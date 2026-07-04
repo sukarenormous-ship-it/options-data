@@ -69,9 +69,10 @@ def parse_deribit_instrument(name: str):
     return base, iso, strike_val, "call" if opt_type == "C" else "put"
 
 
-def fetch_deribit(snapshot_ts: str) -> list[dict]:
+def fetch_deribit(snapshot_ts: str, errors: list[str]) -> list[dict]:
     rows = []
     for currency in DERIBIT_CURRENCIES:
+        before = len(rows)
         try:
             data = http_get_json(
                 "https://www.deribit.com/api/v2/public/get_book_summary_by_currency",
@@ -79,6 +80,7 @@ def fetch_deribit(snapshot_ts: str) -> list[dict]:
             if "result" not in data:
                 raise RuntimeError(data.get("error", "no result"))
         except Exception as exc:
+            errors.append(f"deribit {currency}: {exc}")
             print(f"  deribit {currency}: skipped ({exc})", file=sys.stderr)
             continue
         for item in data["result"]:
@@ -103,7 +105,7 @@ def fetch_deribit(snapshot_ts: str) -> list[dict]:
                 "volume_24h": num(item.get("volume")),
                 "underlying_price": num(item.get("underlying_price")),
             })
-        print(f"  deribit {currency}: {sum(r['underlying'] == currency for r in rows)} contracts")
+        print(f"  deribit {currency}: {len(rows) - before} contracts")
         time.sleep(0.3)
     return rows
 
@@ -124,7 +126,7 @@ def okx_result(payload) -> list:
     return payload["data"]
 
 
-def fetch_okx(snapshot_ts: str) -> list[dict]:
+def fetch_okx(snapshot_ts: str, errors: list[str]) -> list[dict]:
     rows = []
     for family in OKX_FAMILIES:
         try:
@@ -139,21 +141,25 @@ def fetch_okx(snapshot_ts: str) -> list[dict]:
             oi = okx_result(http_get_json(
                 "https://www.okx.com/api/v5/public/open-interest",
                 {"instType": "OPTION", "instFamily": family}))
+            # options settle against the family's own USD index, not USDT
             index = okx_result(http_get_json(
                 "https://www.okx.com/api/v5/market/index-tickers",
-                {"instId": family.replace("USD", "USDT")}))
+                {"instId": family}))
+
+            mark_by_id = {m["instId"]: m for m in marks if "instId" in m}
+            ticker_by_id = {t["instId"]: t for t in tickers if "instId" in t}
+            oi_by_id = {o["instId"]: o for o in oi if "instId" in o}
+            index_px = index[0].get("idxPx", "") if index else ""
         except Exception as exc:
+            errors.append(f"okx {family}: {exc}")
             print(f"  okx {family}: skipped ({exc})", file=sys.stderr)
             continue
 
-        mark_by_id = {m["instId"]: m for m in marks}
-        ticker_by_id = {t["instId"]: t for t in tickers}
-        oi_by_id = {o["instId"]: o for o in oi}
-        index_px = index[0].get("idxPx", "") if index else ""
-
         count = 0
         for item in summary:
-            inst_id = item["instId"]
+            inst_id = item.get("instId")
+            if not inst_id:
+                continue
             try:
                 base, expiry, strike, opt_type = parse_okx_instrument(inst_id)
             except Exception:
@@ -211,25 +217,30 @@ def main() -> None:
     skip_existing = os.environ.get("SKIP_IF_EXISTS") == "1"
     fetchers = {"deribit": fetch_deribit, "okx": fetch_okx}
 
-    wrote_any = False
-    skipped_any = False
+    errors: list[str] = []
+    handled_any = False
     for exchange, fetch in fetchers.items():
         path = csv_path(exchange, now, repo_root)
         if skip_existing and path.exists() and path.stat().st_size > 0:
             print(f"{exchange}: today's file already exists, skipping")
-            skipped_any = True
+            handled_any = True
             continue
         print(f"Fetching {exchange}...")
-        rows = fetch(snapshot_ts)
+        rows = fetch(snapshot_ts, errors)
         if not rows:
+            errors.append(f"{exchange}: no data at all, file not written")
             print(f"{exchange}: no data, file not written", file=sys.stderr)
             continue
         write_csv(rows, path)
         print(f"{exchange}: wrote {len(rows)} rows -> {path.relative_to(repo_root)}")
-        wrote_any = True
+        handled_any = True
 
-    if not wrote_any and not skipped_any:
-        sys.exit("All sources failed — nothing written.")
+    # Exit codes drive the workflow: written data is committed either way,
+    # but any error must surface as a failed run so the alert issue opens.
+    #   0 = complete, 1 = total failure, 2 = partial (some data + some errors)
+    if errors:
+        print("Errors:\n  " + "\n  ".join(errors), file=sys.stderr)
+        sys.exit(1 if not handled_any else 2)
 
 
 if __name__ == "__main__":

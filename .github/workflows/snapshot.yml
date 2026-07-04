@@ -23,12 +23,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # exit codes: 0 = complete, 1 = total failure, 2 = partial
+      # (partial data still gets committed below before the job is failed)
       - name: Fetch option chains
+        id: fetch
         env:
           # scheduled runs never overwrite an existing daily file; manual and
           # push-triggered runs always refresh so testing changes stays easy
           SKIP_IF_EXISTS: ${{ github.event_name == 'schedule' && '1' || '' }}
-        run: python3 scripts/fetch_chain.py
+        run: |
+          set +e
+          python3 scripts/fetch_chain.py
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
 
       - name: Commit snapshot
         run: |
@@ -39,6 +45,8 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Snapshot $(date -u +%Y-%m-%d)"
+            # a concurrent run may have pushed since this run's checkout SHA
+            git pull --rebase origin main
             git push
           fi
 
@@ -49,16 +57,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/snapshot.yml/enable"
 
-      - name: Open issue on failure
+      - name: Fail run if fetch had errors
+        if: steps.fetch.outputs.rc != '0'
+        run: |
+          echo "fetch_chain.py exited with rc=${{ steps.fetch.outputs.rc }} (see fetch step log)"
+          exit 1
+
+      - name: Report failure in an issue
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          title="Snapshot failed $(date -u +%Y-%m-%d)"
-          body="Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          existing=$(gh issue list --repo "${{ github.repository }}" --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          body="Failed run ($(date -u +%Y-%m-%dT%H:%MZ)): ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # comment on ANY open snapshot-failure issue (multi-day outage = one thread);
+          # exact-match via jq, not --search, which is token-based and eventually consistent
+          existing=$(gh issue list --repo "${{ github.repository }}" --state open \
+            --json number,title \
+            --jq '[.[] | select(.title | startswith("Snapshot failing"))][0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --repo "${{ github.repository }}" --body "$body"
           else
-            gh issue create --repo "${{ github.repository }}" --title "$title" --body "$body"
+            gh issue create --repo "${{ github.repository }}" \
+              --title "Snapshot failing (first seen $(date -u +%Y-%m-%d))" --body "$body"
           fi
