@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '15 0 * * *'   # 00:15 UTC ทุกวัน (~07:15 เวลาไทย)
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/**', '.github/workflows/snapshot.yml']
 
 permissions:
   contents: write
