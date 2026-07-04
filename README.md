@@ -34,7 +34,7 @@ data/
 | `type` | `call` หรือ `put` |
 | `mark_price` | ราคา mark **หน่วยเป็นเหรียญอ้างอิง** (คูณ `underlying_price` เพื่อแปลงเป็น USD) |
 | `bid` / `ask` | ราคาเสนอซื้อ/ขายที่ดีที่สุด (หน่วยเดียวกับ mark) |
-| `mark_iv` | implied volatility (%) |
+| `mark_iv` | implied volatility — **หน่วยต่างกัน**: Deribit เป็นเปอร์เซ็นต์ (เช่น `49.57`), OKX เป็นทศนิยม (เช่น `0.4172` = 41.72%) |
 | `delta` `gamma` `vega` `theta` | Greeks (มีเฉพาะฝั่ง OKX) |
 | `open_interest` | สัญญาคงค้าง |
 | `volume_24h` | ปริมาณซื้อขาย 24 ชม. |
