@@ -12,6 +12,7 @@ underlying_price to get USD.
 
 import csv
 import json
+import os
 import sys
 import time
 import urllib.parse
@@ -186,15 +187,17 @@ def fetch_okx(snapshot_ts: str) -> list[dict]:
 
 # ------------------------------------------------------------------- main
 
-def write_csv(rows: list[dict], exchange: str, now: datetime, repo_root: Path) -> Path:
-    path = (repo_root / "data" / exchange / f"{now:%Y}" / f"{now:%m}"
+def csv_path(exchange: str, now: datetime, repo_root: Path) -> Path:
+    return (repo_root / "data" / exchange / f"{now:%Y}" / f"{now:%m}"
             / f"{now:%Y-%m-%d}.csv")
+
+
+def write_csv(rows: list[dict], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=COLUMNS)
         writer.writeheader()
         writer.writerows(rows)
-    return path
 
 
 def main() -> None:
@@ -202,22 +205,30 @@ def main() -> None:
     now = datetime.now(timezone.utc)
     snapshot_ts = now.strftime("%Y-%m-%d %H:%M:%S")
 
-    results = {}
-    print("Fetching Deribit...")
-    results["deribit"] = fetch_deribit(snapshot_ts)
-    print("Fetching OKX...")
-    results["okx"] = fetch_okx(snapshot_ts)
+    # With SKIP_IF_EXISTS=1 (set on scheduled runs) an exchange whose file for
+    # today already exists is left untouched, so the midday catch-up run only
+    # fills in what the morning run missed.
+    skip_existing = os.environ.get("SKIP_IF_EXISTS") == "1"
+    fetchers = {"deribit": fetch_deribit, "okx": fetch_okx}
 
     wrote_any = False
-    for exchange, rows in results.items():
+    skipped_any = False
+    for exchange, fetch in fetchers.items():
+        path = csv_path(exchange, now, repo_root)
+        if skip_existing and path.exists() and path.stat().st_size > 0:
+            print(f"{exchange}: today's file already exists, skipping")
+            skipped_any = True
+            continue
+        print(f"Fetching {exchange}...")
+        rows = fetch(snapshot_ts)
         if not rows:
             print(f"{exchange}: no data, file not written", file=sys.stderr)
             continue
-        path = write_csv(rows, exchange, now, repo_root)
+        write_csv(rows, path)
         print(f"{exchange}: wrote {len(rows)} rows -> {path.relative_to(repo_root)}")
         wrote_any = True
 
-    if not wrote_any:
+    if not wrote_any and not skipped_any:
         sys.exit("All sources failed — nothing written.")
 
 
