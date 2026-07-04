@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 DERIBIT_CURRENCIES = ["BTC", "ETH", "SOL", "XRP"]
-OKX_FAMILIES = ["BTC-USD", "ETH-USD", "SOL-USD"]
+OKX_FAMILIES = ["BTC-USD", "ETH-USD"]  # OKX ยังไม่มี options ของเหรียญอื่น
 
 COLUMNS = [
     "snapshot_utc", "exchange", "underlying", "instrument", "expiry", "strike",
