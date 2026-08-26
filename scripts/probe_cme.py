@@ -5,6 +5,11 @@ Answers one question before any real work starts: which CME endpoints, if
 any, respond to a GitHub Actions runner? Prints a status line per candidate
 and never fails the job -- the log IS the result.
 
+Targets the two products we actually want: WTI crude oil options (NYMEX,
+underlying CL) and gold options (COMEX, underlying GC). Note these are two
+different exchanges under the CME Group umbrella, so the settlement-file
+mirror needs stlnymex/stlcomex, not the CME-proper files.
+
 Delete this file once the answer is recorded.
 """
 
@@ -13,6 +18,7 @@ import io
 import json
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import date, timedelta
 
@@ -27,6 +33,12 @@ BROWSER_HEADERS = {
     "Referer": "https://www.cmegroup.com/",
     "Connection": "close",
 }
+
+# (product slate group, exchange, what we are looking for)
+TARGETS = [
+    ("Energy", "NYMEX", "WTI crude oil options (CL / LO)"),
+    ("Metals", "COMEX", "gold options (GC / OG)"),
+]
 
 
 def prev_business_day(days_back: int = 1) -> date:
@@ -50,10 +62,10 @@ def probe(name: str, url: str, headers: dict | None = None) -> tuple[int, bytes]
             print(f"[ OK  {resp.status}] {name}")
             print(f"        {url}")
             print(f"        {len(raw)} bytes, {ctype}")
-            print(f"        {raw[:220]!r}")
+            print(f"        {raw[:240]!r}")
             return resp.status, raw
     except urllib.error.HTTPError as exc:
-        body = exc.read()[:220]
+        body = exc.read()[:240]
         print(f"[FAIL {exc.code}] {name}")
         print(f"        {url}")
         print(f"        {body!r}")
@@ -67,44 +79,66 @@ def probe(name: str, url: str, headers: dict | None = None) -> tuple[int, bytes]
         print()
 
 
+def discover_option_products(group: str, exchange: str, wanted: str) -> dict[str, str]:
+    """Return {label: numeric productId} for option products in a group."""
+    status, raw = probe(
+        f"product slate: {group}/{exchange} -- looking for {wanted}",
+        "https://www.cmegroup.com/CmeWS/mvc/ProductSlate/V2/List"
+        f"?pageNumber=1&pageSize=500&sortField=globexCode&sortAsc=true"
+        f"&group={urllib.parse.quote(group)}&exchange={exchange}")
+    if status != 200 or not raw:
+        return {}
+
+    found: dict[str, str] = {}
+    try:
+        products = json.loads(raw).get("products", [])
+    except Exception as exc:
+        print(f"        (could not parse product slate: {exc})\n")
+        return {}
+
+    print(f"        {len(products)} products in {group}/{exchange}; options only:")
+    for p in products:
+        # cleared-as tells futures from options; fall back to the name
+        kind = (p.get("cleared") or p.get("clearedAs") or "").lower()
+        name = p.get("name", "")
+        if "option" not in kind and "option" not in name.lower():
+            continue
+        code = p.get("globex") or p.get("globexSymbol") or p.get("clearing") or "?"
+        label = f"{code:<8} {name}"
+        found[label] = str(p.get("id"))
+        print(f"          {p.get('id'):>8}  {label}")
+    print()
+    return found
+
+
 def main() -> None:
     trade_date = prev_business_day()
     ymd = trade_date.strftime("%Y%m%d")
     slash = trade_date.strftime("%m/%d/%Y")
-    print(f"Probing CME for trade date {trade_date} ({ymd})\n")
+    print(f"Probing CME for trade date {trade_date} ({ymd})")
+    print("Targets: WTI crude options (NYMEX) and gold options (COMEX)\n")
 
     print("=" * 70)
     print("ROUTE 1: CmeWS JSON (the API behind cmegroup.com's own OI pages)")
     print("=" * 70 + "\n")
 
-    status, raw = probe(
-        "product slate: crypto products (to discover numeric productIds)",
-        "https://www.cmegroup.com/CmeWS/mvc/ProductSlate/V2/List"
-        "?pageNumber=1&pageSize=200&sortField=globexCode&sortAsc=true"
-        "&group=Cryptocurrency")
-
     product_ids: dict[str, str] = {}
-    if status == 200 and raw:
-        try:
-            for p in json.loads(raw).get("products", []):
-                label = f"{p.get('globexSymbol') or p.get('globex')} {p.get('name')}"
-                product_ids[label] = str(p.get("id"))
-            print("        discovered products:")
-            for label, pid in list(product_ids.items())[:40]:
-                print(f"          {pid:>8}  {label}")
-            print()
-        except Exception as exc:
-            print(f"        (could not parse product slate: {exc})\n")
+    for group, exchange, wanted in TARGETS:
+        product_ids.update(discover_option_products(group, exchange, wanted))
 
-    # Fall back to hard-coded guesses so the rest of the probe still runs.
-    candidates = list(product_ids.values())[:6] or ["8460", "8874"]
+    # Fall back so the rest of the probe still runs if the slate is blocked.
+    candidates = list(product_ids.items())[:6]
+    if not candidates:
+        print("        (no productIds discovered -- trying the endpoint shape "
+              "anyway with a placeholder id)\n")
+        candidates = [("placeholder", "190")]
 
-    for pid in candidates:
-        probe(f"volume+OI detail by strike, productId={pid}",
+    for label, pid in candidates:
+        probe(f"volume+OI detail by strike -- {label} (id={pid})",
               f"https://www.cmegroup.com/CmeWS/mvc/Volume/Details/O/{pid}/{ymd}/G")
 
-    for pid in candidates[:2]:
-        probe(f"settlements (options) productId={pid}",
+    for label, pid in candidates[:2]:
+        probe(f"settlements (options) -- {label} (id={pid})",
               f"https://www.cmegroup.com/CmeWS/mvc/Settlements/Options/Settlements/{pid}/OOF"
               f"?tradeDate={slash}&strategy=DEFAULT")
 
@@ -116,11 +150,13 @@ def main() -> None:
           f"https://www.cmegroup.com/CmeWS/exp/voiProductsViewExport.ctl"
           f"?media=xls&tradeDate={slash}&reportType=F&sortField=vol&sortAsc=false")
 
-    probe("volume+OI per-strike export, productId=8460",
-          f"https://www.cmegroup.com/CmeWS/exp/voiProductDetailsViewExport.ctl"
-          f"?media=xls&tradeDate={slash}&reportType=P&productId=8460")
+    for label, pid in candidates[:2]:
+        probe(f"volume+OI per-strike export -- {label} (id={pid})",
+              f"https://www.cmegroup.com/CmeWS/exp/voiProductDetailsViewExport.ctl"
+              f"?media=xls&tradeDate={slash}&reportType=P&productId={pid}")
 
-    for path in ["pub/settle/stlcur", "pub/settle/stleqt", "pub/settle/stlint"]:
+    # NYMEX = energy (WTI), COMEX = metals (gold). These are the right two.
+    for path in ["pub/settle/stlnymex", "pub/settle/stlcomex"]:
         probe(f"settlement file {path}", f"https://www.cmegroup.com/ftp/{path}")
 
     probe("daily bulletin index", "https://www.cmegroup.com/ftp/bulletin/")
