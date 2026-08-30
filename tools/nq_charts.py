@@ -209,6 +209,55 @@ def chart_returns(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_cost(fig):
+    """ต้นทุนส่วนต่างราคาซื้อ-ขาย แยกตามอายุคงเหลือ เทียบสองตลาด"""
+    c = fig["ต้นทุนตามอายุ"]
+    order = ["0-2 วัน", "3-7 วัน", "8-30 วัน", "31-120 วัน", "เกิน 120 วัน"]
+    venues = [(v, c["ตลาด"][v]["ตามอายุคงเหลือ"]) for v in ("deribit", "okx") if v in c["ตลาด"]]
+    colors = {"deribit": "#7c3aed", "okx": "#0891b2"}
+
+    peak = max(g[k]["ส่วนต่างกลางเปอร์เซ็นต์"] for _, g in venues for k in g)
+    W, H, L, R, B, T = 760, 320, 56, 24, 236, 56
+    gw = (W - L - R) / len(order)
+    bw = min(30, (gw - 22) / len(venues))
+
+    out = []
+    for g in (0, 5, 10, 15, 20, 25):
+        if g <= peak * 1.12:
+            y = B - g / (peak * 1.12) * (B - T)
+            out.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#f3f4f6" stroke-width="1"/>')
+            out.append(f'<text x="{L-8}" y="{y+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{g}%</text>')
+
+    for i, key in enumerate(order):
+        cx = L + i * gw + gw / 2
+        for j, (venue, g) in enumerate(venues):
+            if key not in g:
+                continue
+            val = g[key]["ส่วนต่างกลางเปอร์เซ็นต์"]
+            h = val / (peak * 1.12) * (B - T)
+            x = cx - (len(venues) * bw + 6) / 2 + j * (bw + 6)
+            out.append(f'<rect x="{x:.1f}" y="{B-h:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="3" fill="{colors[venue]}"/>')
+            out.append(f'<text x="{x+bw/2:.1f}" y="{B-h-7:.1f}" text-anchor="middle" font-size="11.5" font-weight="700" fill="{colors[venue]}" {FONT}>{val}</text>')
+        out.append(f'<text x="{cx:.1f}" y="{B+18}" text-anchor="middle" font-size="11.5" fill="#6b7280" {FONT}>{key}</text>')
+
+    out.append(f'<line x1="{L}" y1="{B}" x2="{W-R}" y2="{B}" stroke="#d1d5db" stroke-width="1.5"/>')
+    out.append(f'<text x="{(L+W-R)/2:.0f}" y="{B+40}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>อายุคงเหลือของสัญญา</text>')
+    out.append(f'<text x="{L}" y="{T-26}" font-size="13" font-weight="700" fill="#374151" {FONT}>ยิ่งใกล้หมดอายุ ค่าผ่านทางยิ่งแพง — ต่างกันเกือบสิบเท่า</text>')
+
+    lx = W - R - 190
+    for j, (venue, _) in enumerate(venues):
+        out.append(f'<rect x="{lx + j*95}" y="{T-14}" width="11" height="11" rx="2" fill="{colors[venue]}"/>')
+        out.append(f'<text x="{lx + j*95 + 16}" y="{T-4}" font-size="11.5" fill="#4b5563" {FONT}>{venue}</text>')
+
+    alt = ("กราฟแท่งเปรียบเทียบส่วนต่างราคาซื้อ-ขายของสัญญาใกล้ราคาปัจจุบัน แยกตามอายุคงเหลือ "
+           "แสดงว่าสัญญาที่ใกล้หมดอายุมีต้นทุนสูงกว่าหลายเท่า")
+    cap = (f'ข้อมูลจริงวันที่ {c["วันที่"]} · นับเฉพาะสัญญาที่ห่างจากราคาปัจจุบันไม่เกิน '
+           f'{c["นับเฉพาะสัญญาใกล้ราคาปัจจุบันภายในเปอร์เซ็นต์"]}% และมีทั้งราคาเสนอซื้อและเสนอขาย · '
+           'ตัวเลขข้ามตลาดเทียบกันแบบหยาบ เพราะสเปกสัญญาและเวลาสแนปช็อตไม่ตรงกันเป๊ะ')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -220,6 +269,7 @@ CHARTS = {
     "sample-size": chart_sample_size,
     "indicator": chart_indicator,
     "returns": chart_returns,
+    "cost": chart_cost,
 }
 
 

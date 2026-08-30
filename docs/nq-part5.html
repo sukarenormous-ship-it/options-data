@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 5: ต้นทุนและอีกฝั่งของดีล</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 5 — สถานี ⑤ ต้นทุนและอีกฝั่งของดีล: ค่าผ่านทางที่ไม่มีใครนับ</div>
+<div class="desc">ของถูกที่แพงที่สุดบนกระดาน · ตลาดเดียวกันราคาไม่เท่ากัน · และคำถามที่เปลี่ยนวิธีมองตลาดไปตลอด</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด โดยเฉพาะหัวข้อ "ของถูกที่แพงที่สุด" ซึ่งขัดกับสัญชาตญาณมากที่สุดในเล่ม · <strong>🔵 มีพื้นแล้ว:</strong> ข้ามไปหัวข้อสุดท้าย "ใครอยู่อีกฝั่ง"</p></div>
+
+<h2>ค่าผ่านทางสองแบบ</h2>
+
+<p>Part 3 แสดงให้เห็นแล้วว่าค่าธรรมเนียมไม่ใช่ตัวการหลักที่กินกำไร แต่นั่นไม่ได้แปลว่าต้นทุนไม่สำคัญ — มันแปลว่าเรานับต้นทุนไม่ครบต่างหาก</p>
+
+<p>เวลาซื้อขายอะไรก็ตาม คุณจ่ายสองอย่างที่หน้าตาไม่เหมือนกันเลย</p>
+
+<div class="tw"><table>
+<tr><th>ต้นทุน</th><th>เห็นไหม</th><th>ของมิน</th></tr>
+<tr><td><strong>ค่าธรรมเนียม</strong> — ตลาดเก็บตรง ๆ</td><td>เห็นในรายการเดินบัญชี</td><td>0.1% ต่อข้าง = <strong>0.2% ต่อรอบ</strong></td></tr>
+<tr><td><strong>ส่วนต่างราคาซื้อ-ขาย</strong> — ช่องว่างระหว่างราคาที่ซื้อได้กับขายได้ ณ วินาทีเดียวกัน</td><td><strong>ไม่เห็นเลย</strong> ไม่มีบรรทัดไหนเขียนไว้</td><td>ขึ้นกับว่าซื้ออะไร — และนี่คือเรื่องของบทนี้</td></tr>
+</table></div>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ในตลาดจะมีสองราคาเสมอ ราคาที่คนอยากซื้อยอมจ่าย กับราคาที่คนอยากขายยอมรับ สองราคานี้ไม่เท่ากัน ถ้าคุณเข้าไปซื้อทันทีคุณจ่ายราคาสูง ถ้าขายทันทีคุณได้ราคาต่ำ ช่องว่างตรงกลางคือเงินที่หายไปทันทีที่คุณเข้าและออก โดยไม่ต้องรอให้ราคาขยับเลยแม้แต่นิดเดียว</p>
+
+<div class="pq">ค่าธรรมเนียมคือราคาที่เขาบอกคุณ ส่วนส่วนต่างราคาคือราคาที่เขาไม่ได้บอก</div>
+
+<h2>ของถูกที่แพงที่สุดบนกระดาน</h2>
+
+<p>ทีนี้มาดูของจริง เราเปิดข้อมูลตลาด option ของ BTC วันที่ 29 สิงหาคม 2026 นับเฉพาะสัญญาที่ราคาใช้สิทธิ์อยู่ใกล้ราคาปัจจุบันไม่เกิน 5% แล้วแยกตามว่าเหลืออายุอีกกี่วัน</p>
+
+<!--CHART:cost-->
+<svg class="fig" viewBox="0 0 760 320" role="img" aria-label="กราฟแท่งเปรียบเทียบส่วนต่างราคาซื้อ-ขายของสัญญาใกล้ราคาปัจจุบัน แยกตามอายุคงเหลือ แสดงว่าสัญญาที่ใกล้หมดอายุมีต้นทุนสูงกว่าหลายเท่า">
+<line x1="56" y1="236.0" x2="736" y2="236.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="240.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0%</text>
+<line x1="56" y1="200.3" x2="736" y2="200.3" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="204.3" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">5%</text>
+<line x1="56" y1="164.6" x2="736" y2="164.6" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="168.6" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">10%</text>
+<line x1="56" y1="128.9" x2="736" y2="128.9" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="132.9" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">15%</text>
+<line x1="56" y1="93.1" x2="736" y2="93.1" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="97.1" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">20%</text>
+<line x1="56" y1="57.4" x2="736" y2="57.4" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="61.4" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">25%</text>
+<rect x="91.0" y="75.3" width="30.0" height="160.7" rx="3" fill="#7c3aed"/>
+<text x="106.0" y="68.3" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">22.5</text>
+<rect x="127.0" y="180.3" width="30.0" height="55.7" rx="3" fill="#0891b2"/>
+<text x="142.0" y="173.3" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2" font-family="Sarabun,sans-serif">7.8</text>
+<text x="124.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">0-2 วัน</text>
+<rect x="227.0" y="136.0" width="30.0" height="100.0" rx="3" fill="#7c3aed"/>
+<text x="242.0" y="129.0" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">14.0</text>
+<rect x="263.0" y="198.9" width="30.0" height="37.1" rx="3" fill="#0891b2"/>
+<text x="278.0" y="191.9" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2" font-family="Sarabun,sans-serif">5.2</text>
+<text x="260.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">3-7 วัน</text>
+<rect x="363.0" y="203.1" width="30.0" height="32.9" rx="3" fill="#7c3aed"/>
+<text x="378.0" y="196.1" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">4.6</text>
+<rect x="399.0" y="218.9" width="30.0" height="17.1" rx="3" fill="#0891b2"/>
+<text x="414.0" y="211.9" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2" font-family="Sarabun,sans-serif">2.4</text>
+<text x="396.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">8-30 วัน</text>
+<rect x="499.0" y="219.6" width="30.0" height="16.4" rx="3" fill="#7c3aed"/>
+<text x="514.0" y="212.6" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">2.3</text>
+<rect x="535.0" y="226.0" width="30.0" height="10.0" rx="3" fill="#0891b2"/>
+<text x="550.0" y="219.0" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2" font-family="Sarabun,sans-serif">1.4</text>
+<text x="532.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">31-120 วัน</text>
+<rect x="635.0" y="218.9" width="30.0" height="17.1" rx="3" fill="#7c3aed"/>
+<text x="650.0" y="211.9" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">2.4</text>
+<rect x="671.0" y="205.3" width="30.0" height="30.7" rx="3" fill="#0891b2"/>
+<text x="686.0" y="198.3" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2" font-family="Sarabun,sans-serif">4.3</text>
+<text x="668.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">เกิน 120 วัน</text>
+<line x1="56" y1="236" x2="736" y2="236" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="396" y="276" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">อายุคงเหลือของสัญญา</text>
+<text x="56" y="30" font-size="13" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">ยิ่งใกล้หมดอายุ ค่าผ่านทางยิ่งแพง — ต่างกันเกือบสิบเท่า</text>
+<rect x="546" y="42" width="11" height="11" rx="2" fill="#7c3aed"/>
+<text x="562" y="52" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">deribit</text>
+<rect x="641" y="42" width="11" height="11" rx="2" fill="#0891b2"/>
+<text x="657" y="52" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">okx</text>
+</svg>
+<div class="cap">ข้อมูลจริงวันที่ 2026-08-29 · นับเฉพาะสัญญาที่ห่างจากราคาปัจจุบันไม่เกิน 5% และมีทั้งราคาเสนอซื้อและเสนอขาย · ตัวเลขข้ามตลาดเทียบกันแบบหยาบ เพราะสเปกสัญญาและเวลาสแนปช็อตไม่ตรงกันเป๊ะ</div>
+<!--/CHART:cost-->
+
+<p>อ่านกราฟนี้ช้า ๆ เพราะมันขัดกับสิ่งที่คนส่วนใหญ่คิด</p>
+
+<div class="bx br"><div class="bt">สัญญาที่เหลืออายุ 0-2 วัน มีส่วนต่างค่ากลาง 22.5%</div>
+<p>แปลว่าถ้าคุณซื้อแล้วเปลี่ยนใจขายคืนทันที <strong>เงินหายไปราวหนึ่งในห้า</strong> โดยที่ราคาไม่ต้องขยับเลย</p></div>
+
+<div class="bx bg"><div class="bt">สัญญาที่เหลืออายุ 31-120 วัน มีส่วนต่างค่ากลาง 2.3%</div>
+<p>ตัวเดียวกัน ตลาดเดียวกัน ต่างกันแค่วันหมดอายุ — ถูกกว่าเกือบ <strong>สิบเท่า</strong></p></div>
+
+<p>ตรงนี้คือกับดักที่กลืนคนทุนน้อยมากที่สุด</p>
+
+<p>สัญญาที่ใกล้หมดอายุมีราคา <em>ถูก</em> ในแง่จำนวนเงินที่ต้องจ่าย ซื้อได้ด้วยเงินไม่กี่ร้อยบาท จึงดูเหมือนเป็นทางเลือกของคนทุนน้อย และดูเหมือนความเสี่ยงต่ำเพราะ "เสียก็เสียแค่นิดเดียว"</p>
+
+<p>แต่ในแง่ <strong>สัดส่วนที่ต้องจ่ายเป็นค่าผ่านทาง</strong> มันคือของที่แพงที่สุดบนกระดาน</p>
+
+<div class="bx ba"><div class="bt">🧮 ต้องถูกแค่ไหนถึงจะเสมอตัว</div>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ถ้าค่าผ่านทางกินไป 22.5% ทันทีที่เข้าและออก แปลว่าราคาต้องวิ่งไปทางที่คุณเดามากกว่า 22.5% เพียงเพื่อ <em>ไม่ขาดทุน</em> ยังไม่ได้พูดถึงกำไรเลย</p>
+<div class="fm">ของอายุ 0-2 วัน  : ต้องวิ่งเกิน 22.5% ถึงจะเสมอตัว<br>
+ของอายุ 31-120 วัน: ต้องวิ่งเกิน  2.3% ถึงจะเสมอตัว</div>
+<p>คำถามที่ต้องถามตัวเองคือ คุณเชื่อจริง ๆ หรือว่าเดาทิศทางได้แม่นพอจะชนะค่าผ่านทาง 22.5% ในสองวัน</p></div>
+
+<p>และมีรายละเอียดอีกชั้นที่ซ่อนอยู่ในข้อมูลชุดเดียวกัน — ในบรรดาสัญญาทั้งหมดของวันนั้น มี <strong>8%</strong> ที่ <em>ไม่มีราคาเสนอซื้อเลย</em></p>
+
+<div class="bx br"><div class="bt">ไม่มีคนรับซื้อ = ขายออกไม่ได้</div>
+<p>คุณเป็นเจ้าของมัน คุณเห็นมูลค่าบนหน้าจอ แต่ถ้าอยากเปลี่ยนกลับเป็นเงินสด ไม่มีใครอยู่ฝั่งตรงข้ามให้เลย</p>
+<p>สภาพคล่องไม่ใช่ของที่มีอยู่ตลอดเวลา — และมันมักหายไปในวันที่คุณต้องการมันที่สุด</p></div>
+
+<h2>ของอย่างเดียวกัน ราคาไม่เท่ากัน</h2>
+
+<p>ในกราฟข้างบนมีอีกตลาดหนึ่งอยู่ด้วย ลองเทียบช่องเดียวกัน</p>
+
+<div class="tw"><table>
+<tr><th class="nw">อายุคงเหลือ</th><th class="nw">ตลาดที่หนึ่ง</th><th class="nw">ตลาดที่สอง</th></tr>
+<tr><td class="nw">0-2 วัน</td><td class="nw">22.5%</td><td class="nw"><strong>7.8%</strong></td></tr>
+<tr><td class="nw">3-7 วัน</td><td class="nw">14.0%</td><td class="nw"><strong>5.2%</strong></td></tr>
+<tr><td class="nw">8-30 วัน</td><td class="nw">4.6%</td><td class="nw"><strong>2.4%</strong></td></tr>
+<tr><td class="nw">31-120 วัน</td><td class="nw">2.3%</td><td class="nw"><strong>1.4%</strong></td></tr>
+</table></div>
+
+<p>สินทรัพย์อ้างอิงตัวเดียวกัน วันเดียวกัน แต่ค่าผ่านทางต่างกันเกือบสามเท่าในบางช่อง</p>
+
+<div class="bx ba"><div class="bt">ข้อควรระวังในการอ่านตารางนี้</div>
+<p>ตัวเลขนี้เทียบกันแบบหยาบ ๆ เท่านั้น เพราะสเปกของสัญญาสองตลาดไม่เหมือนกันเป๊ะ และสแนปช็อตเก็บคนละวินาที จึงยัง <strong>สรุปไม่ได้</strong> ว่าตลาดหนึ่งดีกว่าอีกตลาดเสมอไป</p>
+<p>สิ่งที่สรุปได้และสำคัญกว่าคือ <strong>ค่าผ่านทางไม่ใช่ค่าคงที่ของธรรมชาติ</strong> มันเปลี่ยนตามที่ที่คุณเลือกไปซื้อ และคนส่วนใหญ่ไม่เคยเปรียบเทียบเลยสักครั้ง</p></div>
+
+<h2>ใครอยู่อีกฝั่งของไม้นี้</h2>
+
+<p>มาถึงคำถามที่เปลี่ยนวิธีมองตลาดได้มากที่สุดในเล่มนี้ และเป็นคำถามที่แทบไม่มีใครถาม</p>
+
+<p>ทุกครั้งที่คุณซื้อ มีคนขายให้คุณ ทุกครั้งที่คุณขาย มีคนซื้อจากคุณ ตลาดไม่ใช่เครื่องจ่ายเงิน มันคือ <strong>คนที่ตกลงราคากัน</strong></p>
+
+<div class="bx bp"><div class="bt">คำถาม: คนที่อยู่อีกฝั่งของไม้นี้คือใคร และเขายอมเสียเปรียบเพราะอะไร</div>
+<p>มีคำตอบที่สมเหตุสมผลอยู่ไม่กี่แบบ</p>
+<ul>
+<li><strong>เขาต้องการอย่างอื่น ไม่ใช่กำไรจากทิศทาง</strong> — เช่น คนที่ถือของจริงอยู่แล้วและซื้อประกัน หรือธุรกิจที่ต้องปิดความเสี่ยงค่าเงิน คนกลุ่มนี้ยอมจ่ายเพื่อความแน่นอน คุณจึงได้เงินจากการรับความเสี่ยงแทนเขา</li>
+<li><strong>เขาถูกบังคับให้ทำ</strong> — โดนเรียกหลักประกัน ต้องปรับพอร์ตตามกฎ หรือกองทุนต้องขายตามดัชนี</li>
+<li><strong>เขาเป็นผู้ดูแลสภาพคล่อง</strong> — ไม่ได้เดาทิศทาง แต่หากินจากส่วนต่างราคา และป้องกันความเสี่ยงตัวเองทันที</li>
+<li><strong>เขารู้มากกว่าคุณ</strong></li>
+</ul>
+<p>ถ้าคำตอบของคุณตกอยู่ในข้อสุดท้าย หรือ <em>ตอบไม่ได้เลย</em> — นั่นคือสัญญาณเตือน</p></div>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ตลาดเป็นสนามที่เราแข่งกับ "ตลาด" ซึ่งเป็นสิ่งไร้ตัวตน ถ้าวิเคราะห์เก่งพอก็ชนะ<br>
+<strong>quant เห็น:</strong> ตลาดคือ <em>คนที่มีเหตุผลของตัวเอง</em> — กำไรของคุณคือเงินที่ออกจากกระเป๋าใครสักคนเสมอ ดังนั้นคำถามแรกไม่ใช่ "ฉันคิดถูกไหม" แต่คือ "ทำไมคนที่อยู่อีกฝั่งถึงยอม"</p></div>
+
+<p>มุมนี้เปลี่ยนวิธีทำงานทั้งหมด เพราะแทนที่จะไปหาสัญญาณที่แม่นกว่าเดิม คุณจะเริ่มมองหา <strong>สถานการณ์ที่มีคนต้องยอมเสียเปรียบด้วยเหตุผลที่ไม่ใช่การเดาทิศทาง</strong> ซึ่งเป็นสิ่งที่หาได้ยากกว่ามาก แต่เมื่อเจอแล้วมันอธิบายได้ว่าทำไมเงินถึงควรอยู่ฝั่งคุณ</p>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — จัดการต้นทุนยังไงตั้งแต่วันนี้</div>
+<ul>
+<li><strong>วัดค่าผ่านทางของตัวเองก่อนเทรดไม้ถัดไป</strong> — เปิดกระดานราคา ดูราคาเสนอซื้อกับเสนอขาย ณ วินาทีเดียวกัน คำนวณช่องว่างเป็นเปอร์เซ็นต์ แล้วบวกค่าธรรมเนียมสองข้าง นั่นคือเส้นเริ่มต้นของคุณ</li>
+<li><strong>หลีกเลี่ยงของที่ใกล้หมดอายุ ถ้าไม่มีเหตุผลเฉพาะเจาะจง</strong> — ค่าผ่านทางแพงกว่าหลายเท่าโดยไม่ให้อะไรกลับมา</li>
+<li><strong>อย่าซื้อของที่ไม่มีราคาเสนอซื้อ</strong> — ถ้าฝั่งซื้อว่างเปล่า แปลว่าคุณเข้าได้แต่ออกไม่ได้</li>
+<li><strong>ใช้คำสั่งตั้งรอแทนคำสั่งซื้อทันที เมื่อทำได้</strong> — คุณจะเปลี่ยนจากคนจ่ายส่วนต่างเป็นคนเก็บส่วนต่าง แลกกับความเสี่ยงที่จะไม่ได้ของ</li>
+<li><strong>ถ้ายังไม่รู้จะเริ่มยังไง</strong> ให้คำนวณต้นทุนต่อรอบของตัวเองหนึ่งตัวเลข แล้วเขียนแปะไว้ข้างจอ — คนส่วนใหญ่ไม่รู้เลขนี้ของตัวเอง</li>
+</ul></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินเปลี่ยนคำถาม</div>
+<p>มินเห็นสัญญาที่ราคาถูกมาก จ่ายแค่หลักร้อย ถ้าเดาถูกได้กำไรหลายเท่า เหลืออายุอีกวันเดียว</p>
+<p>คำถามเดิมที่มินเคยถามคือ "ราคาจะขึ้นไหม"</p>
+<p>คำถามใหม่ที่มินถามคือ <em>"ใครขายของชิ้นนี้ให้ฉัน และเขายอมขายเพราะอะไร"</em></p>
+<p>คำตอบมาเร็วกว่าที่คิด — คนที่ขายคือคนที่ทำงานนี้ทุกวัน คิดราคาจากความน่าจะเป็นจริง ๆ และเก็บส่วนต่าง 22.5% เป็นค่าตอบแทน เขาไม่ได้เดาว่าราคาจะขึ้นหรือลง เขาแค่ขายประกันแล้วเก็บเบี้ย</p>
+<p>มินไม่ได้ซื้อ ไม่ใช่เพราะคิดว่าราคาจะไม่ขึ้น แต่เพราะ <strong>ตอบไม่ได้ว่าทำไมคนที่คิดราคาเป็นอาชีพถึงยอมขายให้ในราคานี้</strong></p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สามคำถามก่อนกดคำสั่ง</div>
+<ol>
+<li><strong>ค่าผ่านทางไปกลับของไม้นี้กี่เปอร์เซ็นต์</strong> — ต้องตอบเป็นตัวเลข ไม่ใช่ "ไม่เยอะหรอก"</li>
+<li><strong>ราคาต้องวิ่งเท่าไรถึงจะเสมอตัว</strong> — แล้วถามต่อว่าเคยเห็นมันวิ่งขนาดนั้นในกรอบเวลานี้บ่อยแค่ไหน</li>
+<li><strong>ใครอยู่อีกฝั่ง และเขายอมเพราะอะไร</strong> — ถ้าตอบไม่ได้ ให้ถือว่าคำตอบคือ "เขารู้มากกว่าเรา"</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<ul>
+<li>ทุน <strong>50,000 บาท</strong> · ค่าธรรมเนียม <strong>0.2% ต่อรอบ</strong> · เทรด <strong>104 ไม้ต่อปี</strong></li>
+<li>ถ้าใส่เงินเต็มทุกไม้ ค่าธรรมเนียมล้วน ๆ ปีละ = 104 × 0.2% = <strong>20.8% ของทุน</strong></li>
+</ul>
+<p>แปลว่ามินต้องทำกำไรก่อนหักต้นทุนให้ได้เกิน 20.8% ต่อปี เพียงเพื่อจะไม่ขาดทุน — และนั่นยังไม่รวมส่วนต่างราคาซื้อ-ขายเลยสักบาท</p>
+<p>ตัวเลขนี้ทำให้เห็นว่าทำไม <strong>การลดจำนวนไม้ลงครึ่งหนึ่ง</strong> จึงเป็นการปรับปรุงที่ทรงพลังกว่าการหาสัญญาณที่แม่นขึ้น 2%</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>เปิดกระดานราคาของสิ่งที่คุณเทรดบ่อยที่สุด จดราคาเสนอซื้อและเสนอขาย ณ วินาทีเดียวกัน แล้วคำนวณส่วนต่างเป็นเปอร์เซ็นต์</li>
+<li>บวกค่าธรรมเนียมสองข้างเข้าไป แล้วคูณด้วยจำนวนไม้ที่คุณเทรดต่อปี — ตัวเลขที่ได้คือเงินที่คุณจ่ายให้ตลาดต่อปี ไม่ว่าจะกำไรหรือขาดทุน</li>
+<li>เลือกไม้ล่าสุดหนึ่งไม้ แล้วเขียนคำตอบให้ได้ว่าใครอยู่อีกฝั่ง และเขายอมเพราะอะไร — ถ้าเขียนไม่ได้ นั่นคือข้อมูลสำคัญเกี่ยวกับไม้นั้น</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>ส่วนต่างราคาซื้อ-ขายคือต้นทุนที่ไม่มีใบเสร็จ</strong> — และมักใหญ่กว่าค่าธรรมเนียมหลายเท่า</li>
+<li><strong>ของที่ใกล้หมดอายุถูกในแง่เงิน แต่แพงที่สุดในแง่สัดส่วน</strong> — 22.5% เทียบกับ 2.3% ในข้อมูลชุดเดียวกัน</li>
+<li><strong>ถ้าตอบไม่ได้ว่าใครอยู่อีกฝั่งและทำไมเขายอม</strong> ให้ถือว่าคำตอบคือเขารู้มากกว่าเรา</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 5</div>
+<ul>
+<li>ต้นทุนมีสองแบบ: ค่าธรรมเนียมที่เห็นในใบเสร็จ กับส่วนต่างราคาที่ไม่ปรากฏที่ไหนเลย</li>
+<li>ข้อมูลจริง: สัญญาใกล้ราคาปัจจุบันที่เหลืออายุ 0-2 วัน มีส่วนต่างค่ากลาง 22.5% ส่วนที่เหลือ 31-120 วัน อยู่ที่ 2.3%</li>
+<li>8% ของสัญญาทั้งหมดไม่มีราคาเสนอซื้อเลย — เข้าได้แต่ออกไม่ได้</li>
+<li>ตลาดที่ต่างกันคิดค่าผ่านทางไม่เท่ากัน ต่างกันได้เกือบสามเท่าในของที่คล้ายกัน</li>
+<li>คำถามที่ทรงพลังที่สุดของสถานีนี้: ใครอยู่อีกฝั่ง และเขายอมเสียเปรียบเพราะอะไร</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">ถึงตรงนี้เรามีความเชื่อที่ผิดได้ วัดเป็น รู้ว่าหางอ้วน และนับค่าผ่านทางครบแล้ว · เหลือคำถามที่ยังไม่ได้ตอบ — ความเชื่อแบบนี้ควรออกมาเป็นของหน้าตาแบบไหน · Part 6 ว่าด้วยการเลือกรูปของการจ่ายผล</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>ความจริงระดับกระดานราคา สภาพคล่อง และการวางคำสั่ง → <code>ob-part2</code> ถึง <code>ob-part6</code></li>
+<li>ทฤษฎีว่าทำไมผู้ดูแลสภาพคล่องถึงตั้งส่วนต่างเท่านั้นเท่านี้ → <code>pillars-part3</code> (Glosten-Milgrom, Kyle, Avellaneda-Stoikov)</li>
+<li>ต้นทุนการดำเนินการและผลกระทบต่อราคาเวลาไม้ใหญ่ → <code>arb-part7</code>, <code>pillars-part3</code> (Almgren-Chriss)</li>
+<li>เมื่อไรที่ความไม่เท่ากันของราคาข้ามตลาดกลายเป็นโอกาสจริง → <code>arb-part1</code>, <code>arb-part2a</code></li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ส่วนต่างราคาซื้อ-ขาย</strong> = ช่องว่างระหว่างราคาที่ซื้อได้กับขายได้ ณ วินาทีเดียวกัน จ่ายทันทีที่เข้าและออก</li>
+<li><strong>สภาพคล่อง</strong> = มีคนอยู่อีกฝั่งให้ซื้อขายด้วยหรือไม่ ไม่ใช่ของที่มีตลอดเวลา</li>
+<li><strong>ใครอยู่อีกฝั่ง</strong> = คำถามที่ต้องตอบให้ได้ก่อนทุกไม้</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>คำสั่งซื้อทันที</strong> = จับคู่กับราคาที่มีอยู่ ได้ของแน่แต่จ่ายส่วนต่าง · <strong>คำสั่งตั้งรอ</strong> = ตั้งราคาไว้รอคนมาชน อาจไม่ได้ของแต่ไม่ต้องจ่ายส่วนต่าง · <strong>ผู้ดูแลสภาพคล่อง</strong> = คนที่ตั้งราคาทั้งสองฝั่งและหากินจากส่วนต่าง ไม่ใช่จากการเดาทิศทาง</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
