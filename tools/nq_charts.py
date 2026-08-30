@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""สร้างกราฟ inline SVG ของหนังสือ "คิดแบบ Quant" จาก docs/nq-figures.json
+
+กราฟทุกอันในเล่มวาดจากตัวเลขในไฟล์เดียวกับที่บทใช้ จึงเป็นไปไม่ได้ที่กราฟกับ
+ข้อความจะขัดกันเอง (จุดอ่อน W7) และแก้รูปแบบกราฟได้โดยไม่ต้องแตะ SVG ด้วยมือ
+
+ในไฟล์บท คั่นตำแหน่งกราฟด้วย
+    <!--CHART:ชื่อ--> ... <!--/CHART:ชื่อ-->
+สคริปต์จะเขียนทับเฉพาะระหว่างคู่นี้ รันซ้ำได้ตลอด
+
+    python3 tools/nq_charts.py
+"""
+
+import json
+import math
+import os
+import re
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DOCS = os.path.join(ROOT, "docs")
+FONT = 'font-family="Sarabun,sans-serif"'
+
+
+def chart_randomness(fig):
+    """ฮิสโทแกรม: ความสุ่มสร้าง 'ขึ้น 3 วันติด' ได้กี่ครั้ง เทียบกับของจริง"""
+    r = fig["ความสุ่ม"]
+    dist = {int(k): v for k, v in r["การกระจาย"].items()}
+    ks = sorted(dist)
+    peak = max(dist.values())
+    obs = r["ของจริง"]
+    lo, hi = r["ช่วง90เปอร์เซ็นต์"]
+
+    W, H, L, B, T = 760, 322, 52, 250, 48
+    bw = (W - L - 24) / len(ks)
+    out = [f'<line x1="{L-6}" y1="{B}" x2="{W-16}" y2="{B}" stroke="#d1d5db" stroke-width="1.5"/>']
+    for i, k in enumerate(ks):
+        h = (B - T) * dist[k] / peak
+        x = L + i * bw
+        fill = "#7c3aed" if k == obs else ("#93c5fd" if lo <= k <= hi else "#e5e7eb")
+        out.append(f'<rect x="{x:.1f}" y="{B-h:.1f}" width="{bw-2:.1f}" height="{h:.1f}" rx="2" fill="{fill}"/>')
+        if k % 2 == 0:
+            out.append(f'<text x="{x+bw/2-1:.1f}" y="{B+16}" text-anchor="middle" font-size="11" fill="#9ca3af" {FONT}>{k}</text>')
+
+    ox = L + ks.index(obs) * bw + bw / 2 - 1
+    oy = B - (B - T) * dist[obs] / peak
+    out.append(f'<line x1="{ox:.1f}" y1="{oy-8:.1f}" x2="{ox:.1f}" y2="{T-16}" stroke="#7c3aed" stroke-width="2"/>')
+    out.append(f'<text x="{ox:.1f}" y="{T-22}" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed" {FONT}>ตลาดจริง = {obs} ครั้ง</text>')
+    out.append(f'<text x="{L-8}" y="{T+6}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>บ่อย</text>')
+    out.append(f'<text x="{L-8}" y="{B-2}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>น้อย</text>')
+    out.append(f'<text x="{(L+W-24)/2:.0f}" y="{B+38}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>จำนวนครั้งที่เกิด "ขึ้น 3 วันติด" ใน 56 วัน</text>')
+    lx, ly = W - 232, T + 4
+    out.append(f'<rect x="{lx}" y="{ly-10}" width="216" height="46" rx="6" fill="#f9fafb" stroke="#e5e7eb"/>')
+    out.append(f'<rect x="{lx+10}" y="{ly}" width="11" height="11" rx="2" fill="#93c5fd"/>')
+    out.append(f'<text x="{lx+27}" y="{ly+10}" font-size="11.5" fill="#4b5563" {FONT}>ช่วงที่ความสุ่มสร้างได้ 90%</text>')
+    out.append(f'<rect x="{lx+10}" y="{ly+17}" width="11" height="11" rx="2" fill="#7c3aed"/>')
+    out.append(f'<text x="{lx+27}" y="{ly+27}" font-size="11.5" fill="#4b5563" {FONT}>ค่าที่วัดได้จากตลาดจริง</text>')
+
+    alt = (f"การกระจายของจำนวนครั้งที่เกิด ขึ้น 3 วันติด จากการจำลองเหรียญสุ่ม "
+           f"{r['จำนวนรอบจำลอง']:,} รอบ โดยค่าจริงของตลาดคือ {obs} ครั้ง ซึ่งอยู่กลางเนิน")
+    cap = (f"จำลองเหรียญที่ออกหัวเท่าสัดส่วนวันขึ้นจริง {r['จำนวนรอบจำลอง']:,} รอบ · "
+           f"ความสุ่มล้วน ๆ ให้ค่าเฉลี่ย {r['เฉลี่ยจากความสุ่ม']} ครั้ง "
+           f"และอยู่ในช่วง {lo}–{hi} ครั้งถึง 90% ของเวลา")
+    return _wrap(W, H, alt, out, cap)
+
+
+def chart_sample_size(fig):
+    """เส้นโค้ง: ต้องเทรดกี่ไม้ถึงจะพิสูจน์ edge ได้"""
+    ss = fig["ขนาดตัวอย่าง"]
+    pts = sorted(((int(k), v) for k, v in ss["มีEdgeจริง"].items()))
+    no_edge = ss["ไม่มีEdgeเลย"]["1000"]
+
+    W, H, L, B, T = 760, 312, 56, 236, 46
+    x0, x1 = math.log10(pts[0][0]), math.log10(pts[-1][0])
+    X = lambda n: L + (math.log10(n) - x0) / (x1 - x0) * (W - L - 46)
+    Y = lambda p: B - (p / 100) * (B - T)
+
+    out = []
+    for g in (0, 25, 50, 75, 100):
+        out.append(f'<line x1="{L}" y1="{Y(g):.1f}" x2="{W-32}" y2="{Y(g):.1f}" stroke="#f3f4f6" stroke-width="1"/>')
+        out.append(f'<text x="{L-8}" y="{Y(g)+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{g}%</text>')
+
+    line = " ".join(("M" if i == 0 else "L") + f"{X(n):.1f},{Y(p):.1f}" for i, (n, p) in enumerate(pts))
+    out.append(f'<path d="{line} L{X(pts[-1][0]):.1f},{B} L{X(pts[0][0]):.1f},{B} Z" fill="url(#nqArea)"/>')
+    out.append(f'<path d="{line}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
+    out.append(f'<line x1="{L}" y1="{Y(no_edge):.1f}" x2="{W-32}" y2="{Y(no_edge):.1f}" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4"/>')
+    out.append(f'<text x="{W-36}" y="{Y(no_edge)-9:.1f}" text-anchor="end" font-size="12" font-weight="700" fill="#dc2626" {FONT}>คนที่ไม่มี edge เลย ≈ {no_edge}%</text>')
+
+    for i, (n, p) in enumerate(pts):
+        anchor = "end" if i == len(pts) - 1 else "middle"
+        out.append(f'<circle cx="{X(n):.1f}" cy="{Y(p):.1f}" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>')
+        out.append(f'<text x="{X(n):.1f}" y="{Y(p)-14:.1f}" text-anchor="{anchor}" font-size="12.5" font-weight="700" fill="#1e40af" {FONT}>{p}%</text>')
+        out.append(f'<text x="{X(n):.1f}" y="{B+18}" text-anchor="middle" font-size="11.5" fill="#6b7280" {FONT}>{n:,}</text>')
+    out.append(f'<text x="{(L+W-32)/2:.0f}" y="{B+40}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>จำนวนไม้ที่เทรด (มาตราส่วนลอการิทึม)</text>')
+
+    defs = ('<defs><linearGradient id="nqArea" x1="0" y1="0" x2="0" y2="1">'
+            '<stop offset="0" stop-color="#2563eb" stop-opacity=".22"/>'
+            '<stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>')
+    alt = ("กราฟแสดงว่าคนที่มี edge จริง 55% ต้องเทรดกี่ไม้ถึงจะพิสูจน์ตัวเองได้ "
+           f"ที่ 100 ไม้ได้แค่ {ss['มีEdgeจริง']['100']}% ที่ 1000 ไม้ได้ {ss['มีEdgeจริง']['1000']}%")
+    cap = (f"จำลอง {ss['จำนวนรอบจำลอง']:,} รอบต่อจุด · เส้นน้ำเงินคือคนที่เก่งจริง "
+           "เส้นแดงคือคนที่ไม่มีฝีมือเลย — กว่าสองเส้นจะแยกออกจากกันชัดเจน ต้องใช้ถึงหลักพันไม้")
+    return _wrap(W, H, alt, [defs] + out, cap)
+
+
+def _wrap(w, h, alt, parts, cap):
+    body = "\n".join(parts)
+    return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
+            f'{body}\n</svg>\n<div class="cap">{cap}</div>')
+
+
+CHARTS = {
+    "randomness": chart_randomness,
+    "sample-size": chart_sample_size,
+}
+
+
+def main():
+    with open(os.path.join(DOCS, "nq-figures.json")) as fh:
+        fig = json.load(fh)
+
+    written = 0
+    for name in sorted(os.listdir(DOCS)):
+        if not (name.startswith("nq-") and name.endswith(".html")):
+            continue
+        path = os.path.join(DOCS, name)
+        with open(path) as fh:
+            html = fh.read()
+        original = html
+        for key, build in CHARTS.items():
+            pattern = re.compile(
+                r"(<!--CHART:" + re.escape(key) + r"-->).*?(<!--/CHART:" + re.escape(key) + r"-->)",
+                re.S)
+            if pattern.search(html):
+                html = pattern.sub(lambda m: m.group(1) + "\n" + build(fig) + "\n" + m.group(2), html)
+        if html != original:
+            with open(path, "w") as fh:
+                fh.write(html)
+            written += 1
+            print("อัปเดตกราฟใน", name)
+    if not written:
+        print("ไม่มีไฟล์ไหนมีตัวคั่น <!--CHART:ชื่อ--> ให้เขียน")
+
+
+if __name__ == "__main__":
+    main()

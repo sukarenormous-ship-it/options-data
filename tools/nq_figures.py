@@ -10,6 +10,7 @@
 
 import csv
 import glob
+import random
 import json
 import os
 import statistics
@@ -24,6 +25,7 @@ MIN_ACCOUNT = {
     "ทุนเริ่มต้นบาท": 50000,
     "ค่าธรรมเนียมต่อข้างเปอร์เซ็นต์": 0.1,   # taker ทั่วไปของ exchange คริปโตรายย่อย
     "ระบบเดิม": "EMA 12/26 ตัดกัน + RSI 30/70",
+    "ไม้ต่อสัปดาห์": 2,
 }
 
 
@@ -112,6 +114,114 @@ def _spread_study(day="2026-08-29", expiry="2026-09-25", moneyness=0.05):
     }
 
 
+# ── Part 1: ตัวเลขจากการจำลอง ────────────────────────────────────────────────
+# ทุกฟังก์ชันตรึงเมล็ดสุ่มไว้ ผลจึงสร้างซ้ำได้เหมือนเดิมทุกครั้ง
+# (ตรวจแล้วว่าค่าที่รายงานนิ่งข้ามเมล็ด ไม่ใช่ผลของเมล็ดใดเมล็ดหนึ่ง)
+SEED = 20260830
+
+
+def _runs_of_three(seq):
+    return sum(1 for i in range(2, len(seq)) if seq[i] and seq[i - 1] and seq[i - 2])
+
+
+def _randomness_study(streaks, rounds=100000):
+    """เหรียญที่ออกหัวเท่ากับสัดส่วนวันที่ราคาขึ้นจริง จะสร้าง "ขึ้น 3 วันติด" กี่ครั้ง"""
+    n_days = streaks["จำนวนวันที่มีผลตอบแทน"]
+    p_up = streaks["วันที่ขึ้น"] / n_days
+    random.seed(SEED)
+    vals = sorted(_runs_of_three([random.random() < p_up for _ in range(n_days)])
+                  for _ in range(rounds))
+    observed = streaks["ขึ้น3วันติด"]["จำนวนครั้ง"]
+    return {
+        "คำอธิบาย": "จำลองเหรียญที่ออกหัวเท่าสัดส่วนวันขึ้นจริง แล้วนับ 'ขึ้น 3 วันติด'",
+        "จำนวนรอบจำลอง": rounds,
+        "เฉลี่ยจากความสุ่ม": round(statistics.mean(vals), 1),
+        "ช่วง90เปอร์เซ็นต์": [vals[rounds // 20], vals[rounds - rounds // 20 - 1]],
+        "ของจริง": observed,
+        "เปอร์เซ็นไทล์ของค่าจริง": round(100 * sum(1 for v in vals if v <= observed) / rounds),
+        # การกระจายเต็ม (ใช้วาดกราฟในบท) — คีย์คือจำนวนครั้ง ค่าคือสัดส่วนเปอร์เซ็นต์
+        "การกระจาย": {str(k): round(100 * vals.count(k) / rounds, 2)
+                       for k in range(0, max(vals) + 1) if vals.count(k) / rounds >= 0.001},
+    }
+
+
+def _sample_size_study(edge=0.55, trials=20000):
+    """ถ้ามี edge จริง 55% ต้องเทรดกี่ไม้ถึงจะ *พิสูจน์* ได้ว่าไม่ใช่ดวง"""
+    def rate(true_p, n):
+        random.seed(SEED + n)
+        hit = 0
+        for _ in range(trials):
+            wins = sum(1 for _ in range(n) if random.random() < true_p)
+            # เกณฑ์: ชนะเกินครึ่งอย่างน้อย 2 เท่าของความคลาดเคลื่อนมาตรฐาน
+            if wins / n - 0.5 >= 2 * (0.25 / n) ** 0.5:
+                hit += 1
+        return round(100 * hit / trials, 1)
+
+    sizes = [20, 100, 300, 1000, 2000]
+    return {
+        "คำอธิบาย": f"โอกาสที่คนซึ่งมี edge จริง {edge:.0%} จะแสดงหลักฐานได้ว่าตัวเองไม่ได้ฟลุก",
+        "จำนวนรอบจำลอง": trials,
+        "มีEdgeจริง": {str(n): rate(edge, n) for n in sizes},
+        "ไม่มีEdgeเลย": {str(n): rate(0.50, n) for n in (20, 100, 1000)},
+    }
+
+
+def _star_trader_study(traders=2000, per_period=20, top=100):
+    """เทรดเดอร์ฝีมือเท่ากันหมด — ดาวเด่นของรอบแรกทำผลงานรอบสองยังไง"""
+    random.seed(SEED + 7)
+    p1 = [sum(1 for _ in range(per_period) if random.random() < 0.5) for _ in range(traders)]
+    p2 = [sum(1 for _ in range(per_period) if random.random() < 0.5) for _ in range(traders)]
+    stars = sorted(range(traders), key=lambda i: -p1[i])[:top]
+    return {
+        "คำอธิบาย": "เทรดเดอร์ทุกคนฝีมือเท่ากันเป๊ะ (โอกาสชนะ 50%) ผลต่างมาจากดวงล้วน",
+        "จำนวนเทรดเดอร์": traders,
+        "ไม้ต่อรอบ": per_period,
+        "จำนวนดาวเด่นที่คัด": top,
+        "ดาวเด่นชนะเฉลี่ยรอบแรก": round(statistics.mean(p1[i] for i in stars), 1),
+        "ดาวเด่นชนะเฉลี่ยรอบสอง": round(statistics.mean(p2[i] for i in stars), 1),
+        "ทุกคนชนะเฉลี่ย": round(statistics.mean(p1), 1),
+    }
+
+
+def _survivorship_study(prices):
+    """สัญญาที่มีอยู่วันแรก เหลืออยู่ถึงวันสุดท้ายกี่ตัว"""
+    days = sorted(prices)
+
+    def names(day):
+        path = os.path.join(ROOT, "data", "deribit", day[:4], day[5:7], day + ".csv")
+        with open(path) as fh:
+            return {r["instrument"] for r in csv.DictReader(fh) if r["underlying"] == "BTC"}
+
+    first, last = names(days[0]), names(days[-1])
+    stay = first & last
+    return {
+        "คำอธิบาย": "สัญญา BTC ที่ยังอยู่ทั้งวันแรกและวันสุดท้ายของช่วงข้อมูล",
+        "วันแรก": days[0],
+        "วันสุดท้าย": days[-1],
+        "จำนวนวันแรก": len(first),
+        "จำนวนวันสุดท้าย": len(last),
+        "อยู่ครบทั้งสองวัน": len(stay),
+        "สัดส่วนที่รอดเปอร์เซ็นต์": round(100 * len(stay) / len(first)),
+    }
+
+
+def _conditional_study(prevalence=0.01, sensitivity=0.99, false_positive=0.05):
+    """กับดักความน่าจะเป็นแบบมีเงื่อนไข — เลขสมมติ แต่เลขคณิตตรวจได้เอง"""
+    true_pos = prevalence * sensitivity
+    false_pos = (1 - prevalence) * false_positive
+    return {
+        "คำอธิบาย": "ตัวอย่างสมมติเรื่องการตรวจโรค ใช้สอนว่า 'แม่น 99%' ไม่ได้แปลว่าเชื่อได้ 99%",
+        "อัตราการเป็นโรคเปอร์เซ็นต์": round(100 * prevalence, 1),
+        "ความไวของชุดตรวจเปอร์เซ็นต์": round(100 * sensitivity),
+        "อัตราผลบวกลวงเปอร์เซ็นต์": round(100 * false_positive),
+        "ต่อคนหนึ่งหมื่นคน": {
+            "เป็นโรคจริงและตรวจเจอ": round(10000 * true_pos),
+            "ไม่ได้เป็นแต่ตรวจว่าเป็น": round(10000 * false_pos),
+        },
+        "ผลบวกแล้วเป็นโรคจริงเปอร์เซ็นต์": round(100 * true_pos / (true_pos + false_pos), 1),
+    }
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -123,9 +233,17 @@ def build():
             "ค่าธรรมเนียมต่อรอบเปอร์เซ็นต์": round(2 * fee, 2),
             # เสมอตัวเมื่อกำไรเท่าขาดทุน: p·g = (1−p)·g + ต้นทุน  →  p = 0.5 + ต้นทุน/(2g)
             "อัตราชนะขั้นต่ำที่กำไรเป้า2เปอร์เซ็นต์": round(50 + (2 * fee) / (2 * 2.0) * 100, 1),
+            "ไม้ต่อปี": MIN_ACCOUNT["ไม้ต่อสัปดาห์"] * 52,
+            # ต้องเทรดกี่ปีถึงจะสะสมครบ 1,000 ไม้ ซึ่งเป็นจุดที่พิสูจน์ edge ได้ (ดู "ขนาดตัวอย่าง")
+            "ปีที่ต้องใช้เพื่อครบพันไม้": round(1000 / (MIN_ACCOUNT["ไม้ต่อสัปดาห์"] * 52), 1),
         },
         "btc": streaks,
         "ต้นทุนจริง": _spread_study(),
+        "ความสุ่ม": _randomness_study(streaks),
+        "ขนาดตัวอย่าง": _sample_size_study(),
+        "ดาวเด่น": _star_trader_study(),
+        "ผู้รอดชีวิต": _survivorship_study(prices),
+        "เงื่อนไข": _conditional_study(),
     }
 
 
