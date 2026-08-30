@@ -307,6 +307,8 @@ def _claim_study(prices, start="2026-08-20", level=72000):
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
+    # ชุดราคารายวันเต็ม — ใช้วาดกราฟในบท (tools/nq_charts.py อ่านจากตรงนี้)
+    daily = {d: prices[d] for d in sorted(prices)}
     fee = MIN_ACCOUNT["ค่าธรรมเนียมต่อข้างเปอร์เซ็นต์"]
     return {
         "_อ่านก่อน": "สร้างด้วย tools/nq_figures.py — ห้ามแก้ด้วยมือ",
@@ -320,6 +322,7 @@ def build():
             "ปีที่ต้องใช้เพื่อครบพันไม้": round(1000 / (MIN_ACCOUNT["ไม้ต่อสัปดาห์"] * 52), 1),
         },
         "btc": streaks,
+        "ราคารายวัน": daily,
         "ต้นทุนจริง": _spread_study(),
         "ความสุ่ม": _randomness_study(streaks),
         "ขนาดตัวอย่าง": _sample_size_study(),

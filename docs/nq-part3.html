@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 3: ทำไมอินดิเคเตอร์ถึงหลอก</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 3 — สถานี ②③ ฐาน + การวัด: ทำไมอินดิเคเตอร์ถึงหลอก</div>
+<div class="desc">เปิดข้อมูลจริงดูว่าสัญญาณสั่งซื้อขายตรงไหน · ความต่างระหว่างหลักฐานกับกลไก · และเซ็นเซอร์ที่วัดผิดตัวมาตลอด</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> นี่คือบทที่ตอบคำถามหลักของทั้งเล่ม อ่านให้ครบ · <strong>🔵 มีพื้นแล้ว:</strong> ประเด็นที่อาจใหม่สำหรับคุณคือหัวข้อ "หลักฐานกับกลไกไม่ใช่ของอย่างเดียวกัน" และเคสเซ็นเซอร์วัดผิดตัวท้ายบท</p></div>
+
+<h2>กลับไปวันที่ 20 สิงหาคม</h2>
+
+<p>Part 2 ทิ้งไว้ว่ามินตั้งข้อความได้แล้ว แต่ยังใช้ EMA ตัดกันเป็นตัวบอกจังหวะเข้า และวันที่ 20 สิงหาคม สัญญาณบอกให้ซื้อที่ราคา 70,007</p>
+
+<p>คำถามคือ ก่อนหน้านั้นสัญญาณบอกอะไรไว้บ้าง</p>
+
+<p>เรามีข้อมูลอยู่แล้ว เปิดดูได้เลย — คำนวณ EMA 12 กับ EMA 26 บนราคาจริง ทิ้ง 26 วันแรกเป็นช่วงอุ่นเครื่อง เหลือช่วงทดสอบ 31 วัน ตั้งแต่ 30 กรกฎาคม ถึง 29 สิงหาคม</p>
+
+<!--CHART:indicator-->
+<svg class="fig" viewBox="0 0 780 330" role="img" aria-label="กราฟราคา BTC จริงพร้อมจุดที่สัญญาณ EMA สั่งซื้อและสั่งขาย แสดงว่าระบบสั่งขายที่ราคาต่ำแล้วสั่งซื้อคืนที่ราคาสูงกว่าสองครั้ง">
+<defs><linearGradient id="nqPx" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".18"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>
+<line x1="62" y1="217.8" x2="754" y2="217.8" stroke="#f3f4f6" stroke-width="1"/>
+<text x="54" y="221.8" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">65k</text>
+<line x1="62" y1="165.9" x2="754" y2="165.9" stroke="#f3f4f6" stroke-width="1"/>
+<text x="54" y="169.9" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">70k</text>
+<line x1="62" y1="114.1" x2="754" y2="114.1" stroke="#f3f4f6" stroke-width="1"/>
+<text x="54" y="118.1" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">75k</text>
+<line x1="62" y1="62.2" x2="754" y2="62.2" stroke="#f3f4f6" stroke-width="1"/>
+<text x="54" y="66.2" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">80k</text>
+<path d="M62.0,224.9 L85.1,220.7 L108.1,234.8 L131.2,230.5 L154.3,235.8 L177.3,226.4 L200.4,223.2 L223.5,219.4 L246.5,221.5 L269.6,215.4 L292.7,216.3 L315.7,214.8 L338.8,224.9 L361.9,227.9 L384.9,230.3 L408.0,229.7 L431.1,235.5 L454.1,235.5 L477.2,234.9 L500.3,223.4 L523.3,221.1 L546.4,165.9 L569.5,109.2 L592.5,81.4 L615.6,88.7 L638.7,89.3 L661.7,63.3 L684.8,72.0 L707.9,58.2 L730.9,58.7 L754.0,85.9 L754.0,250 L62.0,250 Z" fill="url(#nqPx)"/>
+<path d="M62.0,224.9 L85.1,220.7 L108.1,234.8 L131.2,230.5 L154.3,235.8 L177.3,226.4 L200.4,223.2 L223.5,219.4 L246.5,221.5 L269.6,215.4 L292.7,216.3 L315.7,214.8 L338.8,224.9 L361.9,227.9 L384.9,230.3 L408.0,229.7 L431.1,235.5 L454.1,235.5 L477.2,234.9 L500.3,223.4 L523.3,221.1 L546.4,165.9 L569.5,109.2 L592.5,81.4 L615.6,88.7 L638.7,89.3 L661.7,63.3 L684.8,72.0 L707.9,58.2 L730.9,58.7 L754.0,85.9" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+<line x1="154.3" y1="235.8" x2="154.3" y2="250" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<circle cx="154.3" cy="235.8" r="6" fill="#fff" stroke="#dc2626" stroke-width="3"/>
+<text x="154.3" y="257.8" text-anchor="middle" font-size="12.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">ขาย</text>
+<text x="154.3" y="273.8" text-anchor="middle" font-size="11" fill="#dc2626" font-family="Sarabun,sans-serif">63,266</text>
+<line x1="200.4" y1="223.2" x2="200.4" y2="250" stroke="#16a34a" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<circle cx="200.4" cy="223.2" r="6" fill="#fff" stroke="#16a34a" stroke-width="3"/>
+<text x="200.4" y="201.2" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16a34a" font-family="Sarabun,sans-serif">ซื้อ</text>
+<text x="200.4" y="185.2" text-anchor="middle" font-size="11" fill="#16a34a" font-family="Sarabun,sans-serif">64,483</text>
+<line x1="431.1" y1="235.5" x2="431.1" y2="250" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<circle cx="431.1" cy="235.5" r="6" fill="#fff" stroke="#dc2626" stroke-width="3"/>
+<text x="431.1" y="257.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">ขาย</text>
+<text x="431.1" y="273.5" text-anchor="middle" font-size="11" fill="#dc2626" font-family="Sarabun,sans-serif">63,290</text>
+<line x1="546.4" y1="165.9" x2="546.4" y2="250" stroke="#16a34a" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>
+<circle cx="546.4" cy="165.9" r="6" fill="#fff" stroke="#16a34a" stroke-width="3"/>
+<text x="546.4" y="143.9" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16a34a" font-family="Sarabun,sans-serif">ซื้อ</text>
+<text x="546.4" y="127.9" text-anchor="middle" font-size="11" fill="#16a34a" font-family="Sarabun,sans-serif">70,007</text>
+<text x="62.0" y="270" text-anchor="start" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">07-30</text>
+<text x="754.0" y="270" text-anchor="end" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">08-29</text>
+<text x="408" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">สั่งขายที่จุดต่ำ แล้วสั่งซื้อคืนที่จุดสูงกว่า — สองครั้ง</text>
+<rect x="62" y="280" width="692" height="34" rx="7" fill="#f9fafb" stroke="#e5e7eb"/>
+<text x="78" y="302" font-size="12.5" fill="#4b5563" font-family="Sarabun,sans-serif">เดินตามสัญญาณ <tspan font-weight="700" fill="#b45309">+8.52%</tspan>   ·   ซื้อแล้วถือเฉย ๆ <tspan font-weight="700" fill="#16a34a">+20.83%</tspan>   ·   ตามหลังอยู่ <tspan font-weight="700" fill="#dc2626">12.3 จุด</tspan></text>
+</svg>
+<div class="cap">ราคา BTC จริง 2026-07-30 ถึง 2026-08-29 (31 วัน) · จุดสัญญาณมาจาก EMA 12/26 ตัดกันบนข้อมูลชุดเดียวกัน</div>
+<!--/CHART:indicator-->
+
+<p>อ่านกราฟจากซ้ายไปขวา</p>
+
+<div class="tw"><table>
+<tr><th class="nw">วันที่</th><th class="nw">สัญญาณ</th><th class="nw">ราคา</th><th>เกิดอะไรขึ้น</th></tr>
+<tr><td class="nw">3 ส.ค.</td><td class="nw">ขาย</td><td class="nw">63,266</td><td>สั่งออกที่ราคาใกล้จุดต่ำของช่วง</td></tr>
+<tr><td class="nw">5 ส.ค.</td><td class="nw">ซื้อ</td><td class="nw">64,483</td><td>ซื้อคืน <strong>แพงกว่าที่ขายไป</strong> สองวันก่อน</td></tr>
+<tr><td class="nw">15 ส.ค.</td><td class="nw">ขาย</td><td class="nw">63,290</td><td>สั่งออกอีกครั้ง ขาดทุนไม้แรก −1.85%</td></tr>
+<tr><td class="nw">20 ส.ค.</td><td class="nw">ซื้อ</td><td class="nw">70,007</td><td>ซื้อคืน <strong>แพงกว่าที่ขายไปห้าวันก่อน 6,717 ดอลลาร์</strong></td></tr>
+</table></div>
+
+<p>สัญญาณสี่ครั้ง ทำให้เกิดไม้จริงสองไม้ ผลรวมหลังหักค่าธรรมเนียมคือ <strong>+8.52%</strong></p>
+
+<p>ในช่วงเวลาเดียวกันเป๊ะ คนที่ซื้อวันแรกแล้วนั่งเฉย ๆ ไม่ทำอะไรเลย ได้ <strong>+20.83%</strong></p>
+
+<div class="pq">ระบบไม่ได้แพ้เพราะซื้อผิดตัว มันแพ้เพราะขายตอนราคาถูก แล้วซื้อคืนตอนราคาแพง — สองรอบ</div>
+
+<h2>ค่าธรรมเนียมไม่ใช่ตัวการ</h2>
+
+<p>สมมติฐานแรกที่คนมักคิดคือ "ก็เพราะเทรดบ่อยแล้วโดนค่าธรรมเนียมกินสิ" ลองตรวจดู</p>
+
+<div class="tw"><table>
+<tr><th>กรณี</th><th class="nw">ผลลัพธ์</th></tr>
+<tr><td>เดินตามสัญญาณ หักค่าธรรมเนียม 0.1% ต่อข้าง</td><td class="nw"><strong>+8.52%</strong></td></tr>
+<tr><td>เดินตามสัญญาณ แบบไม่มีค่าธรรมเนียมเลย (ในโลกที่ไม่มีอยู่จริง)</td><td class="nw"><strong>+8.96%</strong></td></tr>
+<tr><td>ซื้อแล้วถือเฉย ๆ</td><td class="nw"><strong>+20.83%</strong></td></tr>
+</table></div>
+
+<p>ค่าธรรมเนียมกินไปแค่ <strong>0.44 จุดเปอร์เซ็นต์</strong> จากช่องว่างทั้งหมด <strong>12.3 จุด</strong></p>
+
+<p>อีก 11.9 จุดที่หายไป ไม่ได้จ่ายให้ใครเลย มันหายไปเฉย ๆ เพราะเงินไม่ได้อยู่ในตลาดตอนที่ราคาวิ่ง — ระหว่างวันที่ 15 ถึง 20 สิงหาคม ราคาขึ้นจาก 63,290 ไป 70,007 และมินถือเงินสดอยู่ตลอดช่วงนั้น เพราะสัญญาณสั่งให้ออกไปแล้ว</p>
+
+<div class="bx br"><div class="bt">ต้นทุนที่ไม่ปรากฏในใบเสร็จ</div>
+<p>ค่าธรรมเนียมเห็นได้ในรายการเดินบัญชี แต่ <strong>ต้นทุนของการไม่อยู่ในตลาด</strong> ไม่ปรากฏที่ไหนเลย ไม่มีบรรทัดไหนเขียนว่า "วันนี้คุณเสีย 6,717 ดอลลาร์เพราะไม่ได้ถืออยู่"</p>
+<p>คนจึงระวังอย่างแรกจนเคยตัว และมองไม่เห็นอย่างที่สองเลยตลอดชีวิตการเทรด</p></div>
+
+<h2>หลักฐานกับกลไกไม่ใช่ของอย่างเดียวกัน</h2>
+
+<p>ตรงนี้ต้องหยุดแล้วซื่อสัตย์กับตัวเอง เพราะ Part 1 เพิ่งวางกฎไว้เองว่าห้ามสรุปจากตัวอย่างน้อย ๆ</p>
+
+<p>ผลข้างบนมาจาก <strong>ไม้สองไม้ ใน 31 วัน</strong></p>
+
+<div class="bx br"><div class="bt">สิ่งที่ตัวเลขชุดนี้ <em>ไม่ได้</em> พิสูจน์</div>
+<ul>
+<li>ไม่ได้พิสูจน์ว่า EMA 12/26 เป็นระบบที่แย่</li>
+<li>ไม่ได้พิสูจน์ว่าถือเฉย ๆ ดีกว่าเสมอ — ในตลาดขาลง ผลจะกลับด้านทันที</li>
+<li>ไม่ได้พิสูจน์อะไรเลยในเชิงสถิติ เพราะ n = 2</li>
+</ul></div>
+
+<p>แต่มีของอีกอย่างที่ตัวเลขชุดนี้ให้เราได้ และมันไม่ต้องการขนาดตัวอย่างใหญ่เลย</p>
+
+<div class="bx bg"><div class="bt">สิ่งที่ตัวเลขชุดนี้ <em>แสดงให้เห็น</em></div>
+<p><strong>กลไก</strong> — เห็นชัด ๆ ว่าสัญญาณออกคำสั่งขาย <em>หลังจาก</em> ราคาลงไปแล้ว และออกคำสั่งซื้อ <em>หลังจาก</em> ราคาขึ้นไปแล้ว</p>
+<p>อันนี้ไม่ใช่เรื่องบังเอิญของช่วงเวลานี้ มันเป็นสิ่งที่ต้องเกิดขึ้นเสมอโดยนิยาม</p></div>
+
+<p>ความแตกต่างนี้สำคัญมากและมักถูกมองข้าม</p>
+
+<ul>
+<li><strong>หลักฐานทางสถิติ</strong> ตอบว่า "สิ่งนี้ให้ผลดีหรือไม่ดี" — ต้องใช้ตัวอย่างเยอะ อย่างที่ Part 1 คำนวณไว้ว่าราวหนึ่งพันไม้</li>
+<li><strong>คำอธิบายเชิงกลไก</strong> ตอบว่า "สิ่งนี้ทำงานยังไง" — ตรวจสอบได้จากตัวมันเอง ไม่ต้องรอตัวอย่าง</li>
+</ul>
+
+<p>คุณไม่ต้องโยนเหรียญพันครั้งเพื่อรู้ว่าเหรียญมีสองด้าน แค่พลิกดูก็พอ</p>
+
+<h2>ทำไมมันถึงช้าเสมอ — และทำไมจูนไม่หาย</h2>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ค่าเฉลี่ยเคลื่อนที่คือการเอาราคาย้อนหลังหลาย ๆ วันมาเฉลี่ยกัน ราคาย้อนหลังคือสิ่งที่ <em>เกิดไปแล้ว</em> ดังนั้นเส้นค่าเฉลี่ยจะเคลื่อนที่ตามราคาเสมอ ไม่มีทางนำหน้าได้</p>
+
+<div class="fm">EMA วันนี้ = (ราคาวันนี้ × น้ำหนัก) + (EMA เมื่อวาน × (1 − น้ำหนัก))</div>
+
+<p>มองสมการนี้แล้วจะเห็นทันทีว่าทุกพจน์ทางขวาเป็นข้อมูลที่มีอยู่แล้ว ไม่มีพจน์ไหนมาจากอนาคตเลย</p>
+
+<p>ทีนี้ "สัญญาณ" ของเราคือการที่เส้นเร็วตัดเส้นช้า ซึ่งแปลว่า <strong>ต้องรอให้ราคาเปลี่ยนทิศมากพอและนานพอ</strong> จนค่าเฉลี่ยสองเส้นสลับตำแหน่งกันเสียก่อน</p>
+
+<div class="ad">
+<div class="pro"><div class="bt">ตั้งค่าให้ไว (เช่น 5/10)</div><ul><li>สัญญาณออกเร็วขึ้น</li><li>แต่สัญญาณหลอกเยอะขึ้นมาก ค่าธรรมเนียมพุ่ง</li></ul></div>
+<div class="con"><div class="bt">ตั้งค่าให้ช้า (เช่น 50/200)</div><ul><li>สัญญาณหลอกน้อยลง</li><li>แต่ยิ่งเข้าออกช้าลงไปอีก</li></ul></div>
+</div>
+
+<p>สังเกตว่าไม่มีช่องไหนเขียนว่า "ตั้งค่าให้ไม่ช้า" — เพราะเป็นไปไม่ได้ <strong>การจูนพารามิเตอร์เปลี่ยนได้แค่ว่าจะช้าแค่ไหน ไม่ได้เปลี่ยนว่าจะช้าหรือไม่ช้า</strong></p>
+
+<p>นี่คือเหตุผลที่คนใช้เวลาเป็นปีจูนค่าไปมาแล้วไม่ดีขึ้นสักที — เขากำลังแก้ปัญหาที่แก้ไม่ได้ในระดับนั้น</p>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> เส้นสองเส้นตัดกัน = สัญญาณซื้อ และถ้าสัญญาณไม่ดีก็ไปหาค่าที่ดีกว่า<br>
+<strong>quant เห็น:</strong> เส้นสองเส้นคือ <em>ตัวกรองที่คำนวณจากราคาในอดีตล้วน ๆ</em> — มันไม่ได้เพิ่มข้อมูลใหม่เข้ามาเลยแม้แต่บิตเดียว แค่ทำให้ข้อมูลเดิมดูเรียบขึ้นโดยแลกกับความช้า</p></div>
+
+<p>ประโยคสุดท้ายคือหัวใจของทั้งบท <strong>อินดิเคเตอร์ไม่ได้สร้างข้อมูล มันแปลงข้อมูลที่มีอยู่แล้ว</strong></p>
+
+<p>ถ้าราคาคือทั้งหมดที่คุณป้อนเข้าไป ผลลัพธ์ที่ออกมาก็มีข้อมูลเท่ากับราคาเป๊ะ ๆ ไม่มากไม่น้อยกว่านั้น การเอามาบวกลบคูณหารกันสิบวิธีก็ยังได้ข้อมูลเท่าเดิม</p>
+
+<h2>สถานี ② — ถามฐานก่อนเสมอ</h2>
+
+<p>Part 0 แนะนำสถานีนี้ไปแล้ว ตรงนี้จะทำให้มันเป็นนิสัยจริง ๆ</p>
+
+<p>ทุกครั้งที่มีสัญญาณ ให้ถามคำถามเดียวก่อนตัดสินใจอะไรทั้งสิ้น</p>
+
+<div class="bx bp"><div class="bt">"ถ้าฉันเพิกเฉยต่อสัญญาณนี้ไปเลย ผลจะต่างจากทำตามยังไง"</div>
+<p>ในกรณีข้างบน คำตอบคือ <strong>ต่างกัน 12.3 จุดเปอร์เซ็นต์ ในทางที่แย่ลง</strong></p></div>
+
+<p>สังเกตว่าคำถามนี้ไม่ได้ถามว่าสัญญาณแม่นไหม แต่ถามว่ามันดีกว่า <em>ทางเลือกที่ไม่ต้องทำอะไรเลย</em> หรือเปล่า ซึ่งเป็นคนละคำถามและเป็นคำถามที่ถูกต้องกว่า</p>
+
+<p>เกือบทุกคนเปรียบเทียบสัญญาณกับ "การไม่มีสัญญาณ" ทั้งที่ควรเปรียบเทียบกับ <strong>ทางเลือกที่ดีที่สุดที่มีอยู่จริง</strong> ซึ่งบางทีก็คือการนั่งเฉย ๆ</p>
+
+<h2>สถานี ③ — เซ็นเซอร์ที่วัดผิดตัว</h2>
+
+<p>อินดิเคเตอร์ยังเป็นแค่ปัญหาระดับเบา เพราะอย่างน้อยมันก็วัดสิ่งที่มันบอกว่าจะวัด</p>
+
+<p>ปัญหาที่หนักกว่าคือเวลาเครื่องมือวัด <em>สิ่งอื่น</em> โดยที่เราไม่รู้ตัว และนี่เกิดขึ้นกับคนที่เขียนโปรแกรมเป็นแล้วด้วยซ้ำ</p>
+
+<div class="bx br"><div class="bt">📉 ตอนนี้พังจริงแบบไหน — เคสจากคลังหนังสือของเราเอง</div>
+<p>บอทเทรดตัวหนึ่งมีระบบเบรกความเสียหาย ถ้าพอร์ตติดลบเกินเกณฑ์จะหยุดเทรดทันที ฟังดูปลอดภัยดี</p>
+<p>ปัญหาคือมันวัดพอร์ตด้วยการดู <strong>ยอดเงินสด USDT อย่างเดียว</strong> ผลที่ตามมามีสองอย่าง และร้ายทั้งคู่</p>
+<ul>
+<li><strong>เบรกทำงานตอนไม่ควรทำงาน</strong> — พอบอทซื้อ BTC ยอด USDT ย่อมลดลงตามปกติ ระบบอ่านว่า "ขาดทุน" แล้วสั่งหยุด ทั้งที่แค่เปลี่ยนเงินสดเป็นของ</li>
+<li><strong>เบรกไม่ทำงานตอนที่ควรทำงาน</strong> — ถ้า BTC ที่ถืออยู่ราคาตกหนัก ยอด USDT ไม่ขยับเลย ระบบจึงมองไม่เห็นการขาดทุนจริงแม้แต่บาทเดียว</li>
+</ul>
+<p>ที่แย่ที่สุดคือตอนทดสอบย้อนหลัง โปรแกรมวัดมูลค่ารวมแบบถูกต้อง แต่ตอนรันจริงวัดแค่เงินสด — <strong>สองโหมดวัดคนละอย่างกัน</strong> ผลทดสอบจึงไม่มีความหมายต่อพฤติกรรมจริงเลย</p></div>
+
+<p>บทเรียนไม่ได้อยู่ที่ว่าอย่าเขียนโค้ดผิด แต่อยู่ที่ว่า</p>
+
+<div class="pq">ทุกตัวเลขที่คุณเชื่อ มีเซ็นเซอร์อยู่ข้างหลัง และเซ็นเซอร์นั้นวัดสิ่งที่มันวัดได้ ไม่ใช่สิ่งที่คุณอยากรู้</div>
+
+<p>ตัวอย่างที่เจอบ่อยในชีวิตประจำวันของคนเทรด</p>
+
+<div class="tw"><table>
+<tr><th>คุณคิดว่ากำลังดู</th><th>จริง ๆ แล้วเซ็นเซอร์วัดอะไร</th></tr>
+<tr><td>ผลตอบแทนของพอร์ต</td><td>ยอดเงินที่ตลาดตีราคาให้ ณ วินาทีนี้ ซึ่งขายจริงอาจไม่ได้ราคานั้น</td></tr>
+<tr><td>ปริมาณการซื้อขายที่บ่งบอกความสนใจ</td><td>จำนวนที่จับคู่กันได้ ซึ่งรวมการซื้อขายซ้ำไปมาของบอทด้วย</td></tr>
+<tr><td>ราคาล่าสุด</td><td>ราคาของดีลล่าสุดที่เกิดขึ้น ซึ่งอาจเป็นเมื่อสิบนาทีที่แล้วถ้าสภาพคล่องบาง</td></tr>
+<tr><td>"กำไรที่ยังไม่ realize"</td><td>ตัวเลขที่ยังไม่ได้หักส่วนต่างราคาซื้อ-ขายและค่าธรรมเนียมขาออก</td></tr>
+</table></div>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — แล้วยังใช้อินดิเคเตอร์ได้ไหม</div>
+<p><strong>ใช้ได้ แต่ย้ายตำแหน่งงานของมัน</strong> จาก "คนสั่งซื้อ" เป็น "คนบอกสภาพอากาศ"</p>
+<ul>
+<li><strong>ห้ามให้มันตัดสินใจเข้าออกเพียงลำพัง</strong> — สัญญาณตัดกันไม่ใช่เหตุผลที่จะซื้อ มันไม่ได้บอกอะไรเกี่ยวกับต้นทุน ขนาดไม้ หรือสิ่งที่จะพิสูจน์ว่าคุณผิด</li>
+<li><strong>ใช้เป็นตัวคัดสภาพตลาด</strong> — เช่น "ช่วงนี้ราคาแกว่งกว้างผิดปกติ ให้ลดขนาดไม้ลง" ซึ่งเป็นงานที่มันทำได้ดีจริง เพราะการวัดความแกว่งย้อนหลังไม่ต้องการการทำนาย</li>
+<li><strong>อย่าจูนค่า</strong> — ใช้ค่ามาตรฐานไปเลย เพราะการจูนคือการซื้อความบังเอิญ (Part 8 จะแสดงให้ดูว่ามันหลอกได้แนบเนียนแค่ไหน)</li>
+<li><strong>ถ้าไม่รู้จะเริ่มยังไง</strong> ให้เลิกใช้อินดิเคเตอร์เป็นตัวสั่งซื้อไปเลยหนึ่งเดือน แล้วดูว่าผลต่างจากเดิมไหม — เป็นการทดลองที่ฟรีและได้คำตอบเร็ว</li>
+</ul></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินตรวจเซ็นเซอร์ของตัวเอง</div>
+<p>มินเปิดแอปดูพอร์ต เห็นตัวเลขกำไรเป็นสีเขียว แล้วรู้สึกดี</p>
+<p>คราวนี้มินถามต่อว่าเลขนี้มาจากไหน คำตอบคือแอปคูณจำนวนที่ถืออยู่ด้วย <em>ราคาอ้างอิงล่าสุด</em></p>
+<p>แต่ราคาที่มินจะได้จริงถ้าขายตอนนี้ ไม่ใช่ราคานั้น — มันคือ <strong>ราคาเสนอซื้อที่ดีที่สุดในกระดาน</strong> ซึ่งต่ำกว่าเสมอ แล้วยังต้องหักค่าธรรมเนียมขาออกอีก 0.1%</p>
+<p>ช่องว่างนี้ใหญ่แค่ไหน วัดได้จากข้อมูลจริงในคลังของเรา ในกลุ่มสัญญาที่สภาพคล่องดีที่สุดของวันที่ 29 สิงหาคม ส่วนต่างระหว่างราคาเสนอซื้อกับเสนอขายอยู่ที่ <strong>1.6%</strong> สำหรับสัญญาที่แคบที่สุด <strong>3.1%</strong> สำหรับค่ากลาง และ <strong>7.1%</strong> สำหรับสัญญาที่กว้างที่สุด</p>
+<p>มินไม่ได้ตกใจกับส่วนต่าง สิ่งที่มินสนใจคือ <strong>ตัวเลขบนหน้าจอกับตัวเลขที่ถอนได้จริง ไม่ใช่ตัวเดียวกัน</strong> — และถ้าเขาตัดสินใจโดยดูตัวแรกมาตลอด เขาก็ตัดสินใจบนตัวเลขที่ไม่มีอยู่จริงมาตลอด</p>
+</div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สามคำถามก่อนเชื่อตัวเลขใด ๆ</div>
+<ol>
+<li><strong>ตัวเลขนี้วัดอะไรกันแน่</strong> — เขียนเป็นประโยคเต็มให้ได้ ถ้าเขียนไม่ได้แปลว่ายังไม่รู้</li>
+<li><strong>มันต่างจากสิ่งที่ฉันอยากรู้ตรงไหน</strong> — เช่น "มูลค่าที่ตลาดตีให้" ต่างจาก "เงินที่ถอนได้จริง" ตรงส่วนต่างราคาและค่าธรรมเนียม</li>
+<li><strong>ตอนทดสอบกับตอนใช้จริง วัดด้วยวิธีเดียวกันไหม</strong> — ถ้าไม่ใช่ ผลทดสอบไม่มีความหมาย</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<p>ถ้ามินเอาทุน 50,000 บาทเดินตามสัญญาณ EMA ในช่วง 31 วันนี้ จะได้ราว <strong>54,260 บาท</strong></p>
+<p>ถ้าซื้อวันแรกแล้วไม่แตะเลย จะได้ราว <strong>60,415 บาท</strong></p>
+<p>ต่างกัน <strong>6,155 บาท</strong> ในหนึ่งเดือน — ซึ่งมากกว่าค่าธรรมเนียมทั้งเดือนหลายเท่า และไม่มีบรรทัดไหนในรายการเดินบัญชีบอกว่าเงินก้อนนี้หายไปไหน</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>เปิดกราฟที่คุณใช้จริง ใส่อินดิเคเตอร์ที่คุณใช้ แล้วหาจุดสัญญาณ 5 จุดล่าสุด จดว่าราคาตอนสัญญาณออก เทียบกับราคาจุดกลับตัวจริงที่ตาเห็น ห่างกันกี่วัน</li>
+<li>คำนวณว่าถ้าคุณไม่ทำอะไรเลยตลอดเดือนที่ผ่านมา พอร์ตจะเป็นเท่าไร แล้วเทียบกับของจริง — ผลต่างคือสิ่งที่การตัดสินใจของคุณสร้างขึ้น ไม่ว่าจะบวกหรือลบ</li>
+<li>เลือกตัวเลขหนึ่งตัวที่คุณดูทุกวัน แล้วเขียนให้ได้เป็นประโยคเต็มว่ามันวัดอะไร และมันต่างจากสิ่งที่คุณอยากรู้ตรงไหน</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>อินดิเคเตอร์ไม่ได้สร้างข้อมูล มันแปลงข้อมูลเดิม</strong> — แลกความเรียบกับความช้า และการจูนเปลี่ยนได้แค่ว่าจะช้าแค่ไหน</li>
+<li><strong>เทียบสัญญาณกับ "ไม่ทำอะไรเลย" เสมอ</strong> — ต้นทุนของการไม่อยู่ในตลาดไม่มีในใบเสร็จ แต่ใหญ่กว่าค่าธรรมเนียมมาก</li>
+<li><strong>กลไกตรวจสอบได้โดยไม่ต้องมีตัวอย่างเยอะ</strong> — คุณไม่ต้องโยนเหรียญพันครั้งเพื่อรู้ว่ามันมีสองด้าน</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 3</div>
+<ul>
+<li>บนข้อมูลจริง 31 วัน สัญญาณ EMA ให้ +8.52% ขณะที่การถือเฉย ๆ ให้ +20.83% — ตามหลัง 12.3 จุด</li>
+<li>ค่าธรรมเนียมกินไปแค่ 0.44 จุด ที่เหลือหายไปกับการไม่อยู่ในตลาดตอนราคาวิ่ง</li>
+<li>ผลนี้ไม่ใช่หลักฐานทางสถิติ (n = 2) แต่แสดง <strong>กลไก</strong> ได้ชัด — และกลไกไม่ต้องรอตัวอย่างเยอะ</li>
+<li>ค่าเฉลี่ยเคลื่อนที่คำนวณจากอดีตล้วน ๆ จึงช้าเสมอโดยนิยาม การจูนไม่ได้แก้เรื่องนี้</li>
+<li>เซ็นเซอร์วัดสิ่งที่มันวัดได้ ไม่ใช่สิ่งที่คุณอยากรู้ — และถ้าโหมดทดสอบกับโหมดจริงวัดคนละอย่าง ผลทดสอบไม่มีความหมาย</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">เราพูดถึง "ผลตอบแทน" มาสามบทแล้วราวกับมันเป็นตัวเลขตัวเดียว · แต่ +20.83% ที่ผ่านมานั้นเดินผ่านวันที่ขึ้น 8.22% และวันที่ลง 3.27% · Part 4 ว่าด้วยเหตุผลที่ค่าเฉลี่ยเป็นตัวเลขที่หลอกที่สุดในบรรดาตัวเลขทั้งหมด</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>การวัดสภาพตลาดอย่างมีหลักการ (regime detection, Hurst, ADX ที่ใช้เป็น) → <code>statarb-ch6</code>, <code>playground-part7</code></li>
+<li>ทำไมการจูนพารามิเตอร์ถึงหลอกได้แนบเนียน และวิธีวัดผลที่หักความบังเอิญออก → <code>theory-part5</code>, Part 8 ของเล่มนี้</li>
+<li>ความจริงระดับกระดานราคา — ทำไมราคาบนหน้าจอไม่ใช่ราคาที่คุณได้ → <code>ob-part2</code>, Part 5 ของเล่มนี้</li>
+<li>เคสเซ็นเซอร์วัดผิดตัวฉบับเต็ม → รายงานรีวิวเล่ม Grid Trading Mastery ในคลัง</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ตัวกรอง (filter)</strong> = การแปลงข้อมูลเดิมให้เรียบขึ้น โดยแลกกับความช้า ไม่ได้เพิ่มข้อมูลใหม่</li>
+<li><strong>ต้นทุนของการไม่อยู่ในตลาด</strong> = เงินที่หายไปเพราะถือเงินสดตอนราคาวิ่ง ไม่ปรากฏในใบเสร็จ</li>
+<li><strong>กลไก vs หลักฐาน</strong> = "มันทำงานยังไง" ตรวจได้จากตัวมันเอง ส่วน "มันดีไหม" ต้องใช้ตัวอย่างเยอะ</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>ค่าเฉลี่ยเคลื่อนที่ (EMA)</strong> = ค่าเฉลี่ยถ่วงน้ำหนักของราคาที่ผ่านมา · <strong>สัญญาณหลอกกลับไปกลับมา (whipsaw)</strong> = การสั่งเข้าออกสลับกันถี่ ๆ จนเสียทั้งค่าธรรมเนียมและจังหวะ · <strong>ช่วงอุ่นเครื่อง</strong> = ช่วงต้นที่ค่าอินดิเคเตอร์ยังไม่นิ่ง ต้องตัดทิ้งก่อนวัดผล</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

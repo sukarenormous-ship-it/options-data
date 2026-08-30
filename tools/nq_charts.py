@@ -102,6 +102,67 @@ def chart_sample_size(fig):
     return _wrap(W, H, alt, [defs] + out, cap)
 
 
+
+def chart_indicator(fig):
+    """ราคาจริงพร้อมจุดที่สัญญาณ EMA สั่งซื้อและสั่งขาย — ให้เห็นว่ามันสั่งช้าตรงไหน"""
+    daily = fig["ราคารายวัน"]
+    ind = fig["อินดิเคเตอร์"]
+    start = ind["ช่วงที่ใช้"]["ตั้งแต่"]
+
+    days = [d for d in sorted(daily) if d >= start]
+    px = [daily[d] for d in days]
+    lo, hi = min(px), max(px)
+    pad = (hi - lo) * 0.16
+
+    W, H, L, R, B, T = 780, 330, 62, 26, 250, 44
+    X = lambda i: L + i / (len(days) - 1) * (W - L - R)
+    Y = lambda v: B - (v - lo + pad / 2) / (hi - lo + pad) * (B - T)
+
+    out = ['<defs><linearGradient id="nqPx" x1="0" y1="0" x2="0" y2="1">'
+           '<stop offset="0" stop-color="#2563eb" stop-opacity=".18"/>'
+           '<stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>']
+
+    for v in (65000, 70000, 75000, 80000):
+        if lo - pad <= v <= hi + pad:
+            out.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{W-R}" y2="{Y(v):.1f}" stroke="#f3f4f6" stroke-width="1"/>')
+            out.append(f'<text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{v//1000}k</text>')
+
+    line = " ".join(("M" if i == 0 else "L") + f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(px))
+    out.append(f'<path d="{line} L{X(len(px)-1):.1f},{B} L{X(0):.1f},{B} Z" fill="url(#nqPx)"/>')
+    out.append(f'<path d="{line}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>')
+
+    for sig in ind["สัญญาณ"]:
+        i = days.index(sig["วันที่"])
+        buy = sig["สัญญาณ"] == "ซื้อ"
+        color = "#16a34a" if buy else "#dc2626"
+        y = Y(sig["ราคา"])
+        out.append(f'<line x1="{X(i):.1f}" y1="{y:.1f}" x2="{X(i):.1f}" y2="{B}" stroke="{color}" stroke-width="1" stroke-dasharray="3 3" opacity=".55"/>')
+        out.append(f'<circle cx="{X(i):.1f}" cy="{y:.1f}" r="6" fill="#fff" stroke="{color}" stroke-width="3"/>')
+        dy = -22 if buy else 22
+        out.append(f'<text x="{X(i):.1f}" y="{y+dy:.1f}" text-anchor="middle" font-size="12.5" font-weight="700" fill="{color}" {FONT}>{sig["สัญญาณ"]}</text>')
+        out.append(f'<text x="{X(i):.1f}" y="{y+dy+(-16 if buy else 16):.1f}" text-anchor="middle" font-size="11" fill="{color}" {FONT}>{sig["ราคา"]:,}</text>')
+
+    for i in (0, len(days) - 1):
+        out.append(f'<text x="{X(i):.1f}" y="{B+20}" text-anchor="{"start" if i==0 else "end"}" font-size="11.5" fill="#6b7280" {FONT}>{days[i][5:]}</text>')
+
+    out.append(f'<text x="{(L+W-R)/2:.0f}" y="{T-20}" text-anchor="middle" font-size="13" font-weight="700" fill="#374151" {FONT}>'
+               f'สั่งขายที่จุดต่ำ แล้วสั่งซื้อคืนที่จุดสูงกว่า — สองครั้ง</text>')
+
+    hold = ind["ผลถือเฉยเปอร์เซ็นต์"]
+    sysr = ind["ผลระบบเปอร์เซ็นต์"]
+    out.append(f'<rect x="{L}" y="{B+30}" width="{W-L-R}" height="34" rx="7" fill="#f9fafb" stroke="#e5e7eb"/>')
+    out.append(f'<text x="{L+16}" y="{B+52}" font-size="12.5" fill="#4b5563" {FONT}>'
+               f'เดินตามสัญญาณ <tspan font-weight="700" fill="#b45309">+{sysr}%</tspan>'
+               f'   ·   ซื้อแล้วถือเฉย ๆ <tspan font-weight="700" fill="#16a34a">+{hold}%</tspan>'
+               f'   ·   ตามหลังอยู่ <tspan font-weight="700" fill="#dc2626">{ind["ตามหลังอยู่จุดเปอร์เซ็นต์"]} จุด</tspan></text>')
+
+    alt = ("กราฟราคา BTC จริงพร้อมจุดที่สัญญาณ EMA สั่งซื้อและสั่งขาย "
+           "แสดงว่าระบบสั่งขายที่ราคาต่ำแล้วสั่งซื้อคืนที่ราคาสูงกว่าสองครั้ง")
+    cap = (f'ราคา BTC จริง {ind["ช่วงที่ใช้"]["ตั้งแต่"]} ถึง {ind["ช่วงที่ใช้"]["ถึง"]} '
+           f'({ind["ช่วงที่ใช้"]["จำนวนวัน"]} วัน) · จุดสัญญาณมาจาก EMA 12/26 ตัดกันบนข้อมูลชุดเดียวกัน')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -111,6 +172,7 @@ def _wrap(w, h, alt, parts, cap):
 CHARTS = {
     "randomness": chart_randomness,
     "sample-size": chart_sample_size,
+    "indicator": chart_indicator,
 }
 
 
