@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 6: โครงสร้างจ่ายผล</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 6 — สถานี ⑥ โครงสร้างจ่ายผล: ความเชื่อเดียวกัน สามรูปทรง</div>
+<div class="desc">อ่านกราฟจ่ายผลใน 2 ขั้น · ราคาจริงจากกระดานจริง · และเหตุผลที่ 'ซื้อเลย' เป็นแค่หนึ่งในหลายทางเลือก</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> Part นี้สอนแค่ให้ <em>อ่านรูป</em> และ <em>เลือกรูป</em> ไม่ได้สอนวิธีประกอบของจริง อ่านได้สบาย ๆ · <strong>🔵 มีพื้นแล้ว:</strong> ถ้าคุ้นกับ payoff chart อยู่แล้ว ข้ามไปที่ "กับดักของรูปที่มีเพดาน"</p></div>
+
+<h2>ความเชื่อหนึ่งอย่าง มีทางออกหลายรูป</h2>
+
+<p>ห้าสถานีที่ผ่านมา เราสร้างความเชื่อที่ผิดได้ ตรวจฐาน วัดให้ถูกตัว รู้ว่าหางอ้วน และนับค่าผ่านทางครบแล้ว</p>
+
+<p>สมมติว่าทั้งหมดผ่าน และความเชื่อของมินคือ <strong>"BTC จะขึ้นภายในเดือนหน้า"</strong></p>
+
+<p>คำถามที่เกือบทุกคนข้าม เพราะคิดว่ามีคำตอบเดียว คือ <em>แล้วจะซื้ออะไร</em></p>
+
+<p>คนส่วนใหญ่ตอบว่า "ก็ซื้อ BTC สิ" ซึ่งไม่ผิด แต่มันเป็นแค่ <strong>หนึ่งในหลายรูป</strong> ที่ความเชื่อนี้ออกมาเป็นได้ และไม่ใช่รูปที่ดีที่สุดเสมอไป</p>
+
+<div class="pq">ความเชื่อบอกว่าราคาจะไปทางไหน โครงสร้างบอกว่าถ้ามันไปจริง คุณจะได้อะไรกลับมาเท่าไร — และสองอย่างนี้เลือกแยกกันได้</div>
+
+<h2>อ่านกราฟจ่ายผลใน 2 ขั้น</h2>
+
+<p>ก่อนดูของจริง ต้องอ่านรูปเป็นก่อน และมันง่ายกว่าที่คิดมาก</p>
+
+<div class="bx bb"><div class="bt">กราฟจ่ายผลคืออะไร</div>
+<p>แกนนอนคือ <strong>ราคาในอนาคต</strong> แกนตั้งคือ <strong>คุณได้หรือเสียเท่าไร</strong> ถ้าราคาไปจบตรงนั้นพอดี</p>
+<p>ไม่มีเรื่องเวลา ไม่มีเรื่องความน่าจะเป็น มีแค่ "ถ้าจบตรงนี้ ได้เท่านี้" เท่านั้น</p></div>
+
+<p>อ่านรูปไหนก็ตาม ให้ดูสองอย่างนี้ตามลำดับ</p>
+
+<ol>
+<li><strong>จุดหัก</strong> — ตรงไหนที่เส้นเปลี่ยนทิศ จุดหักบอกว่ามีเงื่อนไขอะไรเกิดขึ้นที่ราคานั้น</li>
+<li><strong>ความชัน</strong> — ระหว่างจุดหักแต่ละช่วง เส้นชันแค่ไหน ชันมากแปลว่าราคาขยับนิดเดียวแล้วผลลัพธ์เปลี่ยนเยอะ ชันเป็นศูนย์แปลว่าราคาขยับแล้วไม่มีอะไรเปลี่ยน</li>
+</ol>
+
+<p>เท่านี้จริง ๆ ถ้าอ่านสองอย่างนี้ได้ คุณอ่านโครงสร้างการเงินได้เกือบทุกแบบในโลก</p>
+
+<h2>สามรูปจากกระดานจริง</h2>
+
+<p>เราจะไม่ยกตัวอย่างสมมติ แต่เปิดกระดานราคาจริงวันที่ 29 สิงหาคม 2026 ตอนที่ BTC อยู่ที่ <strong>77,716</strong> ดอลลาร์ แล้วประกอบสามรูปจากราคาที่ซื้อได้จริงในวันนั้น</p>
+
+<p>ทุกราคาคิดแบบที่รายย่อยเจอจริง คือ <strong>จ่ายราคาเสนอขายตอนซื้อ และได้ราคาเสนอซื้อตอนขาย</strong> ไม่ใช่ราคากลางสวย ๆ</p>
+
+<!--CHART:payoff-->
+<svg class="fig" viewBox="0 0 780 350" role="img" aria-label="กราฟการจ่ายผลของสามโครงสร้างบนความเชื่อเดียวกัน: ซื้อของจริงเป็นเส้นตรง ซื้อสิทธิ์มีขาดทุนจำกัดแต่กำไรไม่จำกัด และแบบมีเพดานถูกกว่าแต่กำไรตัน">
+<line x1="66" y1="169.9" x2="630" y2="169.9" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="137.9" x2="630" y2="137.9" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="105.8" x2="630" y2="105.8" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="73.8" x2="630" y2="73.8" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="234.0" x2="630" y2="234.0" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="202.0" x2="630" y2="202.0" stroke="#f8fafc" stroke-width="1"/>
+<line x1="66" y1="169.9" x2="630" y2="169.9" stroke="#f8fafc" stroke-width="1"/>
+<text x="58" y="238.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">-10,000</text>
+<text x="58" y="206.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">-5,000</text>
+<text x="58" y="173.9" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">+0</text>
+<text x="58" y="141.9" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">+5,000</text>
+<text x="58" y="109.8" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">+10,000</text>
+<text x="58" y="77.8" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">+15,000</text>
+<line x1="66" y1="169.9" x2="630" y2="169.9" stroke="#cbd5e1" stroke-width="1.5"/>
+<line x1="265.1" y1="40" x2="265.1" y2="250" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="265.1" y="34" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Sarabun,sans-serif">วันนี้ 77,716</text>
+<path d="M66.0,229.7 L313.8,155.3 L441.9,116.8 L630.0,60.3" fill="none" stroke="#64748b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="640" y="64.3" font-size="12" font-weight="700" fill="#64748b" font-family="Sarabun,sans-serif">ซื้อของจริง</text>
+<path d="M66.0,183.1 L313.8,183.1 L441.9,144.6 L630.0,88.2" fill="none" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="640" y="92.2" font-size="12" font-weight="700" fill="#2563eb" font-family="Sarabun,sans-serif">ซื้อสิทธิ์</text>
+<path d="M66.0,179.1 L313.8,179.1 L441.9,140.7 L630.0,140.7" fill="none" stroke="#7c3aed" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="640" y="144.7" font-size="12" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">ซื้อสิทธิ์แบบมีเพดาน</text>
+<text x="313.8" y="268" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Sarabun,sans-serif">80,000</text>
+<text x="441.9" y="268" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Sarabun,sans-serif">86,000</text>
+<text x="348" y="290" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ราคา BTC ณ วันหมดอายุ (ดอลลาร์)</text>
+<text x="10" y="42" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">กำไร/ขาดทุน ($)</text>
+</svg>
+<div class="cap">สร้างจากราคาเสนอซื้อ-เสนอขายจริงวันที่ 2026-08-29 สัญญาหมดอายุ 2026-09-25 (อีก 27 วัน) · คิดราคาแบบที่รายย่อยได้จริง คือจ่ายราคาเสนอขายเวลาซื้อ และได้ราคาเสนอซื้อเวลาขาย</div>
+<!--/CHART:payoff-->
+
+<div class="tw"><table>
+<tr><th>รูป</th><th>วิธีประกอบ</th><th class="nw">จ่ายเท่าไร</th><th class="nw">คุ้มทุนที่</th></tr>
+<tr><td><strong>ซื้อของจริง</strong></td><td>ซื้อ BTC ตรง ๆ</td><td class="nw">เต็มราคา</td><td class="nw">77,716</td></tr>
+<tr><td><strong>ซื้อสิทธิ์</strong></td><td>ซื้อสิทธิ์ซื้อที่ 80,000 หมดอายุ 25 ก.ย.</td><td class="nw">2,059</td><td class="nw">82,059</td></tr>
+<tr><td><strong>ซื้อสิทธิ์แบบมีเพดาน</strong></td><td>ซื้อสิทธิ์ที่ 80,000 แล้วขายสิทธิ์ที่ 86,000 ทิ้ง</td><td class="nw"><strong>1,437</strong></td><td class="nw"><strong>81,437</strong></td></tr>
+</table></div>
+
+<p>สังเกตว่ารูปที่สาม <strong>ถูกกว่า</strong> รูปที่สอง และ <strong>คุ้มทุนเร็วกว่า</strong> ด้วย ทั้งที่ตั้งอยู่บนความเชื่อเดียวกันเป๊ะ</p>
+
+<p>เหตุผลคือรูปที่สามยอมสละบางอย่างไป — เดี๋ยวจะเห็นว่าสละอะไร</p>
+
+<h2>เกิดอะไรขึ้นจริงที่ราคาแต่ละระดับ</h2>
+
+<div class="tw"><table>
+<tr><th class="nw">ราคาวันหมดอายุ</th><th class="nw">ซื้อของจริง</th><th class="nw">ซื้อสิทธิ์</th><th class="nw">แบบมีเพดาน</th></tr>
+<tr><td class="nw">69,944 (−10%)</td><td class="nw">−7,772</td><td class="nw">−2,059</td><td class="nw"><strong>−1,437</strong></td></tr>
+<tr><td class="nw">77,716 (เท่าเดิม)</td><td class="nw">0</td><td class="nw">−2,059</td><td class="nw">−1,437</td></tr>
+<tr><td class="nw">81,602 (+5%)</td><td class="nw"><strong>+3,886</strong></td><td class="nw">−457</td><td class="nw">+165</td></tr>
+<tr><td class="nw">85,488 (+10%)</td><td class="nw">+7,772</td><td class="nw">+3,429</td><td class="nw"><strong>+4,051</strong></td></tr>
+<tr><td class="nw">89,374 (+15%)</td><td class="nw"><strong>+11,658</strong></td><td class="nw">+7,315</td><td class="nw">+4,563</td></tr>
+<tr><td class="nw">97,145 (+25%)</td><td class="nw"><strong>+19,429</strong></td><td class="nw">+15,086</td><td class="nw">+4,563</td></tr>
+</table></div>
+
+<p>ตารางนี้บอกอะไรหลายอย่างที่กราฟเดียวบอกไม่หมด</p>
+
+<div class="bx bg"><div class="bt">ถ้าคุณคิดผิด — สองแถวบน</div>
+<p>ราคาลง 10% คนที่ซื้อของจริงเสีย 7,772 คนที่ซื้อสิทธิ์เสียแค่ 2,059 และแบบมีเพดานเสีย 1,437</p>
+<p><strong>ความเสียหายถูกจำกัดไว้ล่วงหน้า</strong> ไม่ว่าราคาจะลงไปถึงศูนย์ก็ยังเสียเท่าเดิม</p></div>
+
+<div class="bx br"><div class="bt">ถ้าคุณคิดถูกนิดเดียว — แถวกลาง</div>
+<p>ราคาขึ้น 5% คนที่ซื้อของจริงได้ 3,886 แต่คนที่ซื้อสิทธิ์ <strong>ยังขาดทุน 457</strong></p>
+<p>เพราะยังไปไม่ถึงจุดคุ้มทุน 82,059 — <strong>ถูกทาง แต่ไม่แรงพอที่จะจ่ายค่าสิทธิ์</strong></p></div>
+
+<div class="bx ba"><div class="bt">ถ้าคุณคิดถูกมาก — สองแถวล่าง</div>
+<p>ราคาขึ้น 25% แบบมีเพดานได้ <strong>4,563 และหยุดอยู่แค่นั้น</strong> ต่อให้ราคาขึ้นไปเป็นล้านก็ยังได้เท่าเดิม</p>
+<p>นี่คือสิ่งที่รูปที่สามสละไป — <strong>มันขายส่วนที่เกิน 86,000 ทิ้งไปแล้ว</strong> เพื่อแลกกับต้นทุนที่ถูกลง</p></div>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> เลือกว่าจะซื้ออะไร แล้วหวังว่าราคาจะไปทางที่คิด<br>
+<strong>quant เห็น:</strong> เลือกว่า <em>จะเก็บความเสี่ยงส่วนไหนไว้ และขายส่วนไหนทิ้ง</em> — ทุกโครงสร้างคือการแบ่งเส้นราคาออกเป็นช่วง ๆ แล้วตัดสินใจทีละช่วงว่าจะเอาหรือไม่เอา</p></div>
+
+<h2>กับดักของรูปที่มีเพดาน</h2>
+
+<p>ดูตารางแล้วรูปที่สามน่าสนใจมาก ถูกกว่า คุ้มทุนเร็วกว่า และที่ +10% ยังชนะการซื้อสิทธิ์เปล่า ๆ ด้วย</p>
+
+<p>แต่ Part 4 เพิ่งสอนเราว่าอะไร</p>
+
+<div class="bx br"><div class="bt">หางคือที่ที่ผลตอบแทนอยู่</div>
+<p>ในข้อมูล 56 วันของเรา มีวันเดียวที่ราคาขึ้น 8.22% และผลตอบแทนของทั้งช่วงพึ่งพาวันแบบนั้นอย่างมาก</p>
+<p>รูปที่มีเพดานคือการ <strong>ขายหางทิ้ง</strong> — คุณได้ส่วนลดวันนี้ แลกกับการยอมสละวันที่ราคาวิ่งแรงที่สุด ซึ่งเป็นวันที่คุณอยากอยู่ด้วยที่สุด</p></div>
+
+<p>ไม่ได้แปลว่าอย่าใช้ แต่แปลว่าต้องเลือกอย่างรู้ตัว และคำถามที่ตัดสินคือ</p>
+
+<div class="bx bp"><div class="bt">"ความเชื่อของฉันเป็นเรื่องทิศทาง หรือเรื่องขนาด"</div>
+<ul>
+<li>ถ้าเชื่อว่า <em>"จะขึ้น แต่คงไม่เกิน 86,000"</em> — รูปที่มีเพดานตรงกับความเชื่อพอดี คุณขายสิ่งที่คุณไม่เชื่อว่าจะเกิดอยู่แล้ว</li>
+<li>ถ้าเชื่อว่า <em>"จะขึ้น และอาจขึ้นแรงมาก"</em> — การขายเพดานทิ้งคือการขายส่วนที่คุณเชื่อที่สุด ซึ่งขัดกับตัวเอง</li>
+<li>ถ้า <em>ไม่รู้ว่าจะขึ้นแรงแค่ไหน</em> — แปลว่าความเชื่อยังไม่ครบห้าช่องตามสถานี ① กลับไปเขียนใหม่ก่อน</li>
+</ul></div>
+
+<p>นี่คือจุดที่สถานี ① กับสถานี ⑥ มาบรรจบกัน <strong>ความเชื่อที่เขียนไว้ไม่ครบ จะเลือกรูปไม่ได้</strong> เพราะทุกรูปต้องการรู้ว่าคุณเชื่ออะไรเกี่ยวกับ "เท่าไร" ไม่ใช่แค่ "ทางไหน"</p>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — ถ้ายังไม่รู้จะเลือกรูปไหน</div>
+<ul>
+<li><strong>เริ่มที่ "ซื้อของจริง" เสมอ</strong> — เป็นรูปเดียวที่ไม่มีวันหมดอายุ ไม่มีค่าผ่านทางแพง ๆ และไม่ต้องเดาเรื่องเวลาให้ถูกด้วย</li>
+<li><strong>ใช้รูปที่มีขาดทุนจำกัด เมื่อคุณกลัวหางฝั่งลบมากกว่าอยากได้หางฝั่งบวก</strong> — เช่นตอนที่ทนเห็นพอร์ตแดงหนัก ๆ ไม่ไหว ซึ่งเป็นเหตุผลที่ดีและตรงไปตรงมา</li>
+<li><strong>อย่าใช้รูปที่มีเพดาน ถ้ายังไม่มีตัวเลขว่าเชื่อว่าจะขึ้นถึงแค่ไหน</strong></li>
+<li><strong>อย่าเลือกรูปเพราะมันถูก</strong> — Part 5 แสดงแล้วว่าของถูกมักมีค่าผ่านทางแพงที่สุด</li>
+<li><strong>ถ้ายังไม่รู้จะเริ่มยังไง</strong> ให้วาดกราฟจ่ายผลของสิ่งที่คุณถืออยู่ตอนนี้ด้วยมือลงกระดาษ — คนส่วนใหญ่ไม่เคยเห็นรูปของพอร์ตตัวเอง</li>
+</ul></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินเลือกรูป</div>
+<p>มินเชื่อว่า BTC จะขึ้นในเดือนหน้า และเขียนความเชื่อครบห้าช่องแล้ว รวมถึงช่อง "เท่าไร" ซึ่งเขียนไว้ว่า <em>"น่าจะไปแถว 85,000 แต่ไม่คิดว่าจะเกิน 90,000"</em></p>
+<p>มินกางสามรูปออกมาเทียบ แล้วเห็นทันทีว่า</p>
+<ul>
+<li>ถ้าถูกตามที่เชื่อ คือจบแถว 85,000 — แบบมีเพดานให้ผลดีที่สุดในสามรูป</li>
+<li>ส่วนที่แบบมีเพดานสละไป คือช่วงเหนือ 86,000 ซึ่ง <strong>มินเขียนไว้เองว่าไม่คิดว่าจะไปถึง</strong></li>
+</ul>
+<p>มินเลือกแบบมีเพดาน ไม่ใช่เพราะมันถูกที่สุด แต่เพราะ <strong>มันเป็นรูปเดียวที่ตรงกับสิ่งที่เขียนไว้ในสมุด</strong></p>
+<p>และถ้าสุดท้ายราคาทะลุ 95,000 มินจะได้แค่ 4,563 — ซึ่งมินยอมรับได้ตั้งแต่ก่อนเข้าไม้ เพราะนั่นคือกรณีที่มินบอกไว้เองว่าไม่เชื่อ</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สี่คำถามก่อนเลือกรูป</div>
+<ol>
+<li><strong>ความเชื่อของฉันมีตัวเลข "เท่าไร" หรือยัง</strong> — ถ้าไม่มี ยังเลือกรูปไม่ได้</li>
+<li><strong>รูปนี้ขายอะไรทิ้งไปบ้าง</strong> — ทุกส่วนลดมีของที่ถูกสละเสมอ หาให้เจอว่าคืออะไร</li>
+<li><strong>ถ้าฉันคิดผิด รูปนี้ทำให้ฉันเสียเท่าไร</strong> — ตอบเป็นตัวเลขก่อนเข้า ไม่ใช่หลังเข้า</li>
+<li><strong>ถ้าฉันถูกแต่ช้ากว่าที่คิด รูปนี้ยังใช้ได้ไหม</strong> — ของที่มีวันหมดอายุจะตายก่อนคุณถูก</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<p>ทุน <strong>50,000 บาท</strong> ที่อัตราแลกเปลี่ยนคร่าว ๆ คิดเป็นราว 1,400 ดอลลาร์</p>
+<p>ราคาสิทธิ์แบบมีเพดานอยู่ที่ <strong>1,437 ดอลลาร์ต่อสัญญา</strong> ซึ่งแปลว่าถ้ามินซื้อหนึ่งสัญญา <strong>เขาใส่ทุนทั้งพอร์ตลงไปในของชิ้นเดียวที่หมดอายุใน 27 วัน</strong></p>
+<p>รูปที่ถูกที่สุดในสามรูป ยังใหญ่เกินพอร์ตของมินอยู่ดี — และนี่คือเหตุผลที่สถานี ⑦ ต้องมาต่อทันที เพราะเลือกรูปถูกแต่ขนาดผิด ก็จบเหมือนกัน</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>วาดกราฟจ่ายผลของสิ่งที่คุณถืออยู่ตอนนี้ลงกระดาษ ระบุจุดหักและความชันแต่ละช่วง</li>
+<li>เขียนความเชื่อล่าสุดของคุณให้มีตัวเลข "เท่าไร" แล้วถามว่ารูปที่คุณถืออยู่ตรงกับตัวเลขนั้นไหม</li>
+<li>หาโครงสร้างหนึ่งอย่างที่คุณเคยได้ยินชื่อแต่ไม่เคยเข้าใจ แล้วลองอ่านมันด้วยสองขั้น — จุดหักอยู่ตรงไหน ความชันแต่ละช่วงเป็นยังไง</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>อ่านรูปด้วยสองขั้น: จุดหัก แล้วความชัน</strong> — เท่านี้อ่านโครงสร้างได้เกือบทุกแบบ</li>
+<li><strong>ทุกส่วนลดมีของที่ถูกขายทิ้ง</strong> — รูปที่มีเพดานถูกกว่าเพราะมันขายหางฝั่งบวกไปแล้ว</li>
+<li><strong>เลือกรูปไม่ได้ ถ้าความเชื่อยังไม่มีตัวเลข "เท่าไร"</strong> — สถานี ⑥ พึ่งสถานี ① เต็ม ๆ</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 6</div>
+<ul>
+<li>ความเชื่อเดียวกันออกมาเป็นได้หลายรูป และ "ซื้อเลย" เป็นแค่หนึ่งในนั้น</li>
+<li>จากราคาจริงวันที่ 29 ส.ค.: ซื้อของจริงคุ้มทุนที่ 77,716 · ซื้อสิทธิ์จ่าย 2,059 คุ้มทุนที่ 82,059 · แบบมีเพดานจ่าย 1,437 คุ้มทุนที่ 81,437 แต่กำไรตันที่ 4,563</li>
+<li>ถูกทางแต่ไม่แรงพอ ก็ยังขาดทุนได้ — ที่ +5% คนซื้อสิทธิ์ยังติดลบ 457</li>
+<li>รูปที่มีเพดานคือการขายหางทิ้ง ซึ่ง Part 4 บอกไว้ว่าหางคือที่ที่ผลตอบแทนอยู่</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">มินเลือกรูปได้ถูกแล้ว แต่รูปที่ถูกที่สุดยังใหญ่เกินพอร์ตทั้งใบ · คำถามสุดท้ายก่อนเงินจะออกจากบัญชีคือคำถามที่คนตอบผิดบ่อยที่สุด — ไม้ละเท่าไร · Part 7 ตอบโดยไม่ต้องใช้ backtest</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>วิธีอ่านและประกอบ payoff ทุกรูปแบบอย่างละเอียด → <code>pm-part1</code> ถึง <code>pm-part8</code></li>
+<li>ท่อแปลงความเชื่อเป็นโครงสร้างอย่างเป็นระบบ → <code>vp-part1</code> ถึง <code>vp-part7</code> และ <code>vp-drills</code></li>
+<li>ฝึกสายตามองทุกอย่างเป็น payoff → <code>eye-part1</code> ถึง <code>eye-part5</code></li>
+<li>ทฤษฎีการตั้งราคาสิทธิ์และกรีก → <code>pm-part5a</code>, <code>theory-part4</code></li>
+<li>เครื่องมือประกอบรูปเอง → <code>payoff-builder.html</code></li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>กราฟจ่ายผล</strong> = รูปที่บอกว่าถ้าราคาไปจบตรงไหน คุณได้หรือเสียเท่าไร</li>
+<li><strong>จุดหัก</strong> = ราคาที่เส้นเปลี่ยนทิศ แปลว่ามีเงื่อนไขบางอย่างเกิดขึ้นตรงนั้น</li>
+<li><strong>จุดคุ้มทุน</strong> = ราคาที่ทำให้ผลลัพธ์เป็นศูนย์พอดี หลังหักสิ่งที่จ่ายไปแล้ว</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>สิทธิ์ซื้อ</strong> = สัญญาที่ให้สิทธิ์ซื้อของที่ราคาหนึ่งภายในเวลาที่กำหนด · <strong>ราคาใช้สิทธิ์</strong> = ราคาที่ระบุไว้ในสัญญา · <strong>ขาดทุนจำกัด</strong> = รูปที่ไม่ว่าราคาจะแย่แค่ไหน ก็เสียไม่เกินจำนวนที่จ่ายไปตั้งแต่แรก</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

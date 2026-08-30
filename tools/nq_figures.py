@@ -439,6 +439,67 @@ def _cost_study(day="2026-08-29", band=0.05):
     return result
 
 
+# ── Part 6: ความเชื่อเดียวกัน สามรูปทรง ─────────────────────────────────────
+def _structure_study(prices, day="2026-08-29", expiry="2026-09-25", buy_k=80000, sell_k=86000):
+    """สร้างสามโครงสร้างจากราคาจริงในกระดาน เพื่อเทียบ "รูป" ของการจ่ายผล
+
+    ใช้ราคาที่ผู้ซื้อรายย่อยได้จริง — จ่ายราคาเสนอขายเวลาซื้อ และได้ราคาเสนอซื้อเวลาขาย
+    """
+    path = os.path.join(ROOT, "data", "deribit", day[:4], day[5:7], day + ".csv")
+    spot = prices[day]          # ใช้ค่าเดียวกับ "ราคารายวัน" ทั้งเล่ม
+    quotes = {}
+    with open(path) as fh:
+        for row in csv.DictReader(fh):
+            if row["underlying"] != "BTC" or row["expiry"] != expiry or row["type"] != "call":
+                continue
+            try:
+                bid, ask = float(row["bid"] or 0), float(row["ask"] or 0)
+            except ValueError:
+                continue
+            if bid > 0 and ask > 0:
+                quotes[int(float(row["strike"]))] = {"bid": round(bid * spot), "ask": round(ask * spot)}
+
+    long_cost = quotes[buy_k]["ask"]
+    short_credit = quotes[sell_k]["bid"]
+    net = long_cost - short_credit
+
+    def payoff(final):
+        return {
+            "ซื้อของจริง": round(final - spot),
+            "ซื้อสิทธิ์": round(max(final - buy_k, 0) - long_cost),
+            "ซื้อสิทธิ์แบบมีเพดาน": round(min(max(final - buy_k, 0), sell_k - buy_k) - net),
+        }
+
+    scenarios = [round(spot * m) for m in (0.90, 1.0, 1.05, 1.10, 1.15, 1.25)]
+    return {
+        "วันที่": day,
+        "หมดอายุ": expiry,
+        "จำนวนวันคงเหลือ": 27,
+        "ราคาปัจจุบัน": round(spot),
+        "ราคาใช้สิทธิ์ที่ซื้อ": buy_k,
+        "ราคาใช้สิทธิ์ที่ขาย": sell_k,
+        "ราคาที่จ่ายซื้อสิทธิ์": long_cost,
+        "ราคาที่ได้จากการขายสิทธิ์": short_credit,
+        "ต้นทุนสุทธิแบบมีเพดาน": net,
+        "จุดคุ้มทุน": {
+            "ซื้อของจริง": round(spot),
+            "ซื้อสิทธิ์": buy_k + long_cost,
+            "ซื้อสิทธิ์แบบมีเพดาน": buy_k + net,
+        },
+        "ขาดทุนมากสุด": {
+            "ซื้อของจริง": "ได้ถึงศูนย์",
+            "ซื้อสิทธิ์": long_cost,
+            "ซื้อสิทธิ์แบบมีเพดาน": net,
+        },
+        "กำไรมากสุด": {
+            "ซื้อของจริง": "ไม่จำกัด",
+            "ซื้อสิทธิ์": "ไม่จำกัด",
+            "ซื้อสิทธิ์แบบมีเพดาน": (sell_k - buy_k) - net,
+        },
+        "ผลที่ราคาต่าง ๆ": {str(f): payoff(f) for f in scenarios},
+    }
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -471,6 +532,7 @@ def build():
         "การกระจายผลตอบแทน": _distribution_study(prices),
         "ลำดับ": _path_study(prices),
         "ต้นทุนตามอายุ": _cost_study(),
+        "โครงสร้าง": _structure_study(prices),
     }
 
 

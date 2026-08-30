@@ -258,6 +258,61 @@ def chart_cost(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_payoff(fig):
+    """กราฟการจ่ายผลของสามโครงสร้าง สร้างจากราคาจริงในกระดาน"""
+    st = fig["โครงสร้าง"]
+    spot = st["ราคาปัจจุบัน"]
+    kb, ks = st["ราคาใช้สิทธิ์ที่ซื้อ"], st["ราคาใช้สิทธิ์ที่ขาย"]
+    long_cost, net = st["ราคาที่จ่ายซื้อสิทธิ์"], st["ต้นทุนสุทธิแบบมีเพดาน"]
+
+    x0, x1 = round(spot * 0.88), round(spot * 1.22)
+    series = [
+        ("ซื้อของจริง", "#64748b", lambda f: f - spot),
+        ("ซื้อสิทธิ์", "#2563eb", lambda f: max(f - kb, 0) - long_cost),
+        ("ซื้อสิทธิ์แบบมีเพดาน", "#7c3aed", lambda f: min(max(f - kb, 0), ks - kb) - net),
+    ]
+    ys = [fn(x) for _, _, fn in series for x in (x0, x1, kb, ks, spot)]
+    ylo, yhi = min(ys), max(ys)
+    pad = (yhi - ylo) * 0.12
+
+    W, H, L, R, B, T = 780, 350, 66, 150, 250, 40
+    X = lambda v: L + (v - x0) / (x1 - x0) * (W - L - R)
+    Y = lambda v: B - (v - ylo + pad) / (yhi - ylo + 2 * pad) * (B - T)
+
+    out = []
+    for v in range(0, yhi + 1, 5000):
+        out.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{W-R}" y2="{Y(v):.1f}" stroke="#f8fafc" stroke-width="1"/>')
+    for v in range(-10000, 1, 5000):
+        out.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{W-R}" y2="{Y(v):.1f}" stroke="#f8fafc" stroke-width="1"/>')
+    for v in range(-10000, yhi + 1, 5000):
+        if ylo - pad <= v <= yhi + pad:
+            out.append(f'<text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{v:+,}</text>')
+
+    out.append(f'<line x1="{L}" y1="{Y(0):.1f}" x2="{W-R}" y2="{Y(0):.1f}" stroke="#cbd5e1" stroke-width="1.5"/>')
+    out.append(f'<line x1="{X(spot):.1f}" y1="{T}" x2="{X(spot):.1f}" y2="{B}" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 4"/>')
+    out.append(f'<text x="{X(spot):.1f}" y="{T-6}" text-anchor="middle" font-size="11" fill="#94a3b8" {FONT}>วันนี้ {spot:,}</text>')
+
+    for name, color, fn in series:
+        pts = [x0, kb, ks, x1]
+        d = " ".join(("M" if i == 0 else "L") + f"{X(x):.1f},{Y(fn(x)):.1f}" for i, x in enumerate(pts))
+        out.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>')
+        out.append(f'<text x="{W-R+10}" y="{Y(fn(x1))+4:.1f}" font-size="12" font-weight="700" fill="{color}" {FONT}>{name}</text>')
+
+    for label, v in (("80,000", kb), ("86,000", ks)):
+        out.append(f'<text x="{X(v):.1f}" y="{B+18}" text-anchor="middle" font-size="11" fill="#94a3b8" {FONT}>{label}</text>')
+
+    out.append(f'<text x="{(L+W-R)/2:.0f}" y="{B+40}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>ราคา BTC ณ วันหมดอายุ (ดอลลาร์)</text>')
+    out.append(f'<text x="{L-56}" y="{T+2}" font-size="11.5" fill="#6b7280" {FONT}>กำไร/ขาดทุน ($)</text>')
+
+    alt = ("กราฟการจ่ายผลของสามโครงสร้างบนความเชื่อเดียวกัน: ซื้อของจริงเป็นเส้นตรง "
+           "ซื้อสิทธิ์มีขาดทุนจำกัดแต่กำไรไม่จำกัด และแบบมีเพดานถูกกว่าแต่กำไรตัน")
+    cap = (f'สร้างจากราคาเสนอซื้อ-เสนอขายจริงวันที่ {st["วันที่"]} สัญญาหมดอายุ {st["หมดอายุ"]} '
+           f'(อีก {st["จำนวนวันคงเหลือ"]} วัน) · คิดราคาแบบที่รายย่อยได้จริง คือจ่ายราคาเสนอขายเวลาซื้อ '
+           'และได้ราคาเสนอซื้อเวลาขาย')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -270,6 +325,7 @@ CHARTS = {
     "indicator": chart_indicator,
     "returns": chart_returns,
     "cost": chart_cost,
+    "payoff": chart_payoff,
 }
 
 
