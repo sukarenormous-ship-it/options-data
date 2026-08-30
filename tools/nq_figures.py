@@ -555,6 +555,85 @@ def _drawdown_table(levels=(10, 20, 30, 50, 70, 90)):
     return {str(d): round(100 * (1 / (1 - d / 100) - 1)) for d in levels}
 
 
+# ── Part 8: การค้นหาสร้างผลงานปลอมได้เท่าไร ─────────────────────────────────
+def _ema_series(vals, n):
+    k = 2 / (n + 1)
+    out = [vals[0]]
+    for v in vals[1:]:
+        out.append(v * k + out[-1] * (1 - k))
+    return out
+
+
+def _run_crossover(px, fast, slow, fee=0.001):
+    """เดินตามสัญญาณ EMA ตัดกันหนึ่งชุดพารามิเตอร์ คืนผลตอบแทนรวม"""
+    ef, es = _ema_series(px, fast), _ema_series(px, slow)
+    cash, units = 1.0, 0.0
+    for i in range(slow, len(px)):
+        up = ef[i - 1] <= es[i - 1] and ef[i] > es[i]
+        down = ef[i - 1] >= es[i - 1] and ef[i] < es[i]
+        if up and units == 0:
+            units, cash = cash * (1 - fee) / px[i], 0.0
+        elif down and units > 0:
+            cash, units = units * px[i] * (1 - fee), 0.0
+    return (cash if units == 0 else units * px[-1] * (1 - fee)) - 1
+
+
+def _search_study(prices, rounds=200):
+    """ค้นหาพารามิเตอร์ที่ดีที่สุด แล้ววัดว่าตัวเลขที่ได้เป็นของจริงเท่าไร
+
+    ทำสองรอบ
+      ก) ค้นบนข้อมูลจริง — ได้ "ชุดที่ดีที่สุด" มาหนึ่งชุด
+      ข) ค้นแบบเดียวกันบนข้อมูลที่ไม่มีโครงสร้างอะไรเลย หลายรอบ
+         เพื่อดูว่าแค่ *การค้นหา* สร้างผลงานปลอมได้เท่าไร
+    """
+    days = sorted(prices)
+    px = [prices[d] for d in days]
+    r = [px[i] / px[i - 1] - 1 for i in range(1, len(px))]
+    flat = [x - statistics.mean(r) for x in r]
+    combos = [(a, b) for a in range(3, 26) for b in range(a + 1, 51)]
+
+    real = sorted(((_run_crossover(px, a, b), a, b) for a, b in combos), reverse=True)
+    hold = px[-1] / px[0] - 1
+    beat = sum(1 for v, _, _ in real if v > hold)
+
+    random.seed(SEED + 23)
+    bests, singles = [], []
+    for _ in range(rounds):
+        q = flat[:]
+        random.shuffle(q)
+        path = [px[0]]
+        for x in q:
+            path.append(path[-1] * (1 + x))
+        vals = [_run_crossover(path, a, b) for a, b in combos]
+        bests.append(max(vals))
+        singles.append(vals[0])
+    bests.sort()
+
+    best_noise = bests[rounds // 2]
+    single_noise = statistics.median(singles)
+    return {
+        "คำอธิบาย": f"ค้นหาพารามิเตอร์ {len(combos)} ชุด แล้ววัดว่าการค้นหาสร้างผลงานปลอมได้เท่าไร",
+        "จำนวนชุดที่ลอง": len(combos),
+        "จำนวนรอบจำลอง": rounds,
+        "บนข้อมูลจริง": {
+            "ชุดที่ดีที่สุด": f"EMA {real[0][1]}/{real[0][2]}",
+            "ผลของชุดที่ดีที่สุดเปอร์เซ็นต์": round(100 * real[0][0], 2),
+            "ผลกลางของทุกชุดเปอร์เซ็นต์": round(100 * statistics.median(v for v, _, _ in real), 2),
+            "ผลของการถือเฉยๆเปอร์เซ็นต์": round(100 * hold, 2),
+            "จำนวนชุดที่ชนะการถือเฉยๆ": beat,
+        },
+        "บนข้อมูลที่ไม่มีโครงสร้าง": {
+            "ผลของชุดที่ดีที่สุดกลางเปอร์เซ็นต์": round(100 * best_noise, 2),
+            "ชุดที่ดีที่สุดช่วง90เปอร์เซ็นต์": [round(100 * bests[rounds // 20], 2),
+                                                  round(100 * bests[rounds - rounds // 20 - 1], 2)],
+            "ผลของการหยิบชุดเดียวโดยไม่ค้นหากลางเปอร์เซ็นต์": round(100 * single_noise, 2),
+            "ส่วนที่การค้นหาสร้างขึ้นจุดเปอร์เซ็นต์": round(100 * (best_noise - single_noise), 2),
+        },
+        "เปอร์เซ็นไทล์ของผลจริงเทียบกับความสุ่ม": round(
+            100 * sum(1 for b in bests if b <= real[0][0]) / rounds),
+    }
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -590,6 +669,7 @@ def build():
         "โครงสร้าง": _structure_study(prices),
         "การอยู่รอด": _survival_study(prices),
         "กลับทุน": _drawdown_table(),
+        "การค้นหา": _search_study(prices),
     }
 
 

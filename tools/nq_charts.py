@@ -361,6 +361,52 @@ def chart_survival(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_search(fig):
+    """การค้นหาสร้างผลงานปลอมได้เท่าไร — เทียบสี่กรณีบนแกนเดียวกัน"""
+    sc = fig["การค้นหา"]
+    real, noise = sc["บนข้อมูลจริง"], sc["บนข้อมูลที่ไม่มีโครงสร้าง"]
+    n = sc["จำนวนชุดที่ลอง"]
+
+    bars = [
+        (f"หยิบมาชุดเดียว ไม่ค้นหา", "ข้อมูลสุ่ม", noise["ผลของการหยิบชุดเดียวโดยไม่ค้นหากลางเปอร์เซ็นต์"], "#cbd5e1"),
+        (f"ค้นหา {n} ชุด เอาที่ดีที่สุด", "ข้อมูลสุ่ม", noise["ผลของชุดที่ดีที่สุดกลางเปอร์เซ็นต์"], "#f97316"),
+        (f"ค้นหา {n} ชุด เอาที่ดีที่สุด", "ข้อมูลจริง", real["ผลของชุดที่ดีที่สุดเปอร์เซ็นต์"], "#2563eb"),
+        ("ไม่ทำอะไรเลย ถือเฉย ๆ", "ข้อมูลจริง", real["ผลของการถือเฉยๆเปอร์เซ็นต์"], "#16a34a"),
+    ]
+
+    W, H, L, R, T = 780, 258, 250, 60, 46
+    rowh = 46
+    lo = min(v for _, _, v, _ in bars)
+    hi = max(v for _, _, v, _ in bars)
+    zero = L + (0 - lo) / (hi - lo) * (W - L - R) if lo < 0 else L
+    X = lambda v: L + (v - lo) / (hi - lo) * (W - L - R)
+
+    out = [f'<line x1="{zero:.1f}" y1="{T-10}" x2="{zero:.1f}" y2="{T + len(bars)*rowh - 8}" stroke="#cbd5e1" stroke-width="1.5"/>']
+    for i, (label, src, val, color) in enumerate(bars):
+        y = T + i * rowh
+        x0, x1 = (zero, X(val)) if val >= 0 else (X(val), zero)
+        out.append(f'<rect x="{x0:.1f}" y="{y:.1f}" width="{max(x1-x0,2):.1f}" height="24" rx="4" fill="{color}"/>')
+        out.append(f'<text x="{L-12}" y="{y+12:.1f}" text-anchor="end" font-size="12.5" fill="#374151" {FONT}>{label}</text>')
+        out.append(f'<text x="{L-12}" y="{y+27:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{src}</text>')
+        # ค่าติดลบวางป้ายไว้ขวาของเส้นศูนย์ เพื่อไม่ให้ทับคอลัมน์ชื่อรายการ
+        tx = x1 + 8 if val >= 0 else zero + 8
+        out.append(f'<text x="{tx:.1f}" y="{y+17:.1f}" text-anchor="start" font-size="12.5" font-weight="700" fill="{color}" {FONT}>{val:+.2f}%</text>')
+
+    y0, y1 = T + 12, T + rowh + 12
+    bx = max(X(noise["ผลของชุดที่ดีที่สุดกลางเปอร์เซ็นต์"]), X(noise["ผลของการหยิบชุดเดียวโดยไม่ค้นหากลางเปอร์เซ็นต์"])) + 84
+    out.append(f'<path d="M{bx} {y0} L{bx+14} {y0} L{bx+14} {y1} L{bx} {y1}" stroke="#f97316" stroke-width="1.5" fill="none"/>')
+    out.append(f'<text x="{bx+22}" y="{(y0+y1)/2+4:.1f}" font-size="12" font-weight="700" fill="#c2410c" {FONT}>+{noise["ส่วนที่การค้นหาสร้างขึ้นจุดเปอร์เซ็นต์"]} จุด</text>')
+    out.append(f'<text x="{bx+22}" y="{(y0+y1)/2+20:.1f}" font-size="11" fill="#9a3412" {FONT}>เกิดจากการค้นหาล้วน ๆ</text>')
+    out.append(f'<text x="{L-12}" y="{T-20}" text-anchor="end" font-size="13" font-weight="700" fill="#374151" {FONT}>ผลตอบแทนตลอดช่วง</text>')
+
+    alt = ("กราฟแท่งเทียบสี่กรณี แสดงว่าการค้นหาพารามิเตอร์จำนวนมากแล้วรายงานอันที่ดีที่สุด "
+           "สร้างผลงานที่ดูดีขึ้นได้แม้บนข้อมูลที่ไม่มีโครงสร้างอะไรเลย")
+    cap = (f'ลองพารามิเตอร์ {n} ชุด · ฝั่งข้อมูลสุ่มจำลอง {sc["จำนวนรอบจำลอง"]} รอบแล้วรายงานค่ากลาง · '
+           f'บนข้อมูลจริง ไม่มีชุดไหนเลยจาก {n} ชุดที่ชนะการถือเฉย ๆ')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -375,6 +421,7 @@ CHARTS = {
     "cost": chart_cost,
     "payoff": chart_payoff,
     "survival": chart_survival,
+    "search": chart_search,
 }
 
 
