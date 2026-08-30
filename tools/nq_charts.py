@@ -163,6 +163,52 @@ def chart_indicator(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_returns(fig):
+    """ฮิสโทแกรมผลตอบแทนรายวันจริง พร้อมชี้วันที่หลุดกรอบ"""
+    d = fig["การกระจายผลตอบแทน"]
+    bins = {int(k): v for k, v in d["ฮิสโทแกรมช่องละหนึ่งเปอร์เซ็นต์"].items()}
+    ks = list(range(min(bins), max(bins) + 1))
+    peak = max(bins.values())
+    sd = d["ส่วนเบี่ยงเบนต่อวันเปอร์เซ็นต์"]
+    best = d["วันดีสุด"]["เปอร์เซ็นต์"]
+
+    W, H, L, R, B, T = 760, 300, 54, 26, 224, 52
+    bw = (W - L - R) / len(ks)
+    out = [f'<line x1="{L-6}" y1="{B}" x2="{W-R}" y2="{B}" stroke="#d1d5db" stroke-width="1.5"/>']
+
+    for i, k in enumerate(ks):
+        c = bins.get(k, 0)
+        h = (B - T) * c / peak
+        x = L + i * bw
+        far = abs(k) >= 2 * sd
+        fill = "#dc2626" if (far and k > 0) else ("#f97316" if far else "#93c5fd")
+        if c:
+            out.append(f'<rect x="{x+1:.1f}" y="{B-h:.1f}" width="{bw-3:.1f}" height="{h:.1f}" rx="2" fill="{fill}"/>')
+            out.append(f'<text x="{x+bw/2:.1f}" y="{B-h-6:.1f}" text-anchor="middle" font-size="10.5" fill="#6b7280" {FONT}>{c}</text>')
+        out.append(f'<text x="{x+bw/2:.1f}" y="{B+17}" text-anchor="middle" font-size="10.5" fill="#9ca3af" {FONT}>{k:+d}</text>')
+
+    # เส้นกรอบ ±2 sd
+    for sign in (1, -1):
+        v = sign * 2 * sd
+        i = (v - min(ks)) / len(ks) * len(ks)
+        xx = L + (v - min(ks)) / (max(ks) + 1 - min(ks)) * (W - L - R)
+        out.append(f'<line x1="{xx:.1f}" y1="{T-4}" x2="{xx:.1f}" y2="{B}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>')
+    out.append(f'<text x="{L + (2*sd - min(ks))/(max(ks)+1-min(ks))*(W-L-R) + 6:.1f}" y="{T+6}" font-size="11.5" fill="#64748b" {FONT}>กรอบ ±2 เท่าของส่วนเบี่ยงเบน</text>')
+
+    xb = L + (best - min(ks)) / (max(ks) + 1 - min(ks)) * (W - L - R)
+    out.append(f'<text x="{W-R}" y="{T-24}" text-anchor="end" font-size="13" font-weight="700" fill="#dc2626" {FONT}>วันเดียวที่ {best}% = {d["วันดีสุด"]["กี่เท่าของสวนเบี่ยงเบน"]} เท่าของส่วนเบี่ยงเบน</text>')
+    out.append(f'<path d="M{W-R-40} {T-18} Q {xb+34:.1f} {T+6} {xb+bw/2:.1f} {B-40:.1f}" stroke="#dc2626" stroke-width="1.5" fill="none" marker-end="url(#nqAr)"/>')
+    out.append('<defs><marker id="nqAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker></defs>')
+    out.append(f'<text x="{(L+W-R)/2:.0f}" y="{B+40}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>ผลตอบแทนรายวัน (%) · ตัวเลขบนแท่งคือจำนวนวัน</text>')
+
+    alt = ("ฮิสโทแกรมผลตอบแทนรายวันของ BTC จำนวน 56 วัน แสดงว่าวันส่วนใหญ่ขยับเล็กน้อย "
+           f"แต่มีหนึ่งวันที่ขยับ {best}% ซึ่งหลุดกรอบไปไกล")
+    cap = (f'ผลตอบแทนรายวันจริง {d["จำนวนวัน"]} วัน · แต่ละช่องกว้าง 1% ป้ายบอกขอบล่างของช่อง · '
+           f'ส่วนเบี่ยงเบน {sd}% ต่อวัน · มี {d["วันที่ขยับเกินสองเท่าของส่วนเบี่ยงเบน"]} วันที่ขยับเกิน 2 เท่าของส่วนเบี่ยงเบน')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -173,6 +219,7 @@ CHARTS = {
     "randomness": chart_randomness,
     "sample-size": chart_sample_size,
     "indicator": chart_indicator,
+    "returns": chart_returns,
 }
 
 

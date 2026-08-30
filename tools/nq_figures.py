@@ -9,7 +9,9 @@
 """
 
 import csv
+import datetime
 import glob
+import math
 import random
 import json
 import os
@@ -304,6 +306,139 @@ def _claim_study(prices, start="2026-08-20", level=72000):
     }
 
 
+# ── Part 4: การกระจายและหาง ─────────────────────────────────────────────────
+def _distribution_study(prices):
+    """หน้าตาจริงของผลตอบแทนรายวัน — ค่ากลาง ความกว้าง และหาง"""
+    days = sorted(prices)
+    px = [prices[d] for d in days]
+    r = [px[i] / px[i - 1] - 1 for i in range(1, len(px))]
+    n = len(r)
+    sd = statistics.pstdev(r)
+    arith = statistics.mean(r)
+    geo = (px[-1] / px[0]) ** (1 / n) - 1
+    best, worst = max(r), min(r)
+
+    # ความถี่ที่คาดหวังของวันแรงที่สุด ถ้าโลกเป็นการแจกแจงปกติ
+    z = best / sd
+    p_tail = 0.5 * math.erfc(z / math.sqrt(2))
+
+    # ฮิสโทแกรมช่องละ 1%
+    bins = {}
+    for x in r:
+        k = math.floor(x * 100)
+        bins[k] = bins.get(k, 0) + 1
+
+    return {
+        "จำนวนวัน": n,
+        "ผลรวมทั้งช่วงเปอร์เซ็นต์": round(100 * (px[-1] / px[0] - 1), 2),
+        "เฉลี่ยเลขคณิตต่อวันเปอร์เซ็นต์": round(100 * arith, 3),
+        "เฉลี่ยเชิงเรขาคณิตต่อวันเปอร์เซ็นต์": round(100 * geo, 3),
+        "ช่องว่างต่อวันจุดเปอร์เซ็นต์": round(100 * (arith - geo), 3),
+        "ครึ่งหนึ่งของความแปรปรวนจุดเปอร์เซ็นต์": round(100 * sd * sd / 2, 3),
+        "ส่วนเบี่ยงเบนต่อวันเปอร์เซ็นต์": round(100 * sd, 2),
+        "วันดีสุด": {"เปอร์เซ็นต์": round(100 * best, 2), "กี่เท่าของสวนเบี่ยงเบน": round(z, 2)},
+        "วันแย่สุด": {"เปอร์เซ็นต์": round(100 * worst, 2), "กี่เท่าของสวนเบี่ยงเบน": round(worst / sd, 2)},
+        "ถ้าโลกเป็นการแจกแจงปกติ": {
+            "วันแรงขนาดนี้ควรเกิดทุกกี่วัน": round(1 / p_tail),
+            "คิดเป็นกี่ปี": round(1 / p_tail / 365),
+        },
+        "วันที่ขยับเกินสองเท่าของส่วนเบี่ยงเบน": sum(1 for x in r if abs(x) > 2 * sd),
+        "ฮิสโทแกรมช่องละหนึ่งเปอร์เซ็นต์": {str(k): v for k, v in sorted(bins.items())},
+    }
+
+
+def _path_study(prices, stop=0.08, rounds=20000):
+    """ลำดับสำคัญไหม — ตอบสองชั้น: ไม่สำคัญถ้าถือเฉย ๆ แต่สำคัญมากทันทีที่มีกฎ"""
+    days = sorted(prices)
+    px = [prices[d] for d in days]
+    r = [px[i] / px[i - 1] - 1 for i in range(1, len(px))]
+
+    def run(seq, use_stop):
+        v, peak = 1.0, 1.0
+        for x in seq:
+            v *= 1 + x
+            peak = max(peak, v)
+            if use_stop and v / peak - 1 <= -stop:
+                return v - 1, True
+        return v - 1, False
+
+    random.seed(SEED + 11)
+    finals, stopped = [], 0
+    plain = set()
+    for _ in range(rounds):
+        q = r[:]
+        random.shuffle(q)
+        plain.add(round(run(q, False)[0], 9))
+        val, hit = run(q, True)
+        finals.append(val)
+        stopped += hit
+    finals.sort()
+    actual, actual_stop = run(r, True)
+
+    return {
+        "คำอธิบาย": f"สลับลำดับผลตอบแทนชุดเดิม {rounds:,} แบบ",
+        "ถือเฉยๆผลต่างกันกี่ค่า": len(plain),
+        "ผลถือเฉยๆเปอร์เซ็นต์": round(100 * (px[-1] / px[0] - 1), 2),
+        "กฎตัดขาดทุนที่": round(100 * stop),
+        "โดนตัดขาดทุนกี่เปอร์เซ็นต์ของลำดับ": round(100 * stopped / rounds, 1),
+        "ผลแย่สุดเปอร์เซ็นต์": round(100 * finals[0], 1),
+        "ผลกลางเปอร์เซ็นต์": round(100 * finals[rounds // 2], 1),
+        "ผลดีสุดเปอร์เซ็นต์": round(100 * finals[-1], 1),
+        "ลำดับจริงเปอร์เซ็นต์": round(100 * actual, 1),
+        "ลำดับจริงโดนตัดไหม": actual_stop,
+    }
+
+
+# ── Part 5: ต้นทุนและอีกฝั่งของดีล ──────────────────────────────────────────
+def _cost_study(day="2026-08-29", band=0.05):
+    """ส่วนต่างราคาซื้อ-ขายจริง แยกตามอายุคงเหลือ และเทียบข้ามตลาด
+
+    นับเฉพาะสัญญาที่มีทั้งราคาเสนอซื้อและเสนอขาย และอยู่ใกล้ราคาปัจจุบันภายใน band
+    ตัวเลขข้ามตลาดเทียบกันแบบหยาบ ๆ เท่านั้น เพราะสเปกสัญญาและเวลาสแนปช็อตไม่ตรงกันเป๊ะ
+    """
+    y0, m0, d0 = map(int, day.split("-"))
+    today = datetime.date(y0, m0, d0)
+    buckets = [("0-2 วัน", 2), ("3-7 วัน", 7), ("8-30 วัน", 30),
+               ("31-120 วัน", 120), ("เกิน 120 วัน", 10**6)]
+
+    result = {"วันที่": day, "นับเฉพาะสัญญาใกล้ราคาปัจจุบันภายในเปอร์เซ็นต์": round(100 * band), "ตลาด": {}}
+    for venue in ("deribit", "okx"):
+        path = os.path.join(ROOT, "data", venue, day[:4], day[5:7], day + ".csv")
+        if not os.path.exists(path):
+            continue
+        groups = {name: [] for name, _ in buckets}
+        no_bid = total = 0
+        with open(path) as fh:
+            for row in csv.DictReader(fh):
+                if row["underlying"] != "BTC":
+                    continue
+                total += 1
+                try:
+                    bid, ask = float(row["bid"] or 0), float(row["ask"] or 0)
+                    spot, strike = float(row["underlying_price"]), float(row["strike"])
+                except ValueError:
+                    continue
+                if bid <= 0:
+                    no_bid += 1
+                    continue
+                if ask <= 0 or abs(strike / spot - 1) > band:
+                    continue
+                ey, em, ed = map(int, row["expiry"].split("-"))
+                dte = (datetime.date(ey, em, ed) - today).days
+                for name, cap in buckets:
+                    if dte <= cap:
+                        groups[name].append(100 * (ask - bid) / ((ask + bid) / 2))
+                        break
+        result["ตลาด"][venue] = {
+            "ตามอายุคงเหลือ": {name: {"จำนวนสัญญา": len(v), "ส่วนต่างกลางเปอร์เซ็นต์": round(statistics.median(v), 1)}
+                                for name, v in groups.items() if v},
+            "สัญญาที่ไม่มีราคาเสนอซื้อ": no_bid,
+            "สัญญาทั้งหมด": total,
+            "สัดส่วนที่ขายออกไม่ได้เปอร์เซ็นต์": round(100 * no_bid / total) if total else None,
+        }
+    return result
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -331,6 +466,9 @@ def build():
         "เงื่อนไข": _conditional_study(),
         "อินดิเคเตอร์": _indicator_study(prices),
         "ข้อความ": _claim_study(prices),
+        "การกระจายผลตอบแทน": _distribution_study(prices),
+        "ลำดับ": _path_study(prices),
+        "ต้นทุนตามอายุ": _cost_study(),
     }
 
 
