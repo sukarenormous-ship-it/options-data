@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — ภาคผนวก C: การ์ดเดียวจบ</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">ภาคผนวก C — การ์ดเดียวจบ</div>
+<div class="desc">แปดสถานี แปดคำถาม พิมพ์แปะข้างจอ</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 วิธีใช้หน้านี้</div>
+<p>หน้านี้ออกแบบให้พิมพ์ออกมาแผ่นเดียว แล้วแปะไว้ข้างจอ · กด Ctrl+P แล้วสั่งพิมพ์ได้เลย
+กล่องสีจะพิมพ์ติดไปด้วย</p></div>
+
+<h2>ก่อนกดคำสั่ง — แปดคำถาม</h2>
+
+<div class="tw"><table>
+<tr><th class="nw">สถานี</th><th>คำถามที่ต้องตอบให้ได้</th><th>ถ้าตอบไม่ได้</th></tr>
+<tr><td class="nw"><strong>① ข้อความ</strong></td><td>ฉันเชื่ออะไร แบบที่ <em>ผิดได้</em> — ครบห้าช่อง: อะไร · เท่าไร · เมื่อไร · วัดด้วยอะไร · อะไรพิสูจน์ว่าผิด</td><td><strong>ไม่เข้าไม้</strong></td></tr>
+<tr><td class="nw"><strong>② ฐาน</strong></td><td>ถ้าไม่ทำอะไรเลย ปกติมันเป็นยังไง และสัญญาณนี้เพิ่มอะไรจากนั้น</td><td>เขียนลงสมุดว่า "อธิบายไม่ได้" แล้วลดขนาดไม้ลงครึ่งหนึ่ง</td></tr>
+<tr><td class="nw"><strong>③ การวัด</strong></td><td>ตัวเลขที่ฉันใช้ วัดอะไรกันแน่ และต่างจากสิ่งที่ฉันอยากรู้ตรงไหน</td><td>หาตัวเลขที่ตรงกว่านี้ก่อน</td></tr>
+<tr><td class="nw"><strong>④ การกระจาย</strong></td><td>ถ้าวันแย่ที่สุดที่เคยเห็นมาสามวันติด ฉันยังทำตามแผนได้ไหม</td><td>ลดขนาดไม้จนกว่าจะตอบว่าได้</td></tr>
+<tr><td class="nw"><strong>⑤ ต้นทุน</strong></td><td>ค่าผ่านทางไปกลับกี่ % · ต้องชนะกี่ % ถึงเสมอตัว · ใครอยู่อีกฝั่งและเขายอมเพราะอะไร</td><td>ถือว่าคำตอบคือ "เขารู้มากกว่าเรา"</td></tr>
+<tr><td class="nw"><strong>⑥ โครงสร้าง</strong></td><td>ความเชื่อของฉันมีตัวเลข "เท่าไร" หรือยัง · รูปนี้ขายอะไรทิ้งไปบ้าง</td><td>กลับไปเขียนช่อง "เท่าไร" ที่สถานี ①</td></tr>
+<tr><td class="nw"><strong>⑦ ขนาด</strong></td><td>ถ้าไม้นี้ผิดทั้งหมด เสียกี่บาท · เกินเพดานต่อไม้ไหม · ผิดติดกันห้าไม้ยังทำตามแผนได้ไหม</td><td><strong>ลดขนาด ไม่ใช่ลดเพดาน</strong></td></tr>
+<tr><td class="nw"><strong>⑧ บันทึก</strong></td><td>ฉันจดอะไรไว้ก่อนแล้ว · อะไรจะทำให้ฉันยอมรับว่าผิด และเมื่อไร</td><td><strong>ไม่เข้าไม้</strong></td></tr>
+</table></div>
+
+<h2>สมุดหกบรรทัดต่อไม้</h2>
+
+<div class="bx bg"><div class="bt">เขียนก่อนกดคำสั่ง ใช้เวลาไม่ถึงสามนาที</div>
+<ol>
+<li><strong>ข้อความห้าช่อง</strong> ______________________________________________</li>
+<li><strong>ฐาน</strong> ปกติเรื่องแบบนี้เกิด ______ % · รู้ได้จาก ______________________</li>
+<li><strong>ต้นทุนไปกลับ</strong> ______ % · <strong>อัตราชนะขั้นต่ำ</strong> ______ %</li>
+<li><strong>ขนาดไม้</strong> ______ บาท · <strong>เพดานความเสียหาย</strong> ______ บาท</li>
+<li><strong>ความมั่นใจ</strong> 1 · 2 · 3 · 4 · 5</li>
+<li><strong>อะไรจะทำให้เปลี่ยนใจระหว่างทาง</strong> ____________________________</li>
+</ol></div>
+
+<h2>ค่าเริ่มต้นทั้งเล่ม รวมไว้ที่เดียว</h2>
+
+<div class="tw"><table>
+<tr><th>เรื่อง</th><th>ค่าเริ่มต้นถ้ายังไม่รู้จะเลือกอะไร</th><th class="nw">มาจาก</th></tr>
+<tr><td>กรอบเวลาของข้อความ</td><td>5 วันทำการ</td><td class="nw">Part 2</td></tr>
+<tr><td>ลำดับการเขียนข้อความ</td><td>เขียนช่อง "อะไรพิสูจน์ว่าผิด" ก่อนช่องอื่นเสมอ</td><td class="nw">Part 2</td></tr>
+<tr><td>อินดิเคเตอร์</td><td>ใช้ค่ามาตรฐาน ไม่จูน และใช้เป็นตัวคัดสภาพตลาด ไม่ใช่ตัวสั่งซื้อ</td><td class="nw">Part 3</td></tr>
+<tr><td>ตัวเลขผลตอบแทนที่ใช้ตัดสินใจ</td><td>ใช้ค่าเฉลี่ยเชิงเรขาคณิตเสมอ</td><td class="nw">Part 4</td></tr>
+<tr><td>อายุสัญญา</td><td>เลี่ยงของที่ใกล้หมดอายุ ถ้าไม่มีเหตุผลเฉพาะเจาะจง</td><td class="nw">Part 5</td></tr>
+<tr><td>ชนิดคำสั่ง</td><td>ใช้คำสั่งตั้งรอแทนคำสั่งซื้อทันที เมื่อทำได้</td><td class="nw">Part 5</td></tr>
+<tr><td>รูปการจ่ายผล</td><td>เริ่มที่ "ซื้อของจริง" เสมอ · อย่าเลือกรูปเพราะมันถูก</td><td class="nw">Part 6</td></tr>
+<tr><td><strong>เพดานความเสียหายต่อไม้</strong></td><td><strong>1% ของทุน</strong></td><td class="nw">Part 7</td></tr>
+<tr><td><strong>เพดานรวมทั้งพอร์ต</strong></td><td><strong>−20% แล้วหยุดทบทวน</strong></td><td class="nw">Part 7</td></tr>
+<tr><td>ถ้าจะทำอย่างเดียว</td><td>จดสมุดทุกไม้ — ยิ่งเริ่มช้ายิ่งแพง</td><td class="nw">Part 1, 8</td></tr>
+</table></div>
+
+<h2>สัญญาณอันตรายห้าข้อ</h2>
+
+<div class="bx br"><div class="bt">เจอข้อไหน ให้หยุดก่อน</div>
+<ul>
+<li>ตอบไม่ได้ว่า <strong>อะไรจะพิสูจน์ว่าฉันผิด</strong> — หรือตอบได้แต่เป็นประตูหนี ("ถ้ามันไม่ขึ้นต่อ")</li>
+<li>ตัวเลขผลงานที่เห็น <strong>ไม่มี n มาด้วย</strong> หรือคนพูดจำไม่ได้ว่าลองมากี่แบบ</li>
+<li>อยาก <strong>เพิ่มขนาดไม้เพราะมั่นใจ</strong> ไม่ใช่เพราะเพดานเปลี่ยน</li>
+<li>ตัวเลขที่ใช้ตัดสินใจมาจาก <strong>ช่วงเวลาที่ตลาดดีเป็นพิเศษ</strong></li>
+<li>กำลังจะ <strong>เปลี่ยนกฎกลางทาง</strong> ด้วยเหตุผลที่เพิ่งคิดขึ้นสด ๆ</li>
+</ul></div>
+
+<div class="bx bp" style="text-align:center">
+<div class="bt">ประโยคเดียวถ้าจำอะไรไม่ได้เลย</div>
+<p style="font-size:1.15em;font-weight:700">อินดิเคเตอร์คือเครื่องมือวัดที่สถานีที่ 3 — คนที่ขาดทุนไม่ได้เลือกเครื่องมือวัดผิด เขาแค่ไม่มีอีก 7 สถานี</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

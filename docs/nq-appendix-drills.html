@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — ภาคผนวก D: แบบฝึกหัดทั้งเล่ม</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">ภาคผนวก D — แบบฝึกหัดทั้งเล่ม</div>
+<div class="desc">30 ข้อจาก 10 บท รวมไว้ที่เดียว · พิมพ์ออกมาทำได้</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 วิธีใช้หน้านี้</div>
+<p>แบบฝึกหัดในเล่มนี้ไม่มี "เฉลย" เพราะเกือบทุกข้อคำตอบขึ้นกับบัญชีและตลาดของคุณเอง
+สิ่งที่มีคือ <strong>เกณฑ์ว่าทำข้อนั้นสำเร็จหรือยัง</strong> อยู่ท้ายหน้า</p>
+<p>ทำตามลำดับก็ได้ หรือทำเฉพาะบทที่เพิ่งอ่านจบก็ได้ — แต่ข้อที่ให้ "จดไว้ก่อน"
+ต้องทำก่อนเทรดจริงเสมอ ไม่ใช่ย้อนหลัง</p></div>
+
+<h2>Part 0 — เส้นตัดกันแล้วไง</h2>
+<p><a href="nq-part0.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>เปิดไม้ล่าสุดที่คุณเทรด แล้วเขียนความเชื่อตอนนั้นเป็นข้อความที่ <em>ผิดได้</em> หนึ่งประโยค — ถ้าเขียนไม่ได้ นั่นคือคำตอบของแบบฝึกหัดนี้</li>
+<li>หาค่าธรรมเนียมต่อข้างของตลาดที่คุณเทรดจริง แล้วคำนวณอัตราชนะขั้นต่ำที่ทำให้คุณเสมอตัว เมื่อกำไรเป้าเท่ากับขาดทุนที่ยอมรับ</li>
+<li>ในสายการผลิต 8 สถานี ตอนนี้คุณมีกี่สถานี — ตอบตรง ๆ กับตัวเอง แล้วจดวันที่ไว้ เราจะกลับมาดูข้อนี้อีกครั้งที่ Part 9</li>
+</ol>
+<h2>Part 1 — ภาษาของความไม่แน่นอน</h2>
+<p><a href="nq-part1.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>นับจำนวนไม้ที่คุณเทรดไปทั้งหมดตั้งแต่เริ่ม แล้วเทียบกับตารางในบทนี้ — ตอนนี้คุณอยู่แถวไหนของเส้นทางสู่พันไม้</li>
+<li>นึกถึงเทรดเดอร์คนหนึ่งที่คุณเคยประทับใจจากผลงานช่วงหนึ่ง แล้วลองหาว่าเขาทำผลงานยังไงในปีถัดมา — ถ้าหาไม่เจอ ให้ถามว่าทำไมถึงหาไม่เจอ</li>
+<li>เปิดกฎการเข้าไม้ของคุณข้อหนึ่ง แล้วตอบคำถามที่สามของกล่อง 🧭 ให้ได้: ถ้ากฎข้อนี้ไม่มีค่าอะไรเลย ผลลัพธ์ที่ผ่านมาจะหน้าตาต่างจากนี้ยังไง</li>
+</ol>
+<h2>Part 2 — ข้อความที่ผิดได้</h2>
+<p><a href="nq-part2.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>เขียนข้อความห้าช่องสำหรับไม้ถัดไปที่คุณจะเข้าจริง — เขียนก่อนกดซื้อ ไม่ใช่หลัง</li>
+<li>เปิดบทวิเคราะห์ที่คุณอ่านล่าสุด แล้วหาว่ามีประโยคไหนที่กรอกครบห้าช่องได้บ้าง (คำตอบมักจะเป็นศูนย์ และนั่นคือข้อมูลเกี่ยวกับบทวิเคราะห์นั้น)</li>
+<li>นึกถึงไม้ที่ขาดทุนหนักที่สุดของคุณ แล้วตอบว่า ตอนนั้นคุณอ่านตลาดผิด หรืออ่านถูกแต่จัดการห่วย — ถ้าตอบไม่ได้ นั่นคือสิ่งที่สถานีนี้มีไว้แก้</li>
+</ol>
+<h2>Part 3 — ทำไมอินดิเคเตอร์ถึงหลอก</h2>
+<p><a href="nq-part3.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>เปิดกราฟที่คุณใช้จริง ใส่อินดิเคเตอร์ที่คุณใช้ แล้วหาจุดสัญญาณ 5 จุดล่าสุด จดว่าราคาตอนสัญญาณออก เทียบกับราคาจุดกลับตัวจริงที่ตาเห็น ห่างกันกี่วัน</li>
+<li>คำนวณว่าถ้าคุณไม่ทำอะไรเลยตลอดเดือนที่ผ่านมา พอร์ตจะเป็นเท่าไร แล้วเทียบกับของจริง — ผลต่างคือสิ่งที่การตัดสินใจของคุณสร้างขึ้น ไม่ว่าจะบวกหรือลบ</li>
+<li>เลือกตัวเลขหนึ่งตัวที่คุณดูทุกวัน แล้วเขียนให้ได้เป็นประโยคเต็มว่ามันวัดอะไร และมันต่างจากสิ่งที่คุณอยากรู้ตรงไหน</li>
+</ol>
+<h2>Part 4 — การกระจายและหาง</h2>
+<p><a href="nq-part4.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>หาผลตอบแทนรายวันของสิ่งที่คุณถืออยู่ย้อนหลังสองเดือน แล้วหาว่าวันที่แรงที่สุดคิดเป็นกี่เท่าของวันปกติ</li>
+<li>คำนวณว่าถ้าพอร์ตคุณขยับ 4 เท่าของวันปกติในทางลบ เป็นเงินกี่บาท แล้วถามตัวเองตรง ๆ ว่าเห็นตัวเลขนั้นแล้วจะยังทำตามแผนได้ไหม</li>
+<li>นับว่าตอนนี้ระบบของคุณมีกฎอัตโนมัติกี่ข้อ (ตัดขาดทุน ทยอยเข้า ทยอยออก เติมเงิน ถอนเงิน) — ทุกข้อคือจุดที่ลำดับของเหตุการณ์เข้ามามีอำนาจเหนือผลลัพธ์ของคุณ</li>
+</ol>
+<h2>Part 5 — ต้นทุนและอีกฝั่งของดีล</h2>
+<p><a href="nq-part5.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>เปิดกระดานราคาของสิ่งที่คุณเทรดบ่อยที่สุด จดราคาเสนอซื้อและเสนอขาย ณ วินาทีเดียวกัน แล้วคำนวณส่วนต่างเป็นเปอร์เซ็นต์</li>
+<li>บวกค่าธรรมเนียมสองข้างเข้าไป แล้วคูณด้วยจำนวนไม้ที่คุณเทรดต่อปี — ตัวเลขที่ได้คือเงินที่คุณจ่ายให้ตลาดต่อปี ไม่ว่าจะกำไรหรือขาดทุน</li>
+<li>เลือกไม้ล่าสุดหนึ่งไม้ แล้วเขียนคำตอบให้ได้ว่าใครอยู่อีกฝั่ง และเขายอมเพราะอะไร — ถ้าเขียนไม่ได้ นั่นคือข้อมูลสำคัญเกี่ยวกับไม้นั้น</li>
+</ol>
+<h2>Part 6 — โครงสร้างจ่ายผล</h2>
+<p><a href="nq-part6.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>วาดกราฟจ่ายผลของสิ่งที่คุณถืออยู่ตอนนี้ลงกระดาษ ระบุจุดหักและความชันแต่ละช่วง</li>
+<li>เขียนความเชื่อล่าสุดของคุณให้มีตัวเลข "เท่าไร" แล้วถามว่ารูปที่คุณถืออยู่ตรงกับตัวเลขนั้นไหม</li>
+<li>หาโครงสร้างหนึ่งอย่างที่คุณเคยได้ยินชื่อแต่ไม่เคยเข้าใจ แล้วลองอ่านมันด้วยสองขั้น — จุดหักอยู่ตรงไหน ความชันแต่ละช่วงเป็นยังไง</li>
+</ol>
+<h2>Part 7 — ขนาดและการอยู่รอด</h2>
+<p><a href="nq-part7.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>คำนวณเพดานความเสียหายต่อไม้ของคุณเป็นตัวเลขบาท แล้วเทียบกับไม้ล่าสุดที่เพิ่งเทรด — เกินไปกี่เท่า</li>
+<li>เปิดผลตอบแทนย้อนหลังที่คุณใช้ตัดสินใจ แล้วถามว่าช่วงนั้นตลาดขึ้นหรือลง ถ้าขึ้น แปลว่าตัวเลขของคุณมองโลกในแง่ดีเกินจริงอยู่เท่าไร</li>
+<li>ดูตาราง "ขาดทุนไปเท่าไร ต้องได้เท่าไรถึงกลับ" แล้วขีดเส้นว่าคุณจะไม่ยอมให้พอร์ตลงลึกกว่าตรงไหน เขียนตัวเลขนั้นแปะไว้ข้างจอ</li>
+</ol>
+<h2>Part 8 — บันทึก ทดสอบ ยอมผิด</h2>
+<p><a href="nq-part8.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>เขียนบันทึกหกบรรทัดสำหรับไม้ถัดไป เก็บไว้ แล้วเปิดอ่านอีกทีตอนปิดไม้ เทียบกับสิ่งที่คุณจำได้</li>
+<li>นึกถึงตัวเลขผลงานที่คุณเคยเห็นแล้วประทับใจ แล้วถามว่าคนนั้นลองมากี่แบบก่อนจะได้ตัวเลขนั้น — ถ้าไม่มีข้อมูลข้อนี้ คุณยังไม่ได้เห็นผลงานจริง</li>
+<li>ให้คะแนนความมั่นใจ 1 ถึง 5 กับสิบไม้ถัดไป แล้วรอดูว่าคะแนนกับผลลัพธ์เกี่ยวกันไหม</li>
+</ol>
+<h2>Part 9 — 30 วันของมิน</h2>
+<p><a href="nq-part9.html">กลับไปอ่านบทนี้</a></p>
+<ol>
+<li>ย้อนกลับไปดูคำตอบของคุณในแบบฝึกหัดข้อ 3 ของ Part 0 ที่ถามว่าตอนนั้นคุณมีกี่สถานี — ตอนนี้ต่างไปไหม</li>
+<li>เขียนแผนสามสิบวันข้างหน้าของตัวเอง โดยกำหนดแค่สามอย่าง: เพดานต่อไม้ · เพดานรวมทั้งพอร์ต · และสัญญาว่าจะเขียนสมุดทุกไม้</li>
+<li>อย่าเพิ่งเปลี่ยนวิธีเทรด ให้เก็บข้อมูลของวิธีเดิมสามสิบวันก่อน แล้วค่อยตัดสินใจจากสิ่งที่เห็นในสมุด ไม่ใช่จากสิ่งที่รู้สึก</li>
+</ol>
+
+<h2>เกณฑ์ว่าทำสำเร็จแล้ว</h2>
+
+<div class="bx bg"><div class="bt">✅ Monday-Morning Test ฉบับ non-quant</div>
+<p>ถ้าทำแบบฝึกหัดครบแล้ว คุณควรผลิตของหกชิ้นนี้ได้ภายในหนึ่งชั่วโมง โดยไม่ต้องเปิดหนังสือ</p>
+<ol>
+<li><strong>ข้อความที่ผิดได้</strong> หนึ่งข้อ ครบห้าช่อง เกี่ยวกับตลาดที่คุณเทรดจริง</li>
+<li><strong>ฐาน</strong> ของข้อความนั้น — ปกติเกิดบ่อยแค่ไหน และคุณหาตัวเลขนั้นมาจากไหน</li>
+<li><strong>วิธีวัด</strong> ที่คุณอธิบายได้ว่ามันวัดอะไรจริง ๆ และพลาดตรงไหน</li>
+<li><strong>ต้นทุนต่อรอบ</strong> ของตลาดคุณ พร้อมอัตราชนะขั้นต่ำที่ทำให้เสมอตัว</li>
+<li><strong>ขนาดไม้</strong> ที่คำนวณจากเพดานความเสียหาย และ <strong>กฎหยุด</strong> หนึ่งข้อ</li>
+<li><strong>บรรทัดในสมุด</strong> ที่เขียนไว้ก่อนเข้าไม้ ว่าอะไรจะพิสูจน์ว่าคุณผิด</li>
+</ol>
+<p>ข้อไหนทำไม่ได้ ให้กลับไปที่ Part ที่รับผิดชอบข้อนั้น</p></div>
+
+<div class="bx ba"><div class="bt">📖 หมายเหตุ</div>
+<p>หน้านี้สร้างด้วย <code>tools/nq_drills.py</code> ดึงจากกล่อง "ลองทำเอง" ในบทโดยตรง
+ถ้าแก้บท ให้รันสคริปต์ใหม่</p></div>
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
