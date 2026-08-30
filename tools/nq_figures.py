@@ -222,6 +222,88 @@ def _conditional_study(prevalence=0.01, sensitivity=0.99, false_positive=0.05):
     }
 
 
+# ── Part 2-3: อินดิเคเตอร์บนข้อมูลจริง ───────────────────────────────────────
+def _ema(vals, n):
+    k = 2 / (n + 1)
+    out = [vals[0]]
+    for v in vals[1:]:
+        out.append(v * k + out[-1] * (1 - k))
+    return out
+
+
+def _indicator_study(prices, fast=12, slow=26, fee=0.001):
+    """เดินตามสัญญาณ EMA ตัดกันบนข้อมูลจริง เทียบกับการถือเฉย ๆ
+
+    ตัด `slow` วันแรกทิ้งเป็นช่วงอุ่นเครื่อง เพราะค่า EMA ช่วงต้นยังไม่นิ่ง
+    ผลที่ได้มาจากไม้เพียงไม่กี่ไม้ จึงใช้เป็น *ภาพประกอบกลไก* ไม่ใช่หลักฐานทางสถิติ
+    """
+    days = sorted(prices)
+    px = [prices[d] for d in days]
+    ef, es = _ema(px, fast), _ema(px, slow)
+
+    signals = []
+    for i in range(slow, len(px)):
+        if ef[i - 1] <= es[i - 1] and ef[i] > es[i]:
+            signals.append((i, "ซื้อ"))
+        elif ef[i - 1] >= es[i - 1] and ef[i] < es[i]:
+            signals.append((i, "ขาย"))
+
+    def walk(cost):
+        cash, units, entry, trades = 1.0, 0.0, None, []
+        for i, side in signals:
+            if side == "ซื้อ" and units == 0:
+                units, cash, entry = cash * (1 - cost) / px[i], 0.0, i
+            elif side == "ขาย" and units > 0:
+                cash, units = units * px[i] * (1 - cost), 0.0
+                trades.append((entry, i))
+                entry = None
+        if units > 0:
+            cash = units * px[-1] * (1 - cost)
+            trades.append((entry, len(px) - 1))
+        return cash - 1, trades
+
+    net, trades = walk(fee)
+    gross, _ = walk(0.0)
+    hold = px[-1] / px[slow] - 1
+
+    return {
+        "คำอธิบาย": f"เดินตาม EMA {fast}/{slow} ตัดกันบนราคาจริง หักค่าธรรมเนียม {fee:.1%} ต่อข้าง",
+        "เตือน": "มาจากไม้เพียงไม่กี่ไม้ — ใช้ดูกลไก ไม่ใช่หลักฐานว่าระบบดีหรือแย่",
+        "ช่วงที่ใช้": {"ตั้งแต่": days[slow], "ถึง": days[-1], "จำนวนวัน": len(px) - slow},
+        "จำนวนสัญญาณ": len(signals),
+        "สัญญาณ": [{"วันที่": days[i], "สัญญาณ": side, "ราคา": round(px[i])} for i, side in signals],
+        "จำนวนไม้": len(trades),
+        "ไม้": [{"เข้า": days[a], "ราคาเข้า": round(px[a]),
+                 "ออก": days[b], "ราคาออก": round(px[b]),
+                 "ผลเปอร์เซ็นต์": round(100 * (px[b] / px[a] - 1), 2)} for a, b in trades],
+        "ผลระบบเปอร์เซ็นต์": round(100 * net, 2),
+        "ผลระบบไม่มีค่าธรรมเนียมเปอร์เซ็นต์": round(100 * gross, 2),
+        "ผลถือเฉยเปอร์เซ็นต์": round(100 * hold, 2),
+        "ตามหลังอยู่จุดเปอร์เซ็นต์": round(100 * (hold - net), 1),
+        "ส่วนที่เสียไปกับค่าธรรมเนียมจุดเปอร์เซ็นต์": round(100 * (gross - net), 2),
+    }
+
+
+def _claim_study(prices, start="2026-08-20", level=72000):
+    """ข้อความที่ผิดได้ ตรวจได้จริงจากข้อมูล — ใช้เป็นตัวอย่างเดินเรื่องใน Part 2"""
+    days = sorted(prices)
+    i = days.index(start)
+    path = [(d, prices[d]) for d in days[i:]]
+    hit = next((d for d, v in path if v >= level), None)
+    lowest = min(v for _, v in path)
+    return {
+        "วันตั้งข้อความ": start,
+        "ราคาวันตั้ง": round(prices[start]),
+        "เส้นระดับ": level,
+        "วันที่แตะระดับ": hit,
+        "จำนวนวันที่ใช้": days.index(hit) - i if hit else None,
+        "ราคาสูงสุดในช่วง": round(max(v for _, v in path)),
+        "ราคาต่ำสุดในช่วง": round(lowest),
+        "ย่อลึกสุดจากจุดตั้งเปอร์เซ็นต์": round(100 * (lowest / prices[start] - 1), 2),
+        "ราคาวันสุดท้าย": round(path[-1][1]),
+    }
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -244,6 +326,8 @@ def build():
         "ดาวเด่น": _star_trader_study(),
         "ผู้รอดชีวิต": _survivorship_study(prices),
         "เงื่อนไข": _conditional_study(),
+        "อินดิเคเตอร์": _indicator_study(prices),
+        "ข้อความ": _claim_study(prices),
     }
 
 
