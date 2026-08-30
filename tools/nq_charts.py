@@ -313,6 +313,54 @@ def chart_payoff(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_survival(fig):
+    """เทียบผลจำลองสองชุด: ชุดที่อบตลาดขาขึ้นไว้ กับชุดที่ตัดแนวโน้มออก"""
+    sv = fig["การอยู่รอด"]
+    levs = ["0.5", "1", "2", "3"]
+    sets = [("ใช้ผลตอบแทนจริง", "ใช้ผลตอบแทนจริง (ช่วงขาขึ้น)", "#94a3b8"),
+            ("ตัดแนวโน้มออก", "ตัดแนวโน้มออก (สมมติไม่มี edge)", "#dc2626")]
+
+    W, H, L, R, B, T = 760, 344, 60, 24, 232, 62
+    gw = (W - L - R) / len(levs)
+    bw = min(34, (gw - 26) / 2)
+
+    out = []
+    for g in (0, 25, 50, 75, 100):
+        y = B - g / 100 * (B - T)
+        out.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#f3f4f6" stroke-width="1"/>')
+        out.append(f'<text x="{L-8}" y="{y+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{g}%</text>')
+
+    for i, lev in enumerate(levs):
+        cx = L + i * gw + gw / 2
+        for j, (key, _, color) in enumerate(sets):
+            val = sv[key][lev]["เคยลึกสามสิบเปอร์เซ็นต์"]
+            h = val / 100 * (B - T)
+            x = cx - (2 * bw + 8) / 2 + j * (bw + 8)
+            out.append(f'<rect x="{x:.1f}" y="{B-h:.1f}" width="{bw:.1f}" height="{max(h,1.5):.1f}" rx="3" fill="{color}"/>')
+            out.append(f'<text x="{x+bw/2:.1f}" y="{B-h-7:.1f}" text-anchor="middle" font-size="11.5" font-weight="700" fill="{color}" {FONT}>{val}%</text>')
+        label = "ครึ่งทุน" if lev == "0.5" else f"{lev} เท่า"
+        out.append(f'<text x="{cx:.1f}" y="{B+18}" text-anchor="middle" font-size="11.5" fill="#6b7280" {FONT}>{label}</text>')
+
+    out.append(f'<line x1="{L}" y1="{B}" x2="{W-R}" y2="{B}" stroke="#d1d5db" stroke-width="1.5"/>')
+    out.append(f'<text x="{(L+W-R)/2:.0f}" y="{B+40}" text-anchor="middle" font-size="12" fill="#6b7280" {FONT}>ขนาดไม้ (สัดส่วนต่อทุน)</text>')
+    out.append(f'<text x="{L}" y="{T-34}" font-size="13.5" font-weight="700" fill="#374151" {FONT}>โอกาสที่พอร์ตจะเคยติดลบลึกถึง 30% ภายในหนึ่งปี</text>')
+    out.append(f'<text x="{L}" y="{T-16}" font-size="12" fill="#6b7280" {FONT}>ข้อมูลชุดเดียวกัน ต่างกันแค่ว่าอบตลาดขาขึ้นไว้ในสมมติฐานหรือไม่</text>')
+
+    # คำอธิบายสัญลักษณ์วางไว้ใต้แกน เพื่อไม่ให้ทับป้ายของแท่งที่สูงเกือบ 100%
+    ly = B + 62
+    for j, (_, name, color) in enumerate(sets):
+        lx = L + j * 330
+        out.append(f'<rect x="{lx}" y="{ly-10}" width="11" height="11" rx="2" fill="{color}"/>')
+        out.append(f'<text x="{lx+16}" y="{ly}" font-size="11.5" fill="#4b5563" {FONT}>{name}</text>')
+
+    alt = ("กราฟแท่งเทียบโอกาสที่พอร์ตจะติดลบลึก 30% ภายในหนึ่งปี ระหว่างการจำลองที่ใช้ผลตอบแทน "
+           "ช่วงตลาดขาขึ้น กับการจำลองที่ตัดแนวโน้มออก ซึ่งให้คำตอบต่างกันมาก")
+    cap = (f'{sv["คำอธิบาย"]} · ชุดสีเทาอบแนวโน้มขาขึ้น {sv["แนวโน้มที่ตัดออกต่อวันเปอร์เซ็นต์"]}% ต่อวัน '
+           'ไว้ในสมมติฐาน ส่วนชุดสีแดงตัดออก เหลือเฉพาะรูปร่างความผันผวนและหางอ้วน')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -326,6 +374,7 @@ CHARTS = {
     "returns": chart_returns,
     "cost": chart_cost,
     "payoff": chart_payoff,
+    "survival": chart_survival,
 }
 
 

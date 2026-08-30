@@ -500,6 +500,61 @@ def _structure_study(prices, day="2026-08-29", expiry="2026-09-25", buy_k=80000,
     }
 
 
+# ── Part 7: ขนาดไม้และการอยู่รอด ────────────────────────────────────────────
+def _survival_study(prices, horizon=252, rounds=20000):
+    """สุ่มผลตอบแทนจริงคืนกลับเพื่อดูว่าขนาดไม้เปลี่ยนโอกาสอยู่รอดยังไง
+
+    ทำสองชุดโดยตั้งใจ
+      ก) ใช้ผลตอบแทนจริงทั้งดุ้น ซึ่งมาจากช่วงตลาดขาขึ้น — เป็นชุดที่ *หลอก*
+      ข) ตัดค่าเฉลี่ยออก เหลือเฉพาะรูปร่างความผันผวนและหางอ้วน — เป็นชุดที่ใช้ตัดสินใจ
+    ความต่างของสองชุดนี้คือบทเรียนหลักของบท ไม่ใช่ผลข้างเคียง
+    """
+    days = sorted(prices)
+    px = [prices[d] for d in days]
+    r = [px[i] / px[i - 1] - 1 for i in range(1, len(px))]
+    drift = statistics.mean(r)
+    flat = [x - drift for x in r]
+
+    def run(source, lev):
+        random.seed(SEED + int(lev * 100))
+        ends, d30, d50, below = [], 0, 0, 0
+        for _ in range(rounds):
+            v, peak, h30, h50 = 1.0, 1.0, False, False
+            for _ in range(horizon):
+                v *= 1 + lev * random.choice(source)
+                if v <= 0:
+                    v, h30, h50 = 1e-9, True, True
+                    break
+                peak = max(peak, v)
+                dd = v / peak - 1
+                h30 = h30 or dd <= -0.30
+                h50 = h50 or dd <= -0.50
+            ends.append(v - 1)
+            d30 += h30
+            d50 += h50
+            below += v < 1
+        ends.sort()
+        return {
+            "ผลกลางเปอร์เซ็นต์": round(100 * ends[rounds // 2], 1),
+            "เคยลึกสามสิบเปอร์เซ็นต์": round(100 * d30 / rounds, 1),
+            "เคยลึกห้าสิบเปอร์เซ็นต์": round(100 * d50 / rounds, 1),
+            "จบต่ำกว่าทุนเปอร์เซ็นต์": round(100 * below / rounds, 1),
+        }
+
+    levs = [0.5, 1, 2, 3]
+    return {
+        "คำอธิบาย": f"สุ่มผลตอบแทนจริงคืนกลับ {horizon} วันทำการ × {rounds:,} เส้นทาง",
+        "แนวโน้มที่ตัดออกต่อวันเปอร์เซ็นต์": round(100 * drift, 3),
+        "ใช้ผลตอบแทนจริง": {str(l): run(r, l) for l in levs},
+        "ตัดแนวโน้มออก": {str(l): run(flat, l) for l in levs},
+    }
+
+
+def _drawdown_table(levels=(10, 20, 30, 50, 70, 90)):
+    """ขาดทุนแล้วต้องได้กี่เปอร์เซ็นต์ถึงกลับที่เดิม"""
+    return {str(d): round(100 * (1 / (1 - d / 100) - 1)) for d in levels}
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
@@ -533,6 +588,8 @@ def build():
         "ลำดับ": _path_study(prices),
         "ต้นทุนตามอายุ": _cost_study(),
         "โครงสร้าง": _structure_study(prices),
+        "การอยู่รอด": _survival_study(prices),
+        "กลับทุน": _drawdown_table(),
     }
 
 
