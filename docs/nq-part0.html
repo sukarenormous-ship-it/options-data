@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 0: เส้นตัดกันแล้วไง</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 0 — เส้นตัดกันแล้วไง: quant ไม่ใช่อินดิเคเตอร์ แต่คือระบบความคิด</div>
+<div class="desc">ภาพลวง 3 ชั้น · ฐานที่ไม่มีใครดู · สายการผลิตความเชื่อ 8 สถานี — และเหตุผลที่อินดิเคเตอร์กินพื้นที่แค่สถานีเดียว</div>
+</div>
+
+<!-- ═══════════════ READING-PATH BANNER ═══════════════ -->
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทุกอย่างยกเว้นกล่องที่ติดป้าย [รอบสอง] — จบ Part นี้แล้วคุณจะรู้ว่าทั้งเล่มกำลังพาไปไหน · <strong>🔵 มีพื้นแล้ว:</strong> ข้ามไปที่ "สายการผลิต 8 สถานี" ได้เลย แล้วย้อนกลับมาอ่านฉากเปิดทีหลัง</p></div>
+
+<!-- ═══════════════ HOOK ═══════════════ -->
+<h2>สามทุ่มสี่สิบ ที่หน้าจอของมิน</h2>
+
+<p>มินเป็นพนักงานประจำ เทรดหลังเลิกงานด้วยเงิน 50,000 บาท คืนนี้เส้น EMA 12 เพิ่งตัดขึ้นเหนือ EMA 26 บนกราฟ BTC รายวัน RSI อยู่ที่ 62 — ไม่ overbought ปริมาณซื้อขายพอใช้ได้</p>
+
+<p>ทุกอย่างที่หนังสือเทคนิคอลบอกว่าเป็น "สัญญาณซื้อ" มาครบแล้ว</p>
+
+<p>มินเปิดหน้าต่างสั่งซื้อ แล้วหยุดค้างอยู่ตรงนั้น เพราะช่องที่ต้องกรอกต่อไปคือ <strong>จำนวน</strong> และไม่มีเส้นไหนบนจอบอกว่าควรใส่เท่าไร</p>
+
+<p>เขาลองนึกย้อนไปว่าเดือนก่อนสัญญาณแบบเดียวกันนี้ให้ผลยังไง — นึกไม่ออก เพราะไม่เคยจด ลองนึกว่าถ้าซื้อแล้วราคาลง จะออกตรงไหน — ยังไม่ได้คิด ลองนึกว่าถ้าคืนนี้ไม่ทำอะไรเลย พรุ่งนี้ราคาจะขึ้นด้วยความน่าจะเป็นเท่าไร — <em>ไม่รู้เลย</em></p>
+
+<p>สุดท้ายมินใส่ตัวเลขที่ "รู้สึกว่าพอดี" แล้วกดซื้อ</p>
+
+<p>นี่คือช่วงเวลาที่หนังสือเล่มนี้สนใจ ไม่ใช่ตอนที่เส้นตัดกัน แต่คือ <strong>ห้าวินาทีหลังจากนั้น</strong> ตอนที่เครื่องมือทั้งหมดที่มินมีเงียบไปพร้อมกัน</p>
+
+<div class="pq">อินดิเคเตอร์บอกคุณว่าเส้นตัดกัน — quant บอกคุณว่าคุณจะรู้ได้ยังไงว่าตัวเองคิดผิด</div>
+
+<!-- ═══════════════ ภาพลวง 3 ชั้น ═══════════════ -->
+<h2>ภาพลวง 3 ชั้นที่ทำให้เรื่องนี้ดูเหมือนไม่มีปัญหา</h2>
+
+<p>ถ้าการเทรดด้วยอินดิเคเตอร์ล้วน ๆ ให้ผลแย่ชัดเจน คงไม่มีใครทำ ปัญหาคือมันไม่ได้แย่แบบเห็นชัด — มันแย่แบบที่ <em>รู้สึกดี</em> ระหว่างทาง เพราะมีภาพลวงซ้อนกันอยู่สามชั้น</p>
+
+<div class="bx br"><div class="bt">ชั้นที่ 1 — สัญญาณสวย</div>
+<p>กราฟที่เกิดขึ้นแล้วอ่านง่ายเสมอ เพราะเรารู้ตอนจบ เวลาเลื่อนกราฟย้อนหลังไปดูจุดที่เส้นตัดกัน ตาเราจะเลือกมองจุดที่ตัดแล้วราคาวิ่งต่อโดยอัตโนมัติ และเลื่อนผ่านจุดที่ตัดแล้วไม่มีอะไรเกิดขึ้นโดยไม่รู้ตัว</p></div>
+
+<div class="bx br"><div class="bt">ชั้นที่ 2 — backtest สวย</div>
+<p>ปรับค่าจาก 12/26 เป็น 10/30 แล้วผลดีขึ้น ลองอีกทีเป็น 9/21 ดีขึ้นอีก — ทุกครั้งที่ลองค่าใหม่แล้วเลือกอันที่ดีที่สุด เรากำลังจ่ายเงินซื้อ "ความบังเอิญที่พอดีกับอดีต" โดยเข้าใจว่าซื้อความรู้</p></div>
+
+<div class="bx br"><div class="bt">ชั้นที่ 3 — ความมั่นใจ</div>
+<p>ชนะติดกันสามไม้ทำให้รู้สึกว่าเข้าใจตลาดแล้ว ทั้งที่การชนะสามไม้ติดจากการโยนเหรียญเกิดขึ้นได้ 1 ใน 8 ครั้ง — บ่อยพอที่จะเกิดกับเกือบทุกคนที่เทรดสักพัก</p></div>
+
+<p>สามชั้นนี้ไม่ได้ทำให้คนขาดทุนทันที มันทำให้คน <strong>เรียนรู้ไม่ได้</strong> ซึ่งแพงกว่ามาก</p>
+
+<!-- ═══════════════ ฐาน ═══════════════ -->
+<h2>คำถามที่ไม่มีอินดิเคเตอร์ตัวไหนถาม: "ปกติมันเป็นยังไง"</h2>
+
+<p>ลองสมมติสัญญาณที่ง่ายกว่า EMA อีก คือ <strong>"BTC ขึ้น 3 วันติด แปลว่ากำลังมีโมเมนตัม ให้ซื้อ"</strong> ฟังดูสมเหตุสมผล และตรวจสอบได้ง่ายกว่าเส้นตัดกันเสียอีก</p>
+
+<p>เรามีข้อมูลจริงอยู่ในมือ — สแนปช็อตราคา BTC รายวันจากตลาด Deribit <strong>57 วัน</strong> ตั้งแต่ 4 กรกฎาคม ถึง 29 สิงหาคม 2026 ช่วงนั้นราคาขึ้นจาก 62,800 ไปที่ 77,716 ดอลลาร์ เป็นตลาดขาขึ้นชัดเจน</p>
+
+<p>คำถามแรกที่ quant ถาม ไม่ใช่ "สัญญาณนี้ดีไหม" แต่คือ <strong>"ถ้าไม่ใช้สัญญาณนี้เลย ผลจะเป็นยังไง"</strong> — ตัวเลขนั้นเรียกว่า <abbr title="อัตราการเกิดตามปกติของเหตุการณ์หนึ่ง เมื่อยังไม่ใส่เงื่อนไขอะไรเข้าไป">ฐาน</abbr> (base rate)</p>
+
+<div class="tw"><table>
+<tr><th>คำถาม</th><th>ตัวเลขจริงจากข้อมูล 57 วัน</th></tr>
+<tr><td>วันที่ราคาขึ้น มีกี่วัน</td><td>33 จาก 56 วัน = <strong>58.9%</strong> ← นี่คือ "ฐาน"</td></tr>
+<tr><td>"ขึ้น 3 วันติด" เกิดบ่อยแค่ไหน</td><td>11 จาก 54 วัน = <strong>20.4%</strong> ของวันทั้งหมด</td></tr>
+<tr><td>วันถัดจากที่ขึ้น 3 วันติด ราคาขึ้นกี่ครั้ง</td><td>6 จาก 11 ครั้ง = <strong>54.5%</strong></td></tr>
+</table></div>
+
+<svg class="fig" viewBox="0 0 700 250" role="img" aria-label="เทียบสัดส่วนวันที่ราคาขึ้น: ทุกวัน 58.9% เทียบกับหลังขึ้น 3 วันติด 54.5%">
+<defs>
+<linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b5563"/><stop offset="1" stop-color="#9ca3af"/></linearGradient>
+<linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d97706"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
+</defs>
+<line x1="70" y1="200" x2="660" y2="200" stroke="#d1d5db" stroke-width="2"/>
+<line x1="70" y1="118" x2="660" y2="118" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="62" y="123" text-anchor="end" font-size="12" fill="#9ca3af" font-family="Sarabun,sans-serif">50%</text>
+<rect x="140" y="103" width="130" height="97" rx="4" fill="url(#gA)"/>
+<text x="205" y="94" text-anchor="middle" font-size="21" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">58.9%</text>
+<text x="205" y="222" text-anchor="middle" font-size="14" fill="#4b5563" font-family="Sarabun,sans-serif">ทุกวัน (ไม่ใช้สัญญาณ)</text>
+<text x="205" y="240" text-anchor="middle" font-size="12" fill="#9ca3af" font-family="Sarabun,sans-serif">n = 56</text>
+<rect x="400" y="112" width="130" height="88" rx="4" fill="url(#gB)"/>
+<text x="465" y="103" text-anchor="middle" font-size="21" font-weight="700" fill="#b45309" font-family="Sarabun,sans-serif">54.5%</text>
+<text x="465" y="222" text-anchor="middle" font-size="14" fill="#4b5563" font-family="Sarabun,sans-serif">หลังขึ้น 3 วันติด</text>
+<text x="465" y="240" text-anchor="middle" font-size="12" fill="#dc2626" font-family="Sarabun,sans-serif">n = 11 — น้อยเกินไป</text>
+<path d="M300 62 Q 360 46 420 74" stroke="#7c3aed" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7c3aed"/></marker></defs>
+<text x="352" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">สัญญาณทำให้แย่ลง ไม่ใช่ดีขึ้น</text>
+</svg>
+<div class="cap">ข้อมูลจริง BTC 57 วัน (4 ก.ค. – 29 ส.ค. 2026) จากสแนปช็อต Deribit ในคลังข้อมูลของเราเอง</div>
+
+<p>อ่านตัวเลขนี้ช้า ๆ: ในตลาดขาขึ้นนี้ ถ้ามินไม่ทำอะไรเลย วันไหนก็ตามมีโอกาสขึ้น 58.9% แต่ถ้ามินรอ "สัญญาณโมเมนตัม" แล้วค่อยซื้อ โอกาสขึ้นกลายเป็น 54.5%</p>
+
+<p><strong>สัญญาณที่ฟังดูมีเหตุผลที่สุด ให้ผลแย่กว่าการไม่มีสัญญาณเลย</strong></p>
+
+<!-- ═══════════════ กลับหัวอีกชั้น ═══════════════ -->
+<h2>แล้วอย่าเพิ่งเชื่อตัวเลขที่เพิ่งอ่านไป</h2>
+
+<p>ตรงนี้คือจุดที่หนังสือเล่มอื่นจะปิดบทด้วยประโยคเท่ ๆ ว่า "เห็นไหม อินดิเคเตอร์ใช้ไม่ได้" — แต่ถ้าทำแบบนั้น เรากำลังทำสิ่งเดียวกับที่เพิ่งตำหนิไปเมื่อกี้</p>
+
+<p>ดูตัวเลข <strong>n = 11</strong> ในกราฟให้ดี นั่นคือจำนวนครั้งทั้งหมดที่ "ขึ้น 3 วันติด" เกิดขึ้นในข้อมูลชุดนี้ ผลออกมา 6 ครั้งขึ้น 5 ครั้งลง</p>
+
+<p>ถ้าเปลี่ยนผลแค่ครั้งเดียว จาก 6 เป็น 7 ตัวเลขจะกลายเป็น 63.6% ซึ่ง <em>ชนะ</em> ฐานทันที ข้อสรุปทั้งหมดพลิกด้วยเหตุการณ์เดียว</p>
+
+<div class="bx ba"><div class="bt">📉 ตอนนี้พังจริงแบบไหน — เคสของหนังสือเล่มนี้เอง</div>
+<p>ถ้าเราเอากราฟข้างบนไปโพสต์พร้อมข้อความว่า "พิสูจน์แล้วว่าโมเมนตัมไม่มีจริง" เราจะได้ยอดแชร์ และเราจะผิดด้วยวิธีเดียวกับคนที่โพสต์ว่า "สัญญาณนี้แม่น 80%"</p>
+<p>ทั้งสองฝั่งทำผิดข้อเดียวกัน คือ <strong>สรุปจากตัวอย่าง 11 ครั้ง</strong> ต่างกันแค่ทิศทางของข้อสรุป</p>
+<p>สิ่งที่ข้อมูลชุดนี้บอกได้จริง ๆ มีข้อเดียว: <em>"สัญญาณนี้ยังไม่แสดงหลักฐานว่าดีกว่าการไม่ทำอะไร และข้อมูลที่มียังน้อยเกินกว่าจะสรุปอะไรหนักแน่นกว่านี้"</em> — ประโยคนี้ไม่เท่ แต่มันจริง</p></div>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ตัวเลข 54.5% แล้วถามว่า "สรุปสัญญาณนี้ใช้ได้หรือไม่ได้"<br>
+<strong>quant เห็น:</strong> ตัวเลข 54.5% พร้อมกับ n = 11 แล้วถามว่า "ข้อมูลเท่านี้ให้สิทธิ์ฉันพูดอะไรได้บ้าง" — ความต่างไม่ได้อยู่ที่คำตอบ แต่อยู่ที่การรู้ว่าตัวเองมีสิทธิ์ตอบแค่ไหน</p></div>
+
+<p>นี่คือความหมายจริง ๆ ของประโยคที่ว่า quant คือระบบความคิด ไม่ใช่เครื่องมือ เครื่องมือให้คำตอบ ระบบความคิดให้ <strong>ขอบเขตของคำตอบ</strong></p>
+
+<!-- ═══════════════ สายการผลิต ═══════════════ -->
+<h2>สายการผลิตความเชื่อ 8 สถานี</h2>
+
+<p>ถ้า quant ไม่ได้ใช้เวลาทั้งวันไปกับการหาสัญญาณ แล้วเขาทำอะไร</p>
+
+<p>คำตอบที่ตรงที่สุดคือ เขาเอาความเชื่อดิบ ๆ หนึ่งอัน ส่งผ่านสถานีตรวจหลายสถานีเรียงกัน แต่ละสถานีมีสิทธิ์ตีตกความเชื่อนั้น ของที่รอดออกมาปลายทางถึงจะได้เงินจริง</p>
+
+<p>ทั้งเล่มนี้คือสายการผลิตนั้น มี 8 สถานี</p>
+
+<svg class="fig" viewBox="0 0 880 278" role="img" aria-label="แผนภาพสายการผลิตความเชื่อ 8 สถานี โดยอินดิเคเตอร์อยู่ที่สถานีที่ 3 เท่านั้น">
+<defs>
+<linearGradient id="bxg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f3f4f6"/></linearGradient>
+<linearGradient id="bxh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#fde68a"/></linearGradient>
+<marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L8,3.5 z" fill="#9ca3af"/></marker>
+<marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L8,3.5 z" fill="#16a34a"/></marker>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity=".18"/></filter>
+</defs>
+
+<text x="20" y="26" font-size="13" fill="#9ca3af" font-family="Sarabun,sans-serif">ความรู้สึก</text>
+<path d="M92 21 L124 21" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+
+<g font-family="Sarabun,sans-serif" filter="url(#sh)">
+<rect x="132" y="0" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="322" y="0" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="512" y="0" width="164" height="44" rx="8" fill="url(#bxh)" stroke="#d97706" stroke-width="2"/>
+<rect x="702" y="0" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="702" y="150" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="512" y="150" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="322" y="150" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+<rect x="132" y="150" width="164" height="44" rx="8" fill="url(#bxg)" stroke="#d1d5db"/>
+</g>
+
+<g font-family="Sarabun,sans-serif" font-size="15" font-weight="700" fill="#111827" text-anchor="middle">
+<text x="214" y="28">① ข้อความ</text>
+<text x="404" y="28">② ฐาน</text>
+<text x="594" y="28" fill="#b45309">③ การวัด</text>
+<text x="784" y="28">④ การกระจาย</text>
+<text x="784" y="178">⑤ ต้นทุน</text>
+<text x="594" y="178">⑥ โครงสร้าง</text>
+<text x="404" y="178">⑦ ขนาด</text>
+<text x="214" y="178">⑧ บันทึก</text>
+</g>
+
+<path d="M296 22 L318 22" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M486 22 L508 22" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M676 22 L698 22" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M784 44 L784 146" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M702 172 L680 172" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M512 172 L490 172" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+<path d="M322 172 L300 172" stroke="#9ca3af" stroke-width="2" marker-end="url(#a2)"/>
+
+<path d="M132 172 Q 70 172 70 108 Q 70 60 128 26" stroke="#16a34a" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#a3)"/>
+<text x="30" y="112" font-size="12" fill="#16a34a" font-family="Sarabun,sans-serif">ป้อน</text>
+<text x="30" y="128" font-size="12" fill="#16a34a" font-family="Sarabun,sans-serif">กลับ</text>
+
+<path d="M594 96 L594 56" stroke="#d97706" stroke-width="2" fill="none"/>
+<rect x="452" y="98" width="286" height="34" rx="8" fill="#fffbeb" stroke="#d97706"/>
+<text x="595" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="#b45309" font-family="Sarabun,sans-serif">อินดิเคเตอร์ทั้งหมดอยู่ตรงนี้ — สถานีเดียว</text>
+
+<text x="784" y="222" text-anchor="middle" font-size="13" fill="#16a34a" font-weight="700" font-family="Sarabun,sans-serif">ออกปลายทาง:</text>
+<text x="784" y="242" text-anchor="middle" font-size="12" fill="#4b5563" font-family="Sarabun,sans-serif">ตำแหน่งที่มีขนาด</text>
+<text x="784" y="260" text-anchor="middle" font-size="12" fill="#4b5563" font-family="Sarabun,sans-serif">มีกฎออก และมีวิธีรู้ว่าผิด</text>
+</svg>
+<div class="cap">แต่ละ Part ของหนังสือเล่มนี้คือหนึ่งสถานี — Part 9 คือการเดินครบสายพร้อมกันทั้ง 8 สถานี</div>
+
+<div class="tw"><table>
+<tr><th class="nw">สถานี</th><th>คำถามประจำสถานี</th><th>ถ้าข้ามไป จะเจ็บแบบไหน</th></tr>
+<tr><td class="nw"><strong>① ข้อความ</strong></td><td>ฉันเชื่ออะไร แบบที่ <em>ผิดได้</em></td><td>เถียงกับตัวเองไม่จบ ไม่มีวันรู้ว่าถูกจริงหรือฟลุก</td></tr>
+<tr><td class="nw"><strong>② ฐาน</strong></td><td>ถ้าไม่ทำอะไรเลย ปกติมันเป็นยังไง</td><td>ตื่นเต้นกับสิ่งที่เกิดขึ้นเป็นปกติอยู่แล้ว</td></tr>
+<tr><td class="nw"><strong>③ การวัด</strong></td><td>วัดด้วยอะไร และมันวัด <em>ถูกตัว</em> ไหม</td><td>เชื่อเซ็นเซอร์ที่วัดผิดตัว</td></tr>
+<tr><td class="nw"><strong>④ การกระจาย</strong></td><td>ช่วงและหางเป็นยังไง ไม่ใช่แค่ค่ากลาง</td><td>ถูกบ่อยแต่เจ๊งครั้งเดียวจบ</td></tr>
+<tr><td class="nw"><strong>⑤ ต้นทุน</strong></td><td>ใครอยู่อีกฝั่ง และเก็บค่าผ่านทางเท่าไร</td><td>กำไรตายตรงส่วนต่างราคาโดยไม่รู้ตัว</td></tr>
+<tr><td class="nw"><strong>⑥ โครงสร้าง</strong></td><td>ความเชื่อนี้ควรมีหน้าตาการจ่ายผลแบบไหน</td><td>ซื้อของถูกทางแต่ผิดรูป</td></tr>
+<tr><td class="nw"><strong>⑦ ขนาด</strong></td><td>ทนได้แค่ไหน — ไม่ใช่มั่นใจแค่ไหน</td><td>ถูกทางแต่ตายก่อนถึง</td></tr>
+<tr><td class="nw"><strong>⑧ บันทึก</strong></td><td>จดอะไรไว้ก่อน แล้วอะไรพิสูจน์ว่าผิด</td><td>ทำซ้ำความผิดเดิมไปทั้งชีวิต</td></tr>
+</table></div>
+
+<div class="pq">คนที่ขาดทุนส่วนใหญ่ไม่ได้เลือกเครื่องมือวัดผิด เขาแค่ไม่มีอีก 7 สถานี</div>
+
+<!-- ═══════════════ ตัวเลขของมิน ═══════════════ -->
+<h2>ตัวเลขของมิน — และค่าผ่านทางที่ยังไม่มีใครหักออก</h2>
+
+<p>กลับมาที่หน้าจอเมื่อสามทุ่มสี่สิบ สมมติว่ามินซื้อจริง แล้วตั้งใจจะขายเมื่อได้กำไร 2%</p>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<ul>
+<li>ทุน <strong>50,000 บาท</strong> · ค่าธรรมเนียม <strong>0.1% ต่อข้าง</strong> → เข้าและออกครบรอบ = <strong>0.2% ต่อรอบ</strong></li>
+<li>ตั้งเป้ากำไร 2% และยอมขาดทุน 2% เท่ากัน</li>
+<li>อัตราชนะที่ต้องได้เพื่อ <em>แค่เสมอตัว</em> = <strong>55.0%</strong> ไม่ใช่ 50%</li>
+</ul>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ถ้ากำไรกับขาดทุนเท่ากัน การชนะครึ่งหนึ่งควรจะเสมอตัวพอดี แต่ทุกไม้ต้องจ่ายค่าผ่านทาง 0.2% ไปก่อน มินจึงต้องชนะมากกว่าครึ่งอยู่นิดหนึ่งเพื่อหาเงินมาจ่ายส่วนนั้น — "นิดหนึ่ง" นั้นคือ ครึ่งหนึ่งของต้นทุน หารด้วยขนาดกำไรที่ตั้งไว้</p>
+<div class="fm">อัตราชนะเสมอตัว = 50% + (ต้นทุนต่อรอบ ÷ 2 ÷ กำไรเป้า) <br>
+                = 50% + (0.2 ÷ 2 ÷ 2) = 50% + 5% = 55%</div>
+<p>สังเกตว่าตัวหารคือ <em>กำไรเป้า</em> — ยิ่งตั้งเป้ากำไรต่อไม้เล็กลง ต้นทุนยิ่งกินสัดส่วนมากขึ้น ถ้ามินเปลี่ยนไปเก็บสั้น ๆ ทีละ 0.5% เส้นเสมอตัวจะกระโดดไปที่ 70% ทันที</p>
+<p>เทียบกับสัญญาณ "ขึ้น 3 วันติด" ที่ให้ 54.5% — ต่อให้ตัวเลขนั้นเป็นความจริง มินก็ยัง <strong>ขาดทุนช้า ๆ</strong> อยู่ดี</p></div>
+
+<p>และนี่ยังไม่นับส่วนต่างราคาซื้อ-ขาย ลองดูตัวเลขจริงจากตลาด option ในวันที่ 29 สิงหาคม 2026 สัญญาที่ <em>สภาพคล่องดีที่สุด</em> ในกลุ่มใกล้ราคาปัจจุบัน คือ BTC-25SEP26-79000-C ตั้งราคาซื้อไว้ 2,409 ดอลลาร์ ขาย 2,448 ดอลลาร์</p>
+
+<p>ส่วนต่าง 39 ดอลลาร์ หรือ <strong>1.6%</strong> หายไปทันทีที่กดซื้อแล้วขายกลับ และนั่นคือสัญญาที่ดีที่สุด — ค่ากลางของทั้งกลุ่มอยู่ที่ <strong>3.1%</strong> ส่วนสัญญาที่แย่ที่สุดในกลุ่มเดียวกันกินไป <strong>7.1%</strong></p>
+
+<div class="bx bb"><div class="bt">💡 ทำไมเรื่องนี้ต้องอยู่ใน Part 0 ไม่ใช่ท้ายเล่ม</div>
+<p>เพราะต้นทุนไม่ใช่ "รายละเอียดปลีกย่อยที่ค่อยดูทีหลัง" มันคือเส้นที่กำหนดว่าสัญญาณของคุณต้องแม่นแค่ไหนถึงจะมีความหมาย ถ้าไม่รู้ตัวเลขนี้ก่อน คุณจะไล่หาสัญญาณที่แม่น 52% ทั้งชีวิตโดยไม่รู้ว่าเส้นเสมอตัวอยู่ที่ 55%</p></div>
+
+<!-- ═══════════════ ค่าเริ่มต้น ═══════════════ -->
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — แล้วต้องเลิกใช้อินดิเคเตอร์เลยไหม</div>
+<p><strong>ไม่ต้อง</strong> — แต่ต้องย้ายตำแหน่งงานของมัน</p>
+<ul>
+<li><strong>อย่าใช้เป็นคำสั่งซื้อ</strong> — "เส้นตัดแล้วซื้อ" คือการให้สถานีเดียวตัดสินใจแทนทั้งสาย</li>
+<li><strong>ใช้เป็นตัวคัดสถานการณ์</strong> — "ตอนนี้ตลาดอยู่ในสภาพไหน" แล้วส่งต่อให้สถานี ④–⑦ ตัดสินว่าจะทำอะไรและขนาดเท่าไร</li>
+<li><strong>ถ้ายังไม่รู้จะเริ่มยังไง</strong> ให้ใช้ค่ามาตรฐานของอินดิเคเตอร์ตัวเดิมที่คุณใช้อยู่ <em>โดยไม่ปรับ</em> แล้วเอาเวลาทั้งหมดไปทำสถานี ① และ ⑧ แทน — สองสถานีนั้นให้ผลตอบแทนต่อชั่วโมงสูงกว่าการจูนพารามิเตอร์มาก</li>
+</ul></div>
+
+<!-- ═══════════════ ฉากหน้าจอ + นิสัยคิด ═══════════════ -->
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — คืนเดียวกัน แต่มินเดินตามสาย</div>
+<p>เส้นตัดขึ้นเหมือนเดิม มินไม่กดซื้อทันที แต่เปิดสมุดขึ้นมาเขียนสี่บรรทัด</p>
+<ol>
+<li><em>"ฉันเชื่อว่า BTC จะปิดสูงกว่า 77,700 ภายใน 5 วันทำการ"</em> — ข้อความที่ผิดได้ (สถานี ①)</li>
+<li><em>"ปกติโอกาสขึ้นใน 1 วันคือ 58.9% ฉันต้องอธิบายให้ได้ว่าสัญญาณนี้เพิ่มอะไรจากนั้น"</em> (สถานี ②)</li>
+<li><em>"ต้นทุนไปกลับ 0.2% เส้นเสมอตัวของฉันคือชนะ 55%"</em> (สถานี ⑤)</li>
+<li><em>"ถ้าปิดต่ำกว่า 75,000 ถือว่าฉันคิดผิด และจะออกโดยไม่ต่อรองกับตัวเอง"</em> (สถานี ⑧)</li>
+</ol>
+<p>สี่บรรทัดนี้ใช้เวลาไม่ถึงสามนาที และมันเปลี่ยนไม้นี้จาก "การเดา" เป็น "การทดลองที่วัดผลได้" — ไม่ว่าผลจะออกมาทางไหน คืนนี้มินจะได้ความรู้กลับมาหนึ่งอย่างเสมอ ซึ่งไม้เมื่อวานไม่เคยให้</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — ลำดับคำถาม ไม่ใช่ลำดับเครื่องมือ</div>
+<p>เวลาเจอไอเดียเทรดอะไรก็ตาม ไม่ว่าจะมาจากกราฟ ข่าว หรือเพื่อน ให้ถามเรียงแบบนี้เสมอ</p>
+<ol>
+<li>ข้อความนี้ <strong>ผิดได้ไหม</strong> — ถ้าไม่มีทางผิด แปลว่ายังไม่ใช่ข้อความ</li>
+<li>ถ้าไม่ทำอะไรเลย <strong>ผลจะเป็นยังไง</strong></li>
+<li>ตัวเลขที่ฉันใช้ มาจาก <strong>กี่ตัวอย่าง</strong></li>
+<li>ค่าผ่านทางไปกลับ <strong>เท่าไร</strong> และเส้นเสมอตัวอยู่ตรงไหน</li>
+<li>ถ้าผิด ฉันจะรู้ตัว <strong>เมื่อไร</strong> และรู้ได้ยังไง</li>
+</ol>
+<p>ห้าคำถามนี้ตอบได้โดยไม่ต้องเปิดโปรแกรมอะไรเลย และมันคัดไอเดียแย่ ๆ ออกไปได้มากกว่าอินดิเคเตอร์ตัวไหน ๆ</p></div>
+
+<!-- ═══════════════ ลองทำเอง ═══════════════ -->
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>เปิดไม้ล่าสุดที่คุณเทรด แล้วเขียนความเชื่อตอนนั้นเป็นข้อความที่ <em>ผิดได้</em> หนึ่งประโยค — ถ้าเขียนไม่ได้ นั่นคือคำตอบของแบบฝึกหัดนี้</li>
+<li>หาค่าธรรมเนียมต่อข้างของตลาดที่คุณเทรดจริง แล้วคำนวณอัตราชนะขั้นต่ำที่ทำให้คุณเสมอตัว เมื่อกำไรเป้าเท่ากับขาดทุนที่ยอมรับ</li>
+<li>ในสายการผลิต 8 สถานี ตอนนี้คุณมีกี่สถานี — ตอบตรง ๆ กับตัวเอง แล้วจดวันที่ไว้ เราจะกลับมาดูข้อนี้อีกครั้งที่ Part 9</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>ถามฐานก่อนเสมอ</strong> — สัญญาณจะมีความหมายก็ต่อเมื่อมันดีกว่า "การไม่ทำอะไรเลย"</li>
+<li><strong>ตัวเลขทุกตัวมาพร้อมขนาดตัวอย่าง</strong> — 54.5% จาก 11 ครั้ง กับ 54.5% จาก 1,100 ครั้ง เป็นคนละเรื่องกันโดยสิ้นเชิง</li>
+<li><strong>อินดิเคเตอร์คือสถานีที่ 3</strong> — ไม่ผิดที่จะใช้ ผิดที่ให้มันทำงานแทนอีก 7 สถานี</li>
+</ul></div>
+
+<!-- ═══════════════ ปิดตอน ═══════════════ -->
+<div class="bx bb"><div class="bt">สรุป Part 0</div>
+<ul>
+<li>ปัญหาไม่ได้อยู่ที่อินดิเคเตอร์แม่นหรือไม่แม่น แต่อยู่ที่ <strong>มันตอบได้แค่คำถามเดียวจากแปดคำถาม</strong></li>
+<li>ภาพลวง 3 ชั้น (สัญญาณสวย · backtest สวย · ความมั่นใจ) ไม่ได้ทำให้ขาดทุนทันที แต่ทำให้ <strong>เรียนรู้ไม่ได้</strong></li>
+<li>ข้อมูลจริง 57 วันแสดงว่าสัญญาณโมเมนตัมง่าย ๆ ให้ผล 54.5% เทียบกับฐาน 58.9% — และ <strong>ยังสรุปไม่ได้</strong> เพราะมีแค่ 11 ตัวอย่าง</li>
+<li>ต้นทุนไปกลับ 0.2% ดันเส้นเสมอตัวของมินไปที่ 55% ก่อนจะพูดถึงกำไรด้วยซ้ำ</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">คำถามที่ยังค้างอยู่: ถ้า 11 ตัวอย่างน้อยเกินไป แล้วเท่าไรถึงจะพอ — และทำไมสมองเราถึงเห็นแพตเทิร์นในข้อมูลที่สุ่มล้วน ๆ ได้ตลอดเวลา · Part 1 ตอบสองข้อนี้</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้ — เล่มในคลังที่ต่อจากตรงนี้</div>
+<ul>
+<li>อยากได้พื้นสถิติ/ความน่าจะเป็นเต็ม ๆ → <code>math-part2</code>, <code>math-part3</code></li>
+<li>อยากรู้ว่าทำไม backtest ถึงหลอกได้แนบเนียน → <code>theory-part5</code> และเครื่องมือ <code>tool-deflated-sharpe</code></li>
+<li>อยากเห็นเรื่องต้นทุนกับส่วนต่างราคาแบบมืออาชีพ → <code>arb-part7</code>, <code>ob-part2</code></li>
+<li>ยังไม่ต้องเปิดตอนนี้ — Part นี้ตั้งใจให้อ่านจบได้โดยไม่ต้องพึ่งเล่มอื่น</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ฐาน (base rate)</strong> = อัตราการเกิดตามปกติ เมื่อยังไม่ใส่เงื่อนไขอะไรเลย</li>
+<li><strong>ขนาดตัวอย่าง (n)</strong> = จำนวนครั้งที่เหตุการณ์เกิดจริงในข้อมูล ตัวเลขทุกตัวต้องมาคู่กับค่านี้</li>
+<li><strong>เส้นเสมอตัว</strong> = อัตราชนะขั้นต่ำที่ทำให้ไม่ขาดทุนหลังหักต้นทุน</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>ข้อความที่ผิดได้</strong> = ข้อความที่ระบุชัดว่าอะไรจะพิสูจน์ว่ามันผิด · <strong>ส่วนต่างราคาซื้อ-ขาย</strong> = ช่องว่างระหว่างราคาที่ซื้อได้กับขายได้ ณ เวลาเดียวกัน · <strong>สายการผลิต 8 สถานี</strong> = โครงของหนังสือเล่มนี้</p></div>
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
