@@ -407,6 +407,66 @@ def chart_search(fig):
     return _wrap(W, H, alt, out, cap)
 
 
+
+def chart_capstone(fig):
+    """30 วันของมิน — 19 วันเงียบสนิท แล้วสองวันที่สร้างผลตอบแทนทั้งเดือน"""
+    cs = fig["บทสรุป"]
+    daily = fig["ราคารายวัน"]
+    start = cs["ช่วง"]["ตั้งแต่"]
+    days = [d for d in sorted(daily) if d >= start]
+    px = [daily[d] for d in days]
+    big = {b["วันที่"] for b in cs["สองวันที่ใหญ่ที่สุด"]}
+
+    lo, hi = min(px), max(px)
+    pad = (hi - lo) * 0.18
+    W, H, L, R, B, T = 780, 336, 62, 26, 244, 62
+    X = lambda i: L + i / (len(days) - 1) * (W - L - R)
+    Y = lambda v: B - (v - lo + pad / 2) / (hi - lo + pad) * (B - T)
+
+    out = ['<defs><linearGradient id="nqCap" x1="0" y1="0" x2="0" y2="1">'
+           '<stop offset="0" stop-color="#16a34a" stop-opacity=".16"/>'
+           '<stop offset="1" stop-color="#16a34a" stop-opacity="0"/></linearGradient></defs>']
+
+    for v in range(65000, int(hi) + 1, 5000):
+        out.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{W-R}" y2="{Y(v):.1f}" stroke="#f3f4f6" stroke-width="1"/>')
+        out.append(f'<text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11" fill="#9ca3af" {FONT}>{v//1000}k</text>')
+
+    idx = [i for i, d in enumerate(days) if d in big]
+    i0 = min(idx)
+    out.append(f'<rect x="{L}" y="{T}" width="{X(i0-1)-L:.1f}" height="{B-T:.1f}" fill="#f8fafc"/>')
+    out.append(f'<text x="{(L+X(i0-1))/2:.1f}" y="{T+18}" text-anchor="middle" font-size="12.5" font-weight="700" fill="#94a3b8" {FONT}>19 วันแรก: {cs["เปลี่ยนแปลงในช่วงเงียบเปอร์เซ็นต์"]}%</text>')
+
+    line = " ".join(("M" if i == 0 else "L") + f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(px))
+    out.append(f'<path d="{line} L{X(len(px)-1):.1f},{B} L{X(0):.1f},{B} Z" fill="url(#nqCap)"/>')
+    out.append(f'<path d="{line}" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linejoin="round"/>')
+
+    for i in idx:
+        out.append(f'<line x1="{X(i):.1f}" y1="{T+4}" x2="{X(i):.1f}" y2="{B}" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 3" opacity=".6"/>')
+        out.append(f'<circle cx="{X(i):.1f}" cy="{Y(px[i]):.1f}" r="5.5" fill="#fff" stroke="#dc2626" stroke-width="3"/>')
+    mid = (X(idx[0]) + X(idx[-1])) / 2
+    gain_all = cs["ทุนปลายทางถ้าถือทั้งหมด"] - cs["ทุนบาท"]
+    gain_miss = cs["ทุนปลายทางถ้าพลาดสองวัน"] - cs["ทุนบาท"]
+    share = round(100 * (gain_all - gain_miss) / gain_all)
+    out.append(f'<text x="{mid:.1f}" y="{T-10}" text-anchor="middle" font-size="13" font-weight="700" fill="#dc2626" {FONT}>สองวันนี้ = {share}% ของกำไรทั้งเดือน</text>')
+
+    for i, anchor in ((0, "start"), (len(days) - 1, "end")):
+        out.append(f'<text x="{X(i):.1f}" y="{B+18}" text-anchor="{anchor}" font-size="11.5" fill="#6b7280" {FONT}>{days[i][5:]}</text>')
+
+    out.append(f'<rect x="{L}" y="{B+30}" width="{W-L-R}" height="34" rx="7" fill="#f9fafb" stroke="#e5e7eb"/>')
+    out.append(f'<text x="{L+16}" y="{B+52}" font-size="12.5" fill="#4b5563" {FONT}>'
+               f'อยู่ครบทั้งเดือน <tspan font-weight="700" fill="#16a34a">+{cs["ผลรวมเปอร์เซ็นต์"]}%</tspan>'
+               f'   ·   พลาดแค่สองวันนั้น <tspan font-weight="700" fill="#dc2626">+{cs["ถ้าตัดสองวันนั้นออกเปอร์เซ็นต์"]}%</tspan>'
+               f'   ·   ต่างกัน <tspan font-weight="700" fill="#111827">{cs["ทุนปลายทางถ้าถือทั้งหมด"] - cs["ทุนปลายทางถ้าพลาดสองวัน"]:,} บาท</tspan></text>')
+
+    alt = ("กราฟราคา 30 วันของบทสรุป แสดง 19 วันแรกที่แทบไม่ขยับเลย แล้วสองวันที่ราคาพุ่ง "
+           "ซึ่งสร้างกำไรเกือบทั้งหมดของเดือน")
+    cap = (f'ราคาจริง {cs["ช่วง"]["ตั้งแต่"]} ถึง {cs["ช่วง"]["ถึง"]} · '
+           f'{cs["ราคาเริ่ม"]:,} → {cs["ราคาจบ"]:,} ดอลลาร์ · '
+           f'ทุน {cs["ทุนบาท"]:,} บาท กลายเป็น {cs["ทุนปลายทางถ้าถือทั้งหมด"]:,} บาท '
+           f'แต่ถ้าพลาดสองวันนั้นจะเหลือ {cs["ทุนปลายทางถ้าพลาดสองวัน"]:,} บาท')
+    return _wrap(W, H, alt, out, cap)
+
+
 def _wrap(w, h, alt, parts, cap):
     body = "\n".join(parts)
     return (f'<svg class="fig" viewBox="0 0 {w} {h}" role="img" aria-label="{alt}">\n'
@@ -422,6 +482,7 @@ CHARTS = {
     "payoff": chart_payoff,
     "survival": chart_survival,
     "search": chart_search,
+    "capstone": chart_capstone,
 }
 
 

@@ -634,11 +634,75 @@ def _search_study(prices, rounds=200):
     }
 
 
+# ── Part 9: บทสรุป 30 วันของมิน ─────────────────────────────────────────────
+def _capstone_study(prices, start="2026-07-31", capital_thb=50000):
+    """หน้าต่าง 30 วันสุดท้ายของข้อมูล ใช้เดินเรื่องบทปิดเล่ม
+
+    เลือกหน้าต่างนี้เพราะมันเล่าเรื่องทั้งเล่มได้ในตัวเอง — เงียบยาว แล้วหางมาเยือน
+    """
+    days = [d for d in sorted(prices) if d >= start]
+    px = [prices[d] for d in days]
+    rets = [(days[i], px[i] / px[i - 1] - 1) for i in range(1, len(px))]
+    total = px[-1] / px[0] - 1
+
+    big = sorted(rets, key=lambda kv: -kv[1])[:2]
+    without = total + 1
+    for _, r in big:
+        without /= 1 + r
+    without -= 1
+
+    quiet = [d for d, _ in rets if d < big[-1][0] and d < big[0][0]]
+    return {
+        "ช่วง": {"ตั้งแต่": days[0], "ถึง": days[-1], "จำนวนวัน": len(days)},
+        "ราคาเริ่ม": round(px[0]),
+        "ราคาจบ": round(px[-1]),
+        "ผลรวมเปอร์เซ็นต์": round(100 * total, 2),
+        "สองวันที่ใหญ่ที่สุด": [{"วันที่": d, "เปอร์เซ็นต์": round(100 * r, 2)} for d, r in big],
+        "ถ้าตัดสองวันนั้นออกเปอร์เซ็นต์": round(100 * without, 2),
+        "จำนวนวันก่อนสองวันนั้น": len(quiet),
+        "ราคาก่อนสองวันนั้น": round(prices[quiet[-1]]) if quiet else None,
+        "เปลี่ยนแปลงในช่วงเงียบเปอร์เซ็นต์": round(100 * (prices[quiet[-1]] / px[0] - 1), 2) if quiet else None,
+        "ทุนบาท": capital_thb,
+        "ทุนปลายทางถ้าถือทั้งหมด": round(capital_thb * (1 + total)),
+        "ทุนปลายทางถ้าพลาดสองวัน": round(capital_thb * (1 + without)),
+        "ราคาสูงสุดในช่วง": round(max(px)),
+        "วันที่ราคาสูงสุด": days[px.index(max(px))],
+        "ไม้แรกของมิน": _first_trade(prices, capital_thb),
+    }
+
+
+def _first_trade(prices, capital_thb, entry_day="2026-08-01", target=66000, stop=62000,
+                 risk_pct=1.0, horizon=5):
+    """ไม้แรกของมินในบทสรุป — คำนวณขนาดไม้จากเพดานความเสียหายตามกฎใน Part 7"""
+    days = sorted(prices)
+    i = days.index(entry_day)
+    entry = prices[entry_day]
+    window = [prices[d] for d in days[i + 1:i + 1 + horizon]]
+    risk_baht = capital_thb * risk_pct / 100
+    stop_distance = (entry - stop) / entry
+    size = risk_baht / stop_distance
+    return {
+        "วันเข้า": entry_day,
+        "ราคาเข้า": round(entry),
+        "เป้าหมาย": target,
+        "จุดที่ยอมรับว่าผิด": stop,
+        "เพดานความเสียหายบาท": round(risk_baht),
+        "ระยะถึงจุดที่ผิดเปอร์เซ็นต์": round(100 * stop_distance, 2),
+        "ขนาดไม้บาท": round(size / 100) * 100,
+        "ราคาสูงสุดในห้าวัน": round(max(window)),
+        "ถึงเป้าหมายไหม": max(window) >= target,
+    }
+
+
 def build():
     prices = _daily_btc_prices()
     streaks = _streak_study(prices)
     # ชุดราคารายวันเต็ม — ใช้วาดกราฟในบท (tools/nq_charts.py อ่านจากตรงนี้)
-    daily = {d: prices[d] for d in sorted(prices)}
+    days_sorted = sorted(prices)
+    daily = {d: prices[d] for d in days_sorted}
+    # ผลตอบแทนรายวัน เพื่อให้ทุกตัวเลข "วันนั้นขยับกี่ %" ในบทมาจากแหล่งเดียว
+    daily_ret = {days_sorted[i]: round(100 * (prices[days_sorted[i]] / prices[days_sorted[i - 1]] - 1), 2)
+                 for i in range(1, len(days_sorted))}
     fee = MIN_ACCOUNT["ค่าธรรมเนียมต่อข้างเปอร์เซ็นต์"]
     return {
         "_อ่านก่อน": "สร้างด้วย tools/nq_figures.py — ห้ามแก้ด้วยมือ",
@@ -655,6 +719,7 @@ def build():
         },
         "btc": streaks,
         "ราคารายวัน": daily,
+        "ผลตอบแทนรายวันเปอร์เซ็นต์": daily_ret,
         "ต้นทุนจริง": _spread_study(),
         "ความสุ่ม": _randomness_study(streaks),
         "ขนาดตัวอย่าง": _sample_size_study(),
@@ -670,6 +735,7 @@ def build():
         "การอยู่รอด": _survival_study(prices),
         "กลับทุน": _drawdown_table(),
         "การค้นหา": _search_study(prices),
+        "บทสรุป": _capstone_study(prices),
     }
 
 
