@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ลองเอง: ขนาดไม้กับการอยู่รอด — คิดแบบ Quant</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style><style>
+.tool{border:2px solid var(--blue);border-radius:12px;padding:20px 24px;margin:22px 0;background:#fbfdff}
+.ctrl{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;margin:14px 0}
+.ctrl label{font-size:.95em;color:var(--g7)}
+.ctrl input[type=range]{width:100%}
+.ctrl .val{font-weight:700;color:var(--g9);font-variant-numeric:tabular-nums;min-width:5.5em;text-align:right}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-family:inherit;font-size:1em;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.out{font-size:1.06em;line-height:1.9}
+.big{font-size:2em;font-weight:800;color:var(--g9);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.guess{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.guess{grid-template-columns:1fr}.ctrl{grid-template-columns:1fr}.ctrl .val{text-align:left}}
+</style></head><body><div class="cover">
+<h1>ลองเอง: ขนาดไม้กับการอยู่รอด</h1>
+<div class="sub">ใส่เท่าไรถึงจะยังอยู่ในเกม</div>
+<div class="desc">เครื่องมือประกอบ Part 7 — ขนาดและการอยู่รอด</div>
+</div>
+
+<div class="bx bb"><div class="bt">🎯 เครื่องมือนี้ตอบอะไร</div>
+<p>Part 7 บอกว่าขนาดไม้มาจากสิ่งที่ <em>ทนได้</em> ไม่ใช่สิ่งที่ <em>มั่นใจ</em>
+หน้านี้ให้คุณเห็นว่า "ทนได้" หน้าตาเป็นยังไงเมื่อรันจริง</p>
+<p>ปรับสามตัวเลข แล้วดูเส้นทางจำลอง 300 เส้น — <strong>เส้นสีแดงคือเส้นทางที่ติดลบเกิน 30%</strong></p></div>
+
+<div class="tool">
+<div class="ctrl">
+  <label for="risk">เสี่ยงต่อไม้ (% ของทุน)</label><span class="val" id="riskv"></span>
+  <input type="range" id="risk" min="0.5" max="20" step="0.5" value="1" style="grid-column:1/-1">
+  <label for="wr">อัตราชนะจริง (%)</label><span class="val" id="wrv"></span>
+  <input type="range" id="wr" min="30" max="70" step="1" value="50" style="grid-column:1/-1">
+  <label for="rr">กำไรต่อขาดทุน (เท่า)</label><span class="val" id="rrv"></span>
+  <input type="range" id="rr" min="0.5" max="3" step="0.1" value="1" style="grid-column:1/-1">
+  <label for="nt">จำนวนไม้</label><span class="val" id="ntv"></span>
+  <input type="range" id="nt" min="20" max="300" step="10" value="100" style="grid-column:1/-1">
+</div>
+<svg id="paths" viewBox="0 0 760 300" class="fig" style="margin:14px 0 6px"></svg>
+<div class="out" id="out"></div>
+<div class="row"><button class="btn" id="re">สุ่มใหม่</button></div>
+</div>
+
+<div class="bx ba"><div class="bt">💡 อ่านผลยังไง</div>
+<ul>
+<li><strong>ผลกลาง</strong> คือเส้นทางที่อยู่ตรงกลางเมื่อเรียงทั้งหมด — ไม่ใช่ค่าเฉลี่ย เพราะค่าเฉลี่ยถูกดึงด้วยเส้นทางสุดโต่ง</li>
+<li><strong>เคยติดลบ 30%</strong> คือสิ่งที่ตัดสินว่าคุณจะอยู่ต่อไหม ไม่ใช่ผลปลายทาง — คนส่วนใหญ่เลิกกลางทาง ไม่ได้เลิกตอนจบ</li>
+<li>ลองตั้งอัตราชนะไว้ที่ <strong>50%</strong> (คือไม่มี edge เลย) แล้วเลื่อนความเสี่ยงต่อไม้ขึ้น — จะเห็นว่าผลกลางติดลบมากขึ้นเรื่อย ๆ ทั้งที่ไม่มีอะไรเปลี่ยนนอกจากขนาด</li>
+</ul></div>
+
+<div class="bx br"><div class="bt">⚠️ เครื่องมือนี้มองโลกในแง่ดีกว่าความจริง</div>
+<p>เพราะมันสมมติว่ากำไรและขาดทุนต่อไม้คงที่เป๊ะ ในความจริงมี <strong>หางอ้วน</strong> (Part 4)
+คือบางไม้ขาดทุนมากกว่าที่ตั้งไว้ เพราะราคากระโดดข้ามจุดตัดขาดทุน</p>
+<p>ถ้าเครื่องมือนี้บอกว่าอันตราย ของจริงจะอันตรายกว่านั้น</p></div>
+
+<p style="text-align:center;margin-top:26px"><a href="nq-part7.html">← กลับไป Part 7</a> ·
+<a href="nq-index.html">หน้ารวม</a> · <a href="nq-tools.html">เครื่องมือทั้งหมด</a></p>
+
+<script>
+const el=id=>document.getElementById(id);
+function run(){
+  const risk=+el('risk').value/100, wr=+el('wr').value/100, rr=+el('rr').value, n=+el('nt').value;
+  el('riskv').textContent=(100*risk).toFixed(1)+'%';
+  el('wrv').textContent=(100*wr).toFixed(0)+'%';
+  el('rrv').textContent=rr.toFixed(1)+' : 1';
+  el('ntv').textContent=n+' ไม้';
+  const PATHS=300, paths=[], ends=[]; let deep=0, wipe=0;
+  for(let p=0;p<PATHS;p++){
+    let v=1, peak=1, hit=false; const line=[1];
+    for(let i=0;i<n;i++){
+      v *= 1 + (Math.random()<wr ? risk*rr : -risk);
+      if(v<=0.01){v=0.01; hit=true; wipe++; line.push(v); break;}
+      peak=Math.max(peak,v);
+      if(v/peak-1<=-0.30) hit=true;
+      line.push(v);
+    }
+    paths.push({line,hit}); ends.push(v); if(hit) deep++;
+  }
+  const sorted=ends.slice().sort((a,b)=>a-b);
+  const med=sorted[Math.floor(PATHS/2)], p10=sorted[Math.floor(PATHS*0.1)], p90=sorted[Math.floor(PATHS*0.9)];
+  const lo=Math.max(0.01,Math.min(...sorted)), hi=Math.max(...sorted);
+  const W=760,H=300,L=52,R=18,B=252,T=18;
+  const X=i=>L+i/n*(W-L-R);
+  const Y=v=>{const a=Math.log(Math.max(v,0.01)), a0=Math.log(Math.max(lo,0.01)), a1=Math.log(Math.max(hi,1.05));
+    return B-(a-a0)/((a1-a0)||1)*(B-T);};
+  let svg='';
+  for(const g of [0.5,1,2,4]) if(g>=lo*0.9&&g<=hi*1.1){
+    svg+='<line x1="'+L+'" y1="'+Y(g).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(g).toFixed(1)+'" stroke="#f1f5f9" stroke-width="1"/>'+
+      '<text x="'+(L-8)+'" y="'+(Y(g)+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">'+
+      (g===1?'ทุนเดิม':(g<1?'−'+Math.round((1-g)*100)+'%':'+'+Math.round((g-1)*100)+'%'))+'</text>';
+  }
+  for(const p of paths.slice(0,140)){
+    const d=p.line.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+    svg+='<path d="'+d+'" fill="none" stroke="'+(p.hit?'#dc2626':'#2563eb')+'" stroke-width="1" opacity="'+(p.hit?0.28:0.16)+'"/>';
+  }
+  svg+='<line x1="'+L+'" y1="'+Y(1).toFixed(1)+'" x2="'+(W-R)+'" y2="'+Y(1).toFixed(1)+'" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  svg+='<text x="'+(W-R)+'" y="'+(B+24)+'" text-anchor="end" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">'+n+' ไม้</text>';
+  svg+='<text x="'+L+'" y="'+(B+24)+'" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">เส้นทางจำลอง 300 เส้น (แสดง 140 เส้น) · แดง = เคยติดลบเกิน 30%</text>';
+  el('paths').innerHTML=svg;
+  const pct=v=>((v-1)*100).toFixed(1)+'%';
+  const dcol = deep/PATHS>=0.5?'var(--red)':deep/PATHS>=0.2?'var(--amber)':'var(--green)';
+  el('out').innerHTML=
+    '<p>โอกาสที่จะ <strong>เคยติดลบเกิน 30%</strong> ระหว่างทาง</p>'+
+    '<p class="big" style="color:'+dcol+'">'+(100*deep/PATHS).toFixed(0)+'%</p>'+
+    '<p>ผลกลางปลายทาง <strong>'+pct(med)+'</strong> · แย่ 10% ล่างสุด '+pct(p10)+' · ดี 10% บนสุด '+pct(p90)+
+    (wipe?' · <span style="color:var(--red)">หมดตัว '+(100*wipe/PATHS).toFixed(0)+'%</span>':'')+'</p>'+
+    (deep/PATHS>=0.5?'<p style="color:var(--red);font-weight:700">มากกว่าครึ่งของอนาคตที่เป็นไปได้ คุณจะเคยเห็นพอร์ตติดลบ 30% — ถามตัวเองว่าตอนนั้นจะยังทำตามแผนไหม</p>':'');
+}
+['risk','wr','rr','nt'].forEach(i=>el(i).addEventListener('input',run));
+el('re').addEventListener('click',run); run();
+</script>
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

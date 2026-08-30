@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ลองเอง: จริงหรือสุ่ม — คิดแบบ Quant</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style><style>
+.tool{border:2px solid var(--blue);border-radius:12px;padding:20px 24px;margin:22px 0;background:#fbfdff}
+.ctrl{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;margin:14px 0}
+.ctrl label{font-size:.95em;color:var(--g7)}
+.ctrl input[type=range]{width:100%}
+.ctrl .val{font-weight:700;color:var(--g9);font-variant-numeric:tabular-nums;min-width:5.5em;text-align:right}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-family:inherit;font-size:1em;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.out{font-size:1.06em;line-height:1.9}
+.big{font-size:2em;font-weight:800;color:var(--g9);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.guess{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.guess{grid-template-columns:1fr}.ctrl{grid-template-columns:1fr}.ctrl .val{text-align:left}}
+</style></head><body><div class="cover">
+<h1>ลองเอง: จริงหรือสุ่ม</h1>
+<div class="sub">กราฟไหนคือตลาดจริง กราฟไหนคือการโยนเหรียญ</div>
+<div class="desc">เครื่องมือประกอบ Part 1 — ภาษาของความไม่แน่นอน</div>
+</div>
+
+<div class="bx bb"><div class="bt">🎯 เครื่องมือนี้ตอบอะไร</div>
+<p>Part 1 บอกว่า <strong>ความสุ่มสร้างแพตเทิร์นได้เอง</strong> — อ่านแล้วอาจยังไม่เชื่อ
+หน้านี้ให้คุณพิสูจน์กับตาตัวเอง</p>
+<p>ข้างล่างมีกราฟสองอัน อันหนึ่งคือราคา BTC จริงจากคลังข้อมูล อีกอันสร้างจากการโยนเหรียญ
+ที่ออกหัวเท่าสัดส่วนวันขึ้นจริง <strong>เดาให้ถูกว่าอันไหนคืออันไหน</strong></p></div>
+
+<div class="tool">
+<div class="guess">
+  <div><svg id="cA" viewBox="0 0 380 200" class="fig" style="margin:0"></svg>
+    <div style="text-align:center"><button class="btn sec" data-pick="A">เลือก A ว่าเป็นของจริง</button></div></div>
+  <div><svg id="cB" viewBox="0 0 380 200" class="fig" style="margin:0"></svg>
+    <div style="text-align:center"><button class="btn sec" data-pick="B">เลือก B ว่าเป็นของจริง</button></div></div>
+</div>
+<div id="verdict" class="out" style="margin-top:18px;min-height:3.2em"></div>
+<div class="row"><button class="btn" id="again">เล่นอีกรอบ</button>
+<span class="out" id="score" style="align-self:center;color:#64748b"></span></div>
+</div>
+
+<div class="bx ba"><div class="bt">💡 อ่านผลของตัวเองยังไง</div>
+<p>ถ้าเดาถูกราวครึ่งหนึ่งของครั้งทั้งหมด แปลว่า <strong>คุณแยกไม่ออก</strong> — ซึ่งเป็นผลลัพธ์ที่ถูกต้อง
+และเป็นประเด็นทั้งหมดของ Part 1</p>
+<p>ถ้าเดาถูกเกือบทุกครั้ง ให้ดูว่าคุณใช้เบาะแสอะไร บางทีมันคือรายละเอียดทางเทคนิคของการจำลอง
+ไม่ใช่ "ลักษณะของตลาดจริง"</p></div>
+
+<div class="bx bp"><div class="bt">🧠 สิ่งที่ควรเห็นหลังเล่นสัก 10 รอบ</div>
+<p>ทั้งสองกราฟมี "เทรนด์" มี "แนวรับแนวต้าน" มี "การพักตัว" — และครึ่งหนึ่งของสิ่งเหล่านั้น
+เกิดจากเหรียญที่ไม่มีความทรงจำเลยแม้แต่นิดเดียว</p></div>
+
+<p style="text-align:center;margin-top:26px"><a href="nq-part1.html">← กลับไป Part 1</a> ·
+<a href="nq-index.html">หน้ารวม</a> · <a href="nq-tools.html">เครื่องมือทั้งหมด</a></p>
+
+<script>
+const REAL = [0.005185, 0.007754, -0.002361, -0.004719, -0.014683, 0.031622, 0.003117, 0.001024, -0.022182, -0.005496, 0.03512, 0.000381, -0.016596, 0.004851, 0.012171, 0.000466, 0.012183, 0.012876, -0.010441, -0.004911, -0.020197, 0.006962, 0.012556, -0.031147, 0.006353, 0.006795, 0.006302, -0.021091, 0.00662, -0.00801, 0.014247, 0.004925, 0.005607, -0.003095, 0.009142, -0.001438, 0.002336, -0.014977, -0.004546, -0.003539, 0.000851, -0.008769, 0.000112, 0.000892, 0.017514, 0.003462, 0.082246, 0.077979, 0.035587, -0.008968, -0.000835, 0.032398, -0.010524, 0.016882, -0.000571, -0.032675];
+let answer=null, wins=0, plays=0;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function coinPath(n){
+  const up = REAL.filter(x=>x>0).length/REAL.length;
+  const mag = REAL.map(Math.abs);
+  const out=[];
+  for(let i=0;i<n;i++){
+    const m = mag[Math.floor(Math.random()*mag.length)];
+    out.push(Math.random()<up ? m : -m);
+  }
+  return out;
+}
+function toPrices(rets,start){const p=[start];rets.forEach(r=>p.push(p[p.length-1]*(1+r)));return p;}
+function draw(id,prices,color){
+  const lo=Math.min(...prices), hi=Math.max(...prices), pad=(hi-lo)*0.12||1;
+  const X=i=>14+i/(prices.length-1)*352, Y=v=>186-(v-lo+pad/2)/(hi-lo+pad)*172;
+  const d=prices.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+  document.getElementById(id).innerHTML =
+    '<path d="'+d+' L'+X(prices.length-1).toFixed(1)+',186 L14,186 Z" fill="'+color+'" opacity=".12"/>'+
+    '<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linejoin="round"/>'+
+    '<text x="14" y="16" font-size="13" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">'+
+    (id==='cA'?'A':'B')+'</text>';
+}
+function round(){
+  const n = REAL.length;
+  const realStart = Math.floor(Math.random()*Math.max(1, REAL.length-n+1));
+  const realRets = shuffle(REAL).slice(0,n);   // สลับลำดับของจริง เพื่อไม่ให้จำรูปได้
+  const fakeRets = coinPath(n);
+  answer = Math.random()<0.5 ? 'A':'B';
+  const a = answer==='A' ? realRets : fakeRets;
+  const b = answer==='A' ? fakeRets : realRets;
+  draw('cA', toPrices(a,100), '#2563eb');
+  draw('cB', toPrices(b,100), '#7c3aed');
+  document.getElementById('verdict').innerHTML='';
+  document.querySelectorAll('[data-pick]').forEach(x=>x.disabled=false);
+}
+document.querySelectorAll('[data-pick]').forEach(btn=>btn.addEventListener('click',()=>{
+  const ok = btn.dataset.pick===answer;
+  plays++; if(ok) wins++;
+  document.querySelectorAll('[data-pick]').forEach(x=>x.disabled=true);
+  document.getElementById('verdict').innerHTML = ok
+    ? '<span style="color:var(--green);font-weight:700">เดาถูก</span> — ของจริงคือ '+answer+' · แต่ถ้าเดาถูกเพราะ "รู้สึกว่ามันดูจริงกว่า" ให้ลองอีกหลายรอบก่อนสรุป'
+    : '<span style="color:var(--red);font-weight:700">เดาผิด</span> — ของจริงคือ '+answer+' · กราฟที่คุณคิดว่าเป็นตลาด คือเหรียญที่ไม่มีความทรงจำ';
+  document.getElementById('score').textContent = 'เดาถูก '+wins+' จาก '+plays+' ครั้ง'+
+    (plays>=6 ? '  ('+Math.round(100*wins/plays)+'% — ถ้าใกล้ 50% แปลว่าแยกไม่ออก ซึ่งถูกต้องแล้ว)' : '');
+}));
+document.getElementById('again').addEventListener('click',round);
+round();
+</script>
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
