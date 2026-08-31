@@ -37,6 +37,11 @@ pseudo-observations, การเลือก family, GOF test และกร�
   งานต้นฉบับ ภาษาฝรั่งเศส ยาว 2 หน้า — น่าอ่านเชิงประวัติศาสตร์
 - **Joe (2014)** *Dependence Modeling with Copulas*, Chapman & Hall
   ครอบคลุมกว่า Nelsen โดยเฉพาะเรื่อง vine และมิติสูง
+- **Darsow, Nguyen & Olsen (1992)** *"Copulas and Markov processes"*
+  *Illinois Journal of Mathematics*, 36(4), 600–642
+  งานที่แสดงว่ากระบวนการ Markov อธิบายได้ด้วย copula ของคู่ที่ต่างเวลากัน —
+  เป็นฐานของ "ขอบเขตของข้ออ้าง" ในบทที่ 8 หัวข้อ 8.2 อ่านเมื่อคุณอยากรู้ว่า
+  ทำไม copula *ในรูปแบบอื่น* ถึงพูดเรื่องเวลาได้ ทั้งที่ตัวที่เราใช้ในเล่มนี้พูดไม่ได้
 
 ### การประยุกต์ทางการเงิน
 
