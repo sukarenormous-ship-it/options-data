@@ -12,12 +12,16 @@
 | [`code/copula_toolkit.py`](code/copula_toolkit.py) | ชุดเครื่องมือหลัก — copula 5 ตระกูล + การประมาณค่า + เครื่องมือวินิจฉัย |
 | [`code/test_toolkit.py`](code/test_toolkit.py) | ชุดทดสอบ 78 ข้อ ยืนยันทุกสูตรกับผลต่างเชิงตัวเลข |
 | [`code/example_repo_data.py`](code/example_repo_data.py) | ตัวอย่างเต็มขั้นตอน รันบนข้อมูล `data/` ของรีโปนี้ |
+| [`code/build_web.py`](code/build_web.py) | สร้างหน้าอ่านออนไลน์หน้าเดียวจากไฟล์ markdown ทั้งเล่ม |
 
 ```bash
 pip install numpy scipy
 
 python3 book/copula/code/test_toolkit.py        # ควรได้ "ผ่าน 78 / 78"
 python3 book/copula/code/example_repo_data.py   # วิเคราะห์ข้อมูลจริงในรีโป
+
+pip install markdown                            # เฉพาะตอนสร้างหน้าเว็บ
+python3 book/copula/code/build_web.py out.html  # รวมทั้งเล่มเป็นหน้าเดียว
 ```
 
 ---
