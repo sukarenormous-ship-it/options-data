@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Copula ในทางปฏิบัติ — ใช้ร่วมกับ cointegration ยังไง</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style><style>
+.tool{border:2px solid var(--blue);border-radius:12px;padding:20px 24px;margin:22px 0;background:#fbfdff}
+.ctrl{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;margin:14px 0}
+.ctrl label{font-size:.95em;color:var(--g7)}
+.ctrl input[type=range]{width:100%}
+.ctrl .val{font-weight:700;color:var(--g9);font-variant-numeric:tabular-nums;min-width:5.5em;text-align:right}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-family:inherit;font-size:1em;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.out{font-size:1.06em;line-height:1.9}
+.big{font-size:2em;font-weight:800;color:var(--g9);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.guess{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.guess{grid-template-columns:1fr}.ctrl{grid-template-columns:1fr}.ctrl .val{text-align:left}}
+</style></head><body><div class="cover">
+<h1>Copula ในทางปฏิบัติ</h1>
+<div class="sub">ใช้ร่วมกับ cointegration ยังไง — และเมื่อไรไม่ควรใช้เลย</div>
+<div class="desc">บทเสริมสาย Statistical Arbitrage · ตัวเลขทุกตัว fit กับผลตอบแทน BTC/ETH จริงในคลังนี้</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🔵 บทนี้เขียนสำหรับคนที่รู้จัก cointegration และ z-score อยู่แล้ว</strong> ถ้ายังไม่คุ้น
+ให้อ่าน <code>practice-part2</code> §2.1–2.3 ก่อน · หลักการ copula เบื้องต้นและตารางตระกูล
+อยู่ที่ <code>practice-part2</code> §2.4 แล้ว บทนี้ <em>ไม่เขียนซ้ำ</em> แต่ตอบคำถามที่บทนั้นยังไม่ได้ตอบ</p></div>
+
+<h2>คำตอบก่อน แล้วค่อยอธิบาย</h2>
+
+<p>คำถามที่เจอบ่อยที่สุดคือ <em>"เวลาใช้จริง เขาใช้ copula แทน cointegration หรือใช้ร่วมกัน"</em></p>
+
+<div class="bx bg"><div class="bt">คำตอบสั้น: ใช้ร่วมกัน และมันตอบคนละคำถาม</div>
+<p>copula กับ cointegration <strong>ไม่ใช่คู่แข่งกัน</strong> — cointegration ตอบว่า
+"สองตัวนี้ผูกกันในระยะยาวไหม และตอนนี้ห่างจากดุลยภาพแค่ไหน" ส่วน copula ตอบว่า
+"เมื่อรู้ว่าตัวหนึ่งอยู่ตรงไหน อีกตัวควรอยู่ตรงไหน และมันเกาะกันแน่นขึ้นตอนสุดขั้วหรือเปล่า"</p>
+<p>ในบทนี้เราจะวัดออกมาเป็นตัวเลขว่าสองสัญญาณนี้ต่างกันแค่ไหน — คำตอบคือ
+<strong>สหสัมพันธ์กันแค่ 0.141</strong> คือแทบไม่ซ้อนทับกันเลย</p></div>
+
+<p>ในโต๊ะจริง copula ถูกใช้ใน <strong>สี่บทบาท</strong> ที่ต่างกันมาก และคนมักนึกถึงแค่บทบาทเดียว</p>
+
+<div class="tw"><table>
+<tr><th class="nw">บทบาท</th><th>ใช้ทำอะไร</th><th class="nw">พบบ่อยแค่ไหน</th></tr>
+<tr><td class="nw"><strong>1. ตัวคัดคู่</strong></td><td>ก่อนเทรด ดูว่าคู่นี้เกาะกันแบบปกติ หรือเกาะกันเฉพาะตอนตลาดพัง — ถ้าอย่างหลัง สเปรดจะกว้างพร้อมกันตอนที่คุณอยากออกพอดี</td><td class="nw">บ่อย</td></tr>
+<tr><td class="nw"><strong>2. ตัวประเมินความเสี่ยง</strong></td><td>ประเมินว่าพอร์ตที่ดู "market neutral" จะเจ็บพร้อมกันแค่ไหนในวันที่แย่ที่สุด</td><td class="nw"><strong>บ่อยที่สุด</strong></td></tr>
+<tr><td class="nw"><strong>3. ตัวจับจังหวะเสริม</strong></td><td>ใช้ z-score เป็นตัวหลักเหมือนเดิม แล้วใช้ MI ช่วยตัดสินว่าจะเข้าวันนี้หรือรออีกวัน</td><td class="nw">ปานกลาง</td></tr>
+<tr><td class="nw"><strong>4. สัญญาณหลักแทน z-score</strong></td><td>ใช้ Mispricing Index เป็นตัวสั่งเข้า-ออกเลย สำหรับคู่ที่ cointegration ใช้ไม่ได้</td><td class="nw">น้อยที่สุด</td></tr>
+</table></div>
+
+<p>สังเกตว่า <strong>บทบาทที่คนพูดถึงมากที่สุดในบทความ (ข้อ 4) คือบทบาทที่โต๊ะจริงใช้น้อยที่สุด</strong>
+ส่วนบทบาทที่ใช้จริงมากที่สุด (ข้อ 2) แทบไม่มีใครเขียนถึง เพราะมันไม่ใช่สัญญาณและไม่มีผลตอบแทนสวย ๆ ให้โชว์</p>
+
+<h2>หลักการใน 3 ย่อหน้า</h2>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> เวลาเราดูสองสินทรัพย์ เราสนใจสองเรื่องที่ปนกันอยู่ —
+แต่ละตัวมีพฤติกรรมของตัวเองยังไง (ผันผวนแค่ไหน หางอ้วนแค่ไหน) กับ
+มันเชื่อมกันยังไง · correlation ตัวเดียวยัดสองเรื่องนี้รวมกันแล้วบีบเหลือเลขเดียว</p>
+
+<p>ทฤษฎีบทของ Sklar (1959) บอกว่า <strong>การแจกแจงร่วมใด ๆ แยกออกได้เสมอ</strong>
+เป็น marginal ของแต่ละตัว บวกกับฟังก์ชันเชื่อมที่เรียกว่า copula — และแยกได้แบบไม่เสียข้อมูล</p>
+
+<div class="fm">F(x, y) = C( F₁(x) , F₂(y) )</div>
+
+<p>ในทางปฏิบัติแปลว่า: แปลงข้อมูลแต่ละตัวเป็น "อันดับ" (rank) ก่อน ซึ่งลบเรื่องหน่วยและ
+รูปร่างการแจกแจงออกไปหมด เหลือแต่โครงสร้างการเชื่อม แล้วค่อยเลือกว่าจะอธิบายโครงสร้างนั้นด้วยตระกูลไหน
+สิ่งที่ได้เพิ่มมาจาก correlation คือความสามารถบอกว่า <strong>เกาะกันแน่นขึ้นตรงหางหรือเปล่า</strong>
+(ตารางตระกูลอยู่ที่ <code>practice-part2</code> §2.4)</p>
+
+<h2>ปัญหาข้อแรก: family คุณเลือก ไม่ใช่ข้อมูลเลือก</h2>
+
+<p>นี่คือจุดที่คนพลาดกันมากที่สุด และวัดออกมาให้ดูได้</p>
+
+<p>เอาผลตอบแทนรายวันจริงของ <strong>BTC กับ ETH 56 วัน</strong> จากคลังนี้ · ความสัมพันธ์แน่นมาก
+(Pearson 0.852 · Kendall tau 0.692) · แปลงเป็นอันดับ แล้วถามคำถามเดียว —
+<em>tail dependence เท่าไร</em></p>
+
+<svg class="fig" viewBox="0 0 880 340" role="img" aria-label="กราฟแท่งแสดงว่า tail dependence จากข้อมูลชุดเดียวกันเปลี่ยนตามตระกูล copula ที่เลือก ตั้งแต่ 0.000 ถึง 0.857 โดยข้อมูลเลือกตระกูล Gaussian ซึ่งให้ค่าศูนย์">
+<line x1="190.0" y1="56" x2="190.0" y2="268" stroke="#f1f5f9" stroke-width="1"/>
+<text x="190.0" y="286" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0.0</text>
+<line x1="290.8" y1="56" x2="290.8" y2="268" stroke="#f1f5f9" stroke-width="1"/>
+<text x="290.8" y="286" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0.2</text>
+<line x1="391.5" y1="56" x2="391.5" y2="268" stroke="#f1f5f9" stroke-width="1"/>
+<text x="391.5" y="286" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0.4</text>
+<line x1="492.3" y1="56" x2="492.3" y2="268" stroke="#f1f5f9" stroke-width="1"/>
+<text x="492.3" y="286" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0.6</text>
+<line x1="593.1" y1="56" x2="593.1" y2="268" stroke="#f1f5f9" stroke-width="1"/>
+<text x="593.1" y="286" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0.8</text>
+<rect x="190" y="66.0" width="3.0" height="20.3" rx="4" fill="#16a34a"/>
+<text x="178" y="79.2" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Gaussian</text>
+<text x="201.0" y="79.2" font-size="12.5" font-weight="700" fill="#16a34a" font-family="Sarabun,sans-serif">0.000</text>
+<text x="681" y="79.2" font-size="11" fill="#166534" font-weight="700" font-family="Sarabun,sans-serif">AIC -79.6 ← ข้อมูลเลือกอันนี้</text>
+<rect x="190" y="100.3" width="326.5" height="20.3" rx="4" fill="#d97706"/>
+<text x="178" y="113.5" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Student-t (df=3)</text>
+<text x="524.5" y="113.5" font-size="12.5" font-weight="700" fill="#d97706" font-family="Sarabun,sans-serif">0.648</text>
+<rect x="190" y="134.7" width="286.2" height="20.3" rx="4" fill="#d97706"/>
+<text x="178" y="147.8" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Student-t (df=5)</text>
+<text x="484.2" y="147.8" font-size="12.5" font-weight="700" fill="#d97706" font-family="Sarabun,sans-serif">0.568</text>
+<rect x="190" y="169.0" width="240.9" height="20.3" rx="4" fill="#d97706"/>
+<text x="178" y="182.2" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Student-t (df=8)</text>
+<text x="438.9" y="182.2" font-size="12.5" font-weight="700" fill="#d97706" font-family="Sarabun,sans-serif">0.478</text>
+<text x="681" y="182.2" font-size="11" fill="#9ca3af" font-weight="400" font-family="Sarabun,sans-serif">AIC -77.46</text>
+<rect x="190" y="203.3" width="384.0" height="20.3" rx="4" fill="#dc2626"/>
+<text x="178" y="216.5" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Gumbel</text>
+<text x="582.0" y="216.5" font-size="12.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">0.762</text>
+<text x="681" y="216.5" font-size="11" fill="#9ca3af" font-weight="400" font-family="Sarabun,sans-serif">AIC -77.43</text>
+<rect x="190" y="237.7" width="431.8" height="20.3" rx="4" fill="#dc2626"/>
+<text x="178" y="250.8" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">Clayton</text>
+<text x="629.8" y="250.8" font-size="12.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">0.857</text>
+<text x="681" y="250.8" font-size="11" fill="#9ca3af" font-weight="400" font-family="Sarabun,sans-serif">AIC -58.55</text>
+<line x1="190" y1="268" x2="665" y2="268" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="178" y="28" text-anchor="end" font-size="13.5" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">ข้อมูลชุดเดียวกัน 56 วัน</text>
+<text x="190" y="28" font-size="13.5" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">tail dependence ที่ได้ ขึ้นกับว่าคุณสมมติ family ไหน</text>
+<text x="190" y="46" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ตั้งแต่ 0.000 ถึง 0.857 โดยที่ข้อมูลไม่ได้เปลี่ยนเลยแม้แต่จุดเดียว</text>
+<text x="428" y="308" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ค่า tail dependence (λ) ที่ family นั้นบอก</text>
+</svg>
+<div class="cap">fit กับผลตอบแทนรายวัน BTC/ETH จริง 56 วัน · ความยาวแท่งคำนวณจาก Kendall tau = 0.692 · ป้าย AIC ทางขวาคือผลการเลือก family ด้วย maximum likelihood จากข้อมูลชุดเดียวกัน</div>
+
+<div class="bx br"><div class="bt">ข้อมูลไม่เปลี่ยนแม้แต่จุดเดียว แต่คำตอบวิ่งจาก 0.000 ถึง 0.857</div>
+<ul>
+<li>ถ้าสมมติ <strong>Gaussian</strong> — tail dependence เป็น <strong>0 เสมอ</strong> โดยนิยาม ไม่ว่าข้อมูลจะเป็นยังไง</li>
+<li>ถ้าสมมติ <strong>Clayton</strong> — ได้ <strong>0.857</strong> แปลว่าเวลาตัวหนึ่งพังหนัก อีกตัวพังตามด้วยความน่าจะเป็น 86%</li>
+<li>ถ้าสมมติ <strong>Student-t</strong> — ได้ระหว่าง <strong>0.478 ถึง 0.648</strong> ขึ้นกับว่าตั้ง df เท่าไร</li>
+</ul>
+<p>สามคำตอบนี้นำไปสู่การตัดสินใจเรื่องขนาดไม้ที่ต่างกันคนละโลก</p></div>
+
+<p>แล้วข้อมูลชอบตระกูลไหนจริง ๆ · ตอบด้วย maximum likelihood แล้วเทียบ AIC</p>
+
+<div class="tw"><table>
+<tr><th class="nw">ตระกูล</th><th class="nw">AIC</th><th class="nw">พารามิเตอร์ที่ fit ได้</th><th>ผลต่อ tail</th></tr>
+<tr><td class="nw"><strong>Gaussian</strong></td><td class="nw"><strong>−79.60</strong></td><td class="nw">rho = 0.889</td><td>tail dependence = 0</td></tr>
+<tr><td class="nw">Student-t</td><td class="nw">−77.46</td><td class="nw">rho = 0.888 · df = 60.0</td><td>df ชนขอบบน = ยุบกลับเป็น Gaussian</td></tr>
+<tr><td class="nw">Gumbel</td><td class="nw">−77.43</td><td class="nw">theta = 3.083</td><td>หางบน 0.75</td></tr>
+<tr><td class="nw">Clayton</td><td class="nw">−58.55</td><td class="nw">theta = 2.591</td><td>หางล่าง 0.77</td></tr>
+</table></div>
+
+<p><strong>ข้อมูลเลือก Gaussian</strong> — ตระกูลที่บอกว่าไม่มี tail dependence เลย และ Clayton
+แพ้ไปถึง 21 จุด AIC</p>
+
+<div class="bx ba"><div class="bt">🧮 รายละเอียดที่บอกอะไรมากกว่าคะแนน</div>
+<p>ดู Student-t ให้ดี — ML ดัน <strong>df ไปชนขอบบนที่ 60</strong> ซึ่งเป็นวิธีที่ข้อมูลพูดว่า
+<em>"ฉันไม่เห็นหลักฐานของการเกาะกันตรงหางเลย ขอเป็น Gaussian เถอะ"</em></p>
+<p>ถ้าคุณ fit Student-t แล้วเห็น df วิ่งไปชนขอบ นั่นไม่ใช่ผลลัพธ์ที่ใช้ได้ — มันคือสัญญาณว่า
+โมเดลกำลังบอกว่าเลือกผิดตระกูล</p></div>
+
+<h2>ปัญหาข้อสอง: ตัวเลขที่ดูแม่น เพราะสมมติฐาน ไม่ใช่เพราะข้อมูล</h2>
+
+<p>สมมติเราดื้อ ใช้ Clayton ต่อ แล้ว bootstrap 2,000 รอบเพื่อดูช่วงความเชื่อมั่น</p>
+
+<div class="tw"><table>
+<tr><th>ค่า</th><th class="nw">ค่ากลาง</th><th class="nw">ช่วง 90%</th></tr>
+<tr><td>Kendall tau</td><td class="nw">0.696</td><td class="nw">0.602 – 0.770</td></tr>
+<tr><td>Clayton tail dependence</td><td class="nw">0.860</td><td class="nw"><strong>0.795 – 0.901</strong></td></tr>
+</table></div>
+
+<p>ช่วงแคบมาก ดูน่าเชื่อถือสุด ๆ — และนี่คือกับดัก</p>
+
+<div class="bx br"><div class="bt">ช่วงแคบนั้นมาจากสูตร ไม่ได้มาจากหลักฐานในหาง</div>
+<p>เมื่อคุณ<em>สมมติ</em>ว่าเป็น Clayton แล้ว tail dependence กลายเป็นฟังก์ชันตรง ๆ ของ tau
+ซึ่ง tau ประมาณจากข้อมูล <strong>ทั้ง 56 จุด</strong> ไม่ใช่จากจุดในหาง</p>
+<p>ความแม่นที่เห็นจึงเป็นความแม่นของ tau ที่ถูกส่งต่อผ่านสมมติฐาน ไม่ใช่หลักฐานว่าหางเกาะกันจริง</p></div>
+
+<p>ถ้าอยากรู้ว่าหางเกาะกันจริงไหม ต้องนับจุดในหางตรง ๆ — แล้วจะเห็นว่ามีเท่าไร</p>
+
+<div class="tw"><table>
+<tr><th class="nw">ดูที่ควอนไทล์</th><th class="nw">มีจุดในหางกี่จุด</th><th class="nw">หางล่าง</th><th class="nw">หางบน</th></tr>
+<tr><td class="nw">5%</td><td class="nw"><strong>3 จุด</strong></td><td class="nw">0.36</td><td class="nw">0.36</td></tr>
+<tr><td class="nw">10%</td><td class="nw">6 จุด</td><td class="nw">0.36</td><td class="nw">0.71</td></tr>
+<tr><td class="nw">20%</td><td class="nw">11 จุด</td><td class="nw">0.80</td><td class="nw">0.71</td></tr>
+</table></div>
+
+<p>ค่าประมาณวิ่งจาก 0.36 ถึง 0.80 เพียงเพราะเปลี่ยนเส้นแบ่งหาง และที่ควอนไทล์ 5%
+ทั้งหมดตั้งอยู่บน <strong>3 จุดข้อมูล</strong></p>
+
+<div class="qv"><div class="bt">🧠 มุมที่คนใช้จริงมองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> fit copula ได้ tail dependence 0.86 พร้อมช่วงความเชื่อมั่นแคบ = หลักฐานแน่น<br>
+<strong>คนใช้จริงเห็น:</strong> ถามก่อนว่า <em>มีข้อมูลกี่จุดอยู่ในหางที่กำลังพูดถึง</em> — ถ้าตอบว่าสามจุด
+ตัวเลข 0.86 นั้นคือความเห็นของสูตร ไม่ใช่ข้อสรุปจากข้อมูล</p></div>
+
+<h2>สัญญาณสองตัวนี้ต่างกันยังไงจริง ๆ</h2>
+
+<p>มาถึงคำถามหลัก ลองสร้างสัญญาณทั้งสองแบบบนคู่เดียวกัน แล้วเทียบตรง ๆ</p>
+
+<ul>
+<li><strong>สาย cointegration</strong> — หา beta ด้วย OLS บน log price (ได้ 1.408) สร้างสเปรด แล้วทำ z-score · เข้าเมื่อ |z| &gt; 1.5</li>
+<li><strong>สาย copula</strong> — Mispricing Index จาก Gaussian copula ที่ AIC เลือก · MI = P(ETH ต่ำกว่านี้ | เห็น BTC แล้ว) − 0.5 · เข้าเมื่อ |MI| &gt; 0.35</li>
+</ul>
+
+<div class="tw"><table>
+<tr><th>วัดอะไร</th><th class="nw">ผล</th></tr>
+<tr><td>วันที่ z เข้าเกณฑ์</td><td class="nw">6 จาก 56 วัน</td></tr>
+<tr><td>วันที่ MI เข้าเกณฑ์</td><td class="nw">17 จาก 56 วัน</td></tr>
+<tr><td>วันที่เข้าเกณฑ์ทั้งคู่</td><td class="nw"><strong>1 วัน</strong> (และชี้คนละทิศ)</td></tr>
+<tr><td>สหสัมพันธ์ระหว่าง z กับ MI</td><td class="nw"><strong>+0.141</strong></td></tr>
+<tr><td>สหสัมพันธ์ระหว่าง MI กับ <em>การเปลี่ยนแปลง</em> ของ z</td><td class="nw"><strong>+0.639</strong></td></tr>
+</table></div>
+
+<p>สองบรรทัดสุดท้ายคือคำตอบของทั้งบท</p>
+
+<div class="bx bg"><div class="bt">MI ไม่ใช่ z-score เวอร์ชันใหม่ — มันเป็นสัญญาณคนละชั้นเวลา</div>
+<ul>
+<li><strong>z-score วัดระดับสะสม</strong> — "ตอนนี้สเปรดห่างจากค่าเฉลี่ยระยะยาวแค่ไหน"</li>
+<li><strong>MI วัดการเคลื่อนไหวรายวัน</strong> — "วันนี้ ETH เคลื่อนผิดจากที่ควรเป็นเมื่อเทียบกับ BTC แค่ไหน" ซึ่งใกล้เคียงกับ <em>อนุพันธ์</em> ของ z มากกว่าตัว z เอง</li>
+</ul>
+<p>นี่คือเหตุผลที่ MI สหสัมพันธ์กับ Δz ถึง 0.639 แต่กับ z เองแค่ 0.141</p></div>
+
+<p>พอเข้าใจตรงนี้ การใช้งานจริงก็ชัดขึ้นทันที — <strong>มันเสริมกันโดยธรรมชาติ เพราะตัวหนึ่งบอกว่า
+"ห่างพอจะเข้าหรือยัง" อีกตัวบอกว่า "วันนี้กำลังห่างขึ้นหรือกำลังกลับ"</strong></p>
+
+<h2>สี่บทบาทในโต๊ะจริง ทีละบทบาท</h2>
+
+<div class="bx bb"><div class="bt">บทบาท 1 — ตัวคัดคู่ (ก่อนเทรด)</div>
+<p><strong>ถามว่า:</strong> คู่นี้เกาะกันแบบสม่ำเสมอ หรือเกาะกันเฉพาะตอนตลาดพัง</p>
+<p><strong>ทำยังไง:</strong> fit ทั้ง Gaussian และ Clayton/t แล้วดูว่าข้อมูลเลือกอันไหนด้วย AIC ·
+ถ้า Clayton ชนะชัดเจน แปลว่าคู่นี้มี <em>ความเสี่ยงซ่อน</em> — สเปรดจะกว้างตอนที่ทุกอย่างพังพร้อมกัน
+ซึ่งเป็นเวลาที่คุณอยากออกและออกไม่ได้</p>
+<p><strong>ใช้ผลยังไง:</strong> ไม่ใช่ตัดคู่ทิ้ง แต่ <strong>ลดขนาดไม้ของคู่นั้น</strong> และไม่นับมันเป็น
+market neutral เต็มร้อย</p></div>
+
+<div class="bx bp"><div class="bt">บทบาท 2 — ตัวประเมินความเสี่ยง (บทบาทที่ใช้จริงมากที่สุด)</div>
+<p><strong>ถามว่า:</strong> พอร์ตทั้งกระดานจะเจ็บพร้อมกันแค่ไหนในวันที่แย่ที่สุด</p>
+<p>พอร์ต stat arb ที่มี 30 คู่ ดูเผิน ๆ เหมือนกระจายความเสี่ยงดี แต่ถ้าทุกคู่มี tail dependence
+ต่อ factor เดียวกัน วันที่ตลาดพังทั้งหมดจะขาดทุนพร้อมกัน — และ correlation matrix
+ที่คำนวณจากวันปกติจะบอกไม่ได้</p>
+<p><strong>ทำยังไง:</strong> ใช้ t-copula หรือ vine copula กับผลตอบแทนของทุกกลยุทธ์
+แล้วจำลองสถานการณ์เพื่อดูหางของพอร์ตรวม — ตัวเลขที่ได้เอาไปตั้งเพดานความเสี่ยงรวม ไม่ใช่เอาไปเข้าไม้</p>
+<p>นี่เป็นบทบาทที่ธนาคารและกองทุนใช้มานาน และเป็นบทบาทเดียวกับที่ copula ถูกใช้
+(และถูกใช้ผิด) ในตลาด CDO ก่อนปี 2008 — รายละเอียดอยู่ที่ <code>pillars-part2</code></p></div>
+
+<div class="bx ba"><div class="bt">บทบาท 3 — ตัวจับจังหวะเสริม</div>
+<p><strong>ถามว่า:</strong> z บอกว่าห่างพอแล้ว แต่จะเข้าวันนี้เลยไหม</p>
+<p>จากตัวเลขข้างบน MI ใกล้เคียงกับอนุพันธ์ของ z ดังนั้นการรวมกันที่สมเหตุสมผลคือ</p>
+<ul>
+<li><strong>z เป็นเงื่อนไขว่าจะเข้าได้ไหม</strong> (|z| &gt; เกณฑ์)</li>
+<li><strong>MI เป็นเงื่อนไขว่าจะเข้าเมื่อไร</strong> — รอจน MI เริ่มกลับทิศ คือรอให้ "แรงที่ผลักออก" หมดก่อน แทนที่จะเข้าสวนตอนมันยังผลักอยู่</li>
+</ul>
+<p><strong>ข้อควรระวัง:</strong> ทุกเงื่อนไขที่เพิ่มเข้าไปคือพารามิเตอร์ใหม่ที่ต้องพิสูจน์
+และเป็นโอกาสใหม่ที่จะ overfit — ถ้าเพิ่มแล้ววัดผลไม่ได้ว่าดีขึ้นจริง ให้ตัดออก</p></div>
+
+<div class="bx" style="background:var(--g0);border-left:4px solid var(--g7)"><div class="bt">บทบาท 4 — สัญญาณหลักแทน z-score</div>
+<p><strong>ใช้เมื่อ:</strong> คู่ที่ <em>ไม่ผ่าน</em> การทดสอบ cointegration แต่ยังมีความสัมพันธ์ชัดเจน
+เช่นความสัมพันธ์ที่ไม่เป็นเส้นตรง หรือ beta ที่เปลี่ยนไปมาจนสเปรดไม่นิ่ง</p>
+<p>นี่คือแนวทางของ Xie et al. (2016) และเป็นสิ่งที่บทความส่วนใหญ่พูดถึง</p>
+<p><strong>ทำไมโต๊ะจริงใช้น้อย:</strong> เพราะมันต้องประมาณของสองชั้น (marginal + copula)
+บนข้อมูลที่มักไม่พอ · เมื่อไม่มี "ดุลยภาพระยะยาว" ให้ยึด ก็ไม่มีอะไรรับประกันว่าราคาจะกลับ ·
+และงานวิจัยที่เทียบตรง ๆ (Rad, Low &amp; Faff 2016) พบว่าผลของวิธี copula
+<strong>ไม่ได้ชนะวิธี cointegration อย่างชัดเจน</strong> หลังหักต้นทุน</p></div>
+
+<h2>ลำดับงานที่แนะนำ ถ้าจะเริ่มใช้จริง</h2>
+
+<div class="tw"><table>
+<tr><th class="nw">ขั้น</th><th>ทำอะไร</th><th>ทำไมต้องเรียงแบบนี้</th></tr>
+<tr><td class="nw">1</td><td>คัดคู่ด้วยวิธี classic ก่อน (correlation → ADF/Johansen → half-life)</td><td>ถูกกว่า เร็วกว่า และมีเหตุผลเชิงเศรษฐศาสตร์รองรับ</td></tr>
+<tr><td class="nw">2</td><td>fit copula กับคู่ที่ผ่านแล้ว <em>เพื่อดูความเสี่ยง</em> ไม่ใช่เพื่อหาสัญญาณ</td><td>ตอบว่าคู่นี้จะพังพร้อมตลาดไหม ซึ่ง z-score บอกไม่ได้</td></tr>
+<tr><td class="nw">3</td><td>ปรับ <strong>ขนาดไม้</strong> ตามผลข้อ 2</td><td>เป็นการใช้ copula ที่ให้ผลตอบแทนต่อความพยายามสูงสุด</td></tr>
+<tr><td class="nw">4</td><td>ถ้าจะใช้ MI เป็นตัวจับจังหวะ ให้เพิ่มทีหลังสุด และวัดผลแยก</td><td>จะได้รู้ว่ามันเพิ่มมูลค่าจริงหรือแค่เพิ่มพารามิเตอร์</td></tr>
+</table></div>
+
+<div class="bx br"><div class="bt">❌ เมื่อไรไม่ควรใช้ copula เลย</div>
+<ul>
+<li><strong>ข้อมูลน้อยกว่าราว 500 วัน</strong> — บทนี้มี 56 วัน ซึ่งพอสำหรับสาธิตกลไก แต่ไม่พอสำหรับตัดสินใจ · หางต้องมีจุดพอจะนับ</li>
+<li><strong>ยังไม่ได้ทำ marginal ให้ถูก</strong> — ถ้า marginal ผิด copula ผิดตามทั้งหมด · ใช้ empirical CDF ไปก่อนดีกว่าเดาการแจกแจง</li>
+<li><strong>ตั้งใจจะลองทุกตระกูลแล้วเลือกอันที่ backtest สวยสุด</strong> — นั่นคือการค้นหา ซึ่งสร้างผลงานปลอมได้ตามที่วัดไว้ใน Part 8 ของ "คิดแบบ Quant"</li>
+<li><strong>ยังไม่มีคำตอบว่าทำไมสองตัวนี้ควรผูกกัน</strong> — copula อธิบายรูปแบบการเชื่อม แต่ไม่ได้บอกว่าทำไมถึงเชื่อม · ถ้าไม่มีเหตุผลเชิงกลไก ก็แค่ curve fitting</li>
+</ul></div>
+
+<div class="bx bg"><div class="bt">✅ เช็กลิสต์ก่อนเชื่อผล copula ของตัวเอง</div>
+<ol>
+<li>ข้อมูลกี่จุด และ <strong>อยู่ในหางที่กำลังพูดถึงกี่จุด</strong></li>
+<li>fit มากี่ตระกูล และเลือกด้วยอะไร (AIC/BIC) — ถ้าเลือกด้วย backtest แปลว่ากำลัง overfit</li>
+<li>ถ้า fit Student-t แล้ว <strong>df ชนขอบไหม</strong> — ถ้าชน แปลว่าข้อมูลกำลังบอกว่าไม่มี tail dependence</li>
+<li>ผลลัพธ์เปลี่ยนไหมถ้าเปลี่ยนเส้นแบ่งหางจาก 5% เป็น 10% — ถ้าเปลี่ยนมาก แปลว่ายังไม่นิ่ง</li>
+<li>ทดสอบ out-of-sample แล้วหรือยัง</li>
+<li>สุดท้าย: <strong>ถ้าเอา copula ออกทั้งหมด ผลแย่ลงจริงไหม</strong> — ถ้าตอบไม่ได้ ก็ยังไม่รู้ว่ามันช่วยอะไร</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">⚠️ ข้อจำกัดของบทนี้เอง</div>
+<p>ตัวเลขทั้งหมดมาจาก <strong>BTC/ETH 56 วัน</strong> ซึ่งน้อยมากตามมาตรฐานของงาน copula
+และเป็นช่วงตลาดขาขึ้นช่วงเดียว</p>
+<p>สิ่งที่บทนี้แสดงได้คือ <strong>กลไก</strong> — ว่าการเลือก family เปลี่ยนคำตอบยังไง
+และสัญญาณสองแบบวัดคนละมิติยังไง · สิ่งที่บทนี้ <em>แสดงไม่ได้</em> คือคู่ BTC/ETH
+มี tail dependence จริงหรือไม่ เพราะข้อมูลไม่พอจะตอบ</p>
+<p>ถ้าจะใช้จริง ให้รัน <code>tools/copula_figures.py</code> ใหม่กับข้อมูลของคุณเองที่ยาวกว่านี้มาก</p></div>
+
+<div class="bx bb"><div class="bt">📚 อ่านต่อ</div>
+<ul>
+<li>Sklar, A. (1959) — ทฤษฎีบทที่เป็นรากของทั้งหมด</li>
+<li>Xie, W., Liew, R.Q., Wu, Y. &amp; Zou, X. (2016) "Pairs Trading with Copulas" — ต้นฉบับของวิธี Mispricing Index</li>
+<li>Rad, H., Low, R.K.Y. &amp; Faff, R. (2016) "The profitability of pairs trading strategies: distance, cointegration and copula methods", <em>Quantitative Finance</em> — งานที่เทียบสามวิธีตรง ๆ</li>
+<li>Stübinger, J., Mangold, B. &amp; Krauss, C. (2018) "Statistical arbitrage with vine copulas", <em>Quantitative Finance</em> — ขยายไปหลายสินทรัพย์</li>
+<li>ในคลังนี้: <code>practice-part2</code> §2.4 (หลักการ + ตารางตระกูล + เครื่องมือ) · <code>vol2-code/02_cointegration_copula.ipynb</code> (notebook รันได้) · <code>pillars-part2</code> (copula ในตลาดเครดิตและบทเรียนปี 2008)</li>
+</ul></div>
+
+<div class="bx bp"><div class="bt">📖 สรุปบทนี้เป็นสามบรรทัด</div>
+<ol>
+<li><strong>copula ไม่ได้แทน cointegration</strong> — MI ใกล้เคียงอนุพันธ์ของ z (สหสัมพันธ์ 0.639) มากกว่าตัว z เอง (0.141)</li>
+<li><strong>บทบาทที่คุ้มที่สุดคือประเมินความเสี่ยงและปรับขนาดไม้</strong> ไม่ใช่สร้างสัญญาณ</li>
+<li><strong>การเลือก family กำหนดคำตอบมากกว่าข้อมูล</strong> เมื่อข้อมูลน้อย — ต้องนับจุดในหางเสมอก่อนเชื่อตัวเลข</li>
+</ol></div>
+
+<p style="text-align:center;margin-top:26px"><a href="nq-index.html">หน้ารวม "คิดแบบ Quant"</a> ·
+<a href="nq-appendix-map.html">แผนที่เข้าคลัง</a></p>
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
