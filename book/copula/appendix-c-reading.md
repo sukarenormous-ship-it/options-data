@@ -21,6 +21,12 @@
 pseudo-observations, การเลือก family, GOF test และกราฟวินิจฉัย
 มาจากสาย hydrology แต่ใช้ได้ตรง ๆ กับการเงิน
 
+**หมายเหตุเพิ่มเติมสำหรับคนที่จะรายงาน confidence interval:**
+Genest, Ghoudi & Rivest (1995) *"A semiparametric estimation procedure of
+dependence parameters in multivariate families of distributions"*,
+*Biometrika* 82(3), 543–552 — ที่มาของ asymptotic variance ของ CML
+และเหตุผลว่าทำไม SE ที่ optimizer คืนมาถึงเชื่อไม่ได้ (บทที่ 5 หัวข้อ 5.2)
+
 **3. Nelsen (2006)**
 *An Introduction to Copulas*, ฉบับที่ 2, Springer
 
@@ -94,8 +100,8 @@ pseudo-observations, การเลือก family, GOF test และกร�
   *Journal of Portfolio Management*, 40(5), 94–107
   วิธีปรับ Sharpe ตามจำนวนการทดลองที่ทำไป — ตรงกับบทที่ 12 หัวข้อ 12.6 ข้อ 3
 - **López de Prado (2018)** *Advances in Financial Machine Learning*, Wiley
-  บทที่ 7 (purged cross-validation) และบทที่ 11 (backtest overfitting)
-  คุ้มค่าที่สุดสำหรับคนทำ StatArb
+  บทที่ 7 **ของหนังสือเล่มนั้น** (purged cross-validation) และบทที่ 11
+  **ของเล่มนั้น** (backtest overfitting) คุ้มค่าที่สุดสำหรับคนทำ StatArb
 - **Harvey, Liu & Zhu (2016)** *"…and the Cross-Section of Expected Returns"*
   *Review of Financial Studies*, 29(1), 5–68
   ว่าด้วยปัญหา multiple testing ในงานวิจัยการเงินทั้งสาขา

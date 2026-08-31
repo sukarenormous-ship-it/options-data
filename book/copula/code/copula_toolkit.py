@@ -10,7 +10,7 @@ copula_toolkit — ชุดเครื่องมือขนาดเล็�
 from __future__ import annotations
 
 import numpy as np
-from scipy import optimize, stats
+from scipy import integrate, optimize, stats
 from scipy.special import gammaln
 
 EPS = 1e-10
@@ -57,6 +57,7 @@ class Copula:
 
     name = "base"
     param_bounds = (-np.inf, np.inf)
+    n_params = 1               # ลูกที่มีพารามิเตอร์มากกว่าหนึ่งตัวต้อง override
 
     def __init__(self, theta):
         self.theta = float(theta)
@@ -216,24 +217,36 @@ class Frank(Copula):
         return np.exp(-t * v) * gu / (D + gu * gv)
 
     @staticmethod
+    def _tau(theta):
+        """tau(theta) = 1 - 4/theta + 4*D1(theta)/theta
+
+        ใกล้ theta = 0 ต้องใช้อนุกรม เพราะ -4/theta กับ 4*D1/theta หักล้างกัน
+        เกือบหมด ความคลาดเคลื่อนเชิงตัวเลขจึงถูกขยายด้วย 1/theta
+        """
+        if abs(theta) < 1e-4:
+            return theta / 9.0 - theta ** 3 / 900.0
+        d1 = integrate.quad(lambda x: 1.0 if x == 0.0 else x / np.expm1(x),
+                            0.0, theta)[0] / theta
+        return 1.0 - 4.0 / theta + 4.0 * d1 / theta
+
+    @staticmethod
     def tau_to_theta(tau):
-        """ไม่มีรูปปิด — แก้เชิงตัวเลขจาก τ(θ) = 1 − 4/θ + 4·D₁(θ)/θ"""
-        tau = float(np.clip(tau, -0.95, 0.95))
-        if abs(tau) < 1e-6:
-            return 1e-6
+        """ไม่มีรูปปิด - แก้เชิงตัวเลขจาก tau(theta)
 
-        trapz = getattr(np, "trapezoid", None) or np.trapz  # numpy < 2 ใช้ trapz
-
-        def debye1(t):
-            grid = np.linspace(1e-9, t, 2000)
-            return trapz(grid / np.expm1(grid), grid) / t
+        โดเมน theta ตาม param_bounds เอื้อมถึง |tau| <= 0.891 เท่านั้น
+        ค่าที่เกินจะถูก clip (ในทางทฤษฎี Frank รองรับ tau ได้ทั้ง (-1, 1))
+        """
+        lo, hi = Frank.param_bounds
+        tau_max = Frank._tau(hi) * (1 - 1e-9)
+        tau = float(np.clip(tau, -tau_max, tau_max))
+        if abs(tau) < 1e-8:
+            return 1e-8
 
         def f(t):
-            return 1.0 - 4.0 / t + 4.0 * debye1(t) / t - tau
+            return Frank._tau(t) - tau
 
-        lo, hi = (1e-4, 35.0) if tau > 0 else (-35.0, -1e-4)
-        return optimize.brentq(f, lo, hi)
-
+        return (optimize.brentq(f, 1e-8, hi) if tau > 0
+                else optimize.brentq(f, lo, -1e-8))
 
 class Gaussian(Copula):
     """elliptical, สมมาตร, ไม่มี tail dependence"""
@@ -275,6 +288,7 @@ class StudentT(Copula):
 
     name = "StudentT"
     param_bounds = (-0.999, 0.999)
+    n_params = 2               # rho และ nu
 
     def __init__(self, theta, nu=6.0):
         super().__init__(theta)
@@ -330,7 +344,11 @@ def fit_tau_inversion(u, v, family):
 
 
 def fit_cml(u, v, family):
-    """CML — empirical marginal (ที่ทำมาแล้ว) + MLE บนพารามิเตอร์ copula"""
+    """CML — empirical marginal (ที่ทำมาแล้ว) + MLE บนพารามิเตอร์ copula
+
+    หมายเหตุ: optimize พารามิเตอร์ตัวเดียว (scalar) เท่านั้น — ถ้าใช้กับ StudentT
+    ค่า nu จะถูกตรึงที่ค่า default ไม่ได้ถูกประมาณจากข้อมูล
+    """
     lo, hi = family.param_bounds
 
     def neg_ll(theta):
@@ -352,8 +370,9 @@ def select_family(u, v, families=None):
         try:
             cop = fit_cml(u, v, fam)
             ll = float(np.sum(cop.logpdf(u, v)))
+            k = getattr(fam, "n_params", 1)
             rows.append({"family": fam.name, "copula": cop,
-                         "loglik": ll, "aic": -2 * ll + 2})
+                         "loglik": ll, "aic": -2 * ll + 2 * k})
         except Exception as exc:                      # noqa: BLE001
             rows.append({"family": fam.name, "copula": None,
                          "loglik": np.nan, "aic": np.inf, "error": str(exc)})
@@ -425,8 +444,12 @@ def effective_breadth(corr_matrix):
 def half_life(residual):
     """half-life ของ OU ประมาณจาก AR(1)  (ภาคผนวก A.6)
 
-    คืน np.inf ถ้าไม่มี mean reversion ที่วัดได้ — ซึ่งแปลว่า
-    ไม่มีอะไรให้เทรด ไม่ว่า copula จะบอกอะไร (บทที่ 8)
+    คืน np.inf ในสองกรณีที่การแปลง kappa = -ln(b) ใช้ไม่ได้ ซึ่ง **ต่างกันมาก**:
+      b >= 1  → ไม่มี mean reversion (random walk) — ไม่มีอะไรให้เทรด
+      b <= 0  → autocorrelation ติดลบ คือแกว่งข้ามค่ากลางทุกก้าว
+
+    และระวังข้อมูลที่ b ประมาณได้ใกล้ 0 (เช่นอนุกรมที่ถูกสลับลำดับ) — ค่าที่ได้
+    จะไร้ความหมาย บางครั้ง inf บางครั้งเกือบศูนย์ แล้วแต่เศษ noise (บทที่ 8)
     """
     e = np.asarray(residual, dtype=float)
     e = e[np.isfinite(e)]
