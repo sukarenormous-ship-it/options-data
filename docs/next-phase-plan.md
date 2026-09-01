@@ -13,7 +13,7 @@
 | **A** | **ย้ายหนังสือไป `claude-code-project`** | ตอนนี้อยู่ใน repo ข้อมูล ผิดที่ · แยกจากอีก 14 เล่ม | 🟡 **เปิด PR แล้ว** — [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) (draft) รอรีวิว/merge ก่อนจะลบไฟล์ต้นทางจาก repo นี้ |
 | **B** | **บท: การรวมสัญญาณโดยไม่ overfit** | คลังนับได้ **0** · เป็นภาคต่อโดยตรงของบท copula | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-signal-blending.html`) |
 | **C** | **บท: live กับ backtest ไม่ตรงกัน** | คลังนับได้ **0** · สาเหตุอันดับหนึ่งที่ระบบ deploy จริงแล้วพัง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-live-vs-backtest.html`) |
-| **D** | **บท: edge เสื่อม — รู้ได้เมื่อไร** | `alpha decay` = 12 ครั้ง · เป็นการตัดสินใจที่ยากที่สุดในชีวิตจริง | ⬜ |
+| **D** | **บท: edge เสื่อม — รู้ได้เมื่อไร** | `alpha decay` = 12 ครั้ง · เป็นการตัดสินใจที่ยากที่สุดในชีวิตจริง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-alpha-decay.html`) |
 | **E** | **บท: ข้อมูลที่ใช้ทดสอบเชื่อได้แค่ไหน** | `data quality` = 2 · `short availability` = 3 · `corporate action` = 5 | ⬜ |
 
 **ลำดับที่เสนอ:** A → B → C → D → E
@@ -158,6 +158,12 @@
 
 ### เกณฑ์เสร็จ
 ผู้อ่านมีกฎที่ตั้งไว้ล่วงหน้าได้ว่าจะลดขนาดเมื่อไรและเท่าไร แทนการตัดสินใจตอนกำลังเจ็บ
+
+### สถานะละเอียด (อัปเดตหลังลงมือทำจริง)
+- ✅ เขียน `statarb-alpha-decay.html` + `tools/alpha_decay_figures.py` ตรงเข้า `claude-code-project`
+- ✅ ขยายสูตร power calculation ของ `nq-tool-samplesize` จากกรณีพิเศษ p0=0.5 ไปเป็นกรณีทั่วไป p0→p1 — ตรวจแล้วว่าลดรูปกลับไปตรงกับสูตรเดิมเป๊ะที่ p0=0.5 (1,077 ไม้)
+- ✅ ผลหลัก: edge 55%→50% ต้องใช้ 1,067 ไม้ (10.3 ปีที่จังหวะ 2 ไม้/สัปดาห์ของมิน) ถึงตรวจจับได้ — ตรงกับที่แผนเดิมคาดไว้ว่า "เวลาที่ใช้ตรวจจับ ยาวกว่าเวลาที่คนส่วนใหญ่ทนได้"
+- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-live-vs-backtest.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว (ยังไม่ merge)
 
 ---
 
