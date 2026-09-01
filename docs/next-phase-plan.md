@@ -14,7 +14,7 @@
 | **B** | **บท: การรวมสัญญาณโดยไม่ overfit** | คลังนับได้ **0** · เป็นภาคต่อโดยตรงของบท copula | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-signal-blending.html`) |
 | **C** | **บท: live กับ backtest ไม่ตรงกัน** | คลังนับได้ **0** · สาเหตุอันดับหนึ่งที่ระบบ deploy จริงแล้วพัง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-live-vs-backtest.html`) |
 | **D** | **บท: edge เสื่อม — รู้ได้เมื่อไร** | `alpha decay` = 12 ครั้ง · เป็นการตัดสินใจที่ยากที่สุดในชีวิตจริง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-alpha-decay.html`) |
-| **E** | **บท: ข้อมูลที่ใช้ทดสอบเชื่อได้แค่ไหน** | `data quality` = 2 · `short availability` = 3 · `corporate action` = 5 | ⬜ |
+| **E** | **บท: ข้อมูลที่ใช้ทดสอบเชื่อได้แค่ไหน** | `data quality` = 2 · `short availability` = 3 · `corporate action` = 5 | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-data-quality.html`) |
 
 **ลำดับที่เสนอ:** A → B → C → D → E
 เหตุผล: A เป็นงานโครงสร้างที่ยิ่งทำช้ายิ่งแพง (ทุกบทใหม่ที่เขียนก่อนย้ายคือของที่ต้องย้ายเพิ่ม)
@@ -189,6 +189,16 @@ backtest ของคุณตั้งอยู่บนข้อมูล — 
 
 ### เกณฑ์เสร็จ
 มีสคริปต์ตรวจสุขภาพข้อมูลที่รันได้จริง และรายงานของคลังนี้เป็นตัวอย่างที่เดินตามได้
+
+### สถานะละเอียด (อัปเดตหลังลงมือทำจริง)
+- ✅ เขียน `statarb-data-quality.html` + `tools/data_health.py` ตรงเข้า `claude-code-project`
+- ✅ `data_health.py` ออกแบบเป็นเครื่องมืออิสระ (ไม่ผูกกับ nq-figures.json) รันกับข้อมูลของใครก็ได้ผ่าน `--data-dir` ตรวจ 4 เรื่อง: ความครบของวันที่ · ผู้รอดชีวิต · สภาพคล่อง · ราคาข้ามตลาด
+- ✅ ผลตรวจคลังนี้เอง: ทั้งสองตลาดข้อมูลครบ 57/57 วัน (ข่าวดี) แต่ผู้รอดชีวิตต่างกันมาก (Deribit 44.2% vs OKX 31.8%) และราคาข้ามตลาดต่างกันกลาง 0.448%
+- ✅ ตัวเลขตรงกับ nq-figures.json (44%) และ live-backtest-figures.json (45.9%/9.8%/13, 43.1%/10.4%/237) ทุกจุด — ตรวจข้าม
+- 🟡 ตัวเลขคลังนับ `data quality`/`short availability`/`corporate action` ที่แผนเดิมอ้างไว้ (2/3/5) เป็นตัวเลขจาก scan ข้ามหลาย branch ในเซสชันก่อนหน้า — บทนี้ตรวจนับใหม่เฉพาะ branch ที่ใช้จริง (`payoff-chart-lesson-KchZQ`) ได้ผลต่างกัน (survivorship 5 ไฟล์, corporate action 1 ไฟล์, short-borrow 4 ไฟล์) และเขียนตามตัวเลขที่ตรวจสอบได้จริงแทน
+- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-alpha-decay.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว (ยังไม่ merge)
+
+**งาน B/C/D/E เสร็จครบทั้งหมดแล้ว** — สายเสริม stat arb มี 5 บทต่อเนื่องกัน: copula → รวมสัญญาณ → live-vs-backtest → alpha-decay → data-quality
 
 ---
 
