@@ -16,6 +16,7 @@ import glob
 import json
 import math
 import os
+import sys
 import statistics
 
 import numpy as np
@@ -23,13 +24,19 @@ from scipy import optimize, stats
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "copula-figures.json")
+# ที่อยู่ของสแนปช็อตดิบ — เหตุผลเดียวกับ nq_figures.py แก้ได้ด้วย --data-dir หรือ NQ_DATA_DIR
+DATA_DIR = os.environ.get(
+    "NQ_DATA_DIR",
+    os.path.join(ROOT, "data") if os.path.isdir(os.path.join(ROOT, "data"))
+    else os.path.join(ROOT, "..", "options-data", "data"),
+)
 SEED = 20260830
 
 
 def daily_prices():
     """ราคารายวันของแต่ละเหรียญ = median ของ underlying_price ในไฟล์วันนั้น"""
     per = collections.defaultdict(dict)
-    for path in sorted(glob.glob(os.path.join(ROOT, "data", "*", "*", "*", "*.csv"))):
+    for path in sorted(glob.glob(os.path.join(DATA_DIR, "*", "*", "*", "*.csv"))):
         day = os.path.basename(path)[:-4]
         buckets = collections.defaultdict(list)
         with open(path) as fh:
@@ -202,6 +209,14 @@ def build():
 
 
 if __name__ == "__main__":
+    _args = sys.argv[1:]
+    if "--data-dir" in _args:
+        _i = _args.index("--data-dir")
+        DATA_DIR = _args[_i + 1]
+    if not os.path.isdir(DATA_DIR):
+        sys.exit(f"ไม่พบโฟลเดอร์ข้อมูล: {DATA_DIR}\n"
+                 f"ระบุตำแหน่งด้วย --data-dir <path> หรือตัวแปรแวดล้อม NQ_DATA_DIR "
+                 f"(ต้องมี deribit/ และ okx/ อยู่ข้างใน)")
     with open(OUT, "w") as fh:
         json.dump(build(), fh, ensure_ascii=False, indent=2)
         fh.write("\n")

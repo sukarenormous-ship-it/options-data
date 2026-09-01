@@ -20,6 +20,14 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "nq-figures.json")
+# ที่อยู่ของสแนปช็อตดิบ (data/deribit/, data/okx/) — ค่าเริ่มต้นมองหาข้าง ๆ repo นี้
+# เพราะไฟล์เหล่านี้อาจถูกย้ายไปอยู่คนละ repo กับข้อมูลดิบ (repo หนังสือ vs repo ข้อมูล)
+# แก้ได้ด้วย --data-dir หรือตัวแปรแวดล้อม NQ_DATA_DIR โดยไม่ต้องแก้โค้ด
+DATA_DIR = os.environ.get(
+    "NQ_DATA_DIR",
+    os.path.join(ROOT, "data") if os.path.isdir(os.path.join(ROOT, "data"))
+    else os.path.join(ROOT, "..", "options-data", "data"),
+)
 
 # ── บัญชีของ "มิน" (golden thread) ────────────────────────────────────────────
 # ตัวเลขสมมติที่ประกาศตรง ๆ ว่าสมมติ — ทุกบทต้องใช้ชุดนี้ ห้ามเปลี่ยนกลางเล่ม
@@ -34,7 +42,7 @@ MIN_ACCOUNT = {
 def _daily_btc_prices():
     """ราคา BTC รายวันจากสแนปช็อต Deribit — median ของ underlying_price ในไฟล์วันนั้น"""
     prices = {}
-    for path in sorted(glob.glob(os.path.join(ROOT, "data", "deribit", "*", "*", "*.csv"))):
+    for path in sorted(glob.glob(os.path.join(DATA_DIR, "deribit", "*", "*", "*.csv"))):
         day = os.path.basename(path)[:-4]
         vals = []
         with open(path) as fh:
@@ -86,7 +94,7 @@ def _streak_study(prices):
 
 def _spread_study(day="2026-08-29", expiry="2026-09-25", moneyness=0.05):
     """ต้นทุนจริง: bid/ask ของ option ใกล้ ATM ในสแนปช็อตวันหนึ่ง"""
-    path = os.path.join(ROOT, "data", "deribit", day[:4], day[5:7], day + ".csv")
+    path = os.path.join(DATA_DIR, "deribit", day[:4], day[5:7], day + ".csv")
     quotes = []
     with open(path) as fh:
         for row in csv.DictReader(fh):
@@ -190,7 +198,7 @@ def _survivorship_study(prices):
     days = sorted(prices)
 
     def names(day):
-        path = os.path.join(ROOT, "data", "deribit", day[:4], day[5:7], day + ".csv")
+        path = os.path.join(DATA_DIR, "deribit", day[:4], day[5:7], day + ".csv")
         with open(path) as fh:
             return {r["instrument"] for r in csv.DictReader(fh) if r["underlying"] == "BTC"}
 
@@ -403,7 +411,7 @@ def _cost_study(day="2026-08-29", band=0.05):
 
     result = {"วันที่": day, "นับเฉพาะสัญญาใกล้ราคาปัจจุบันภายในเปอร์เซ็นต์": round(100 * band), "ตลาด": {}}
     for venue in ("deribit", "okx"):
-        path = os.path.join(ROOT, "data", venue, day[:4], day[5:7], day + ".csv")
+        path = os.path.join(DATA_DIR, venue, day[:4], day[5:7], day + ".csv")
         if not os.path.exists(path):
             continue
         groups = {name: [] for name, _ in buckets}
@@ -445,7 +453,7 @@ def _structure_study(prices, day="2026-08-29", expiry="2026-09-25", buy_k=80000,
 
     ใช้ราคาที่ผู้ซื้อรายย่อยได้จริง — จ่ายราคาเสนอขายเวลาซื้อ และได้ราคาเสนอซื้อเวลาขาย
     """
-    path = os.path.join(ROOT, "data", "deribit", day[:4], day[5:7], day + ".csv")
+    path = os.path.join(DATA_DIR, "deribit", day[:4], day[5:7], day + ".csv")
     spot = prices[day]          # ใช้ค่าเดียวกับ "ราคารายวัน" ทั้งเล่ม
     quotes = {}
     with open(path) as fh:
@@ -740,8 +748,17 @@ def build():
 
 
 if __name__ == "__main__":
+    _args = sys.argv[1:]
+    if "--data-dir" in _args:
+        _i = _args.index("--data-dir")
+        DATA_DIR = _args[_i + 1]
+        _args = _args[:_i] + _args[_i + 2:]
+    if not os.path.isdir(DATA_DIR):
+        sys.exit(f"ไม่พบโฟลเดอร์ข้อมูล: {DATA_DIR}\n"
+                 f"ระบุตำแหน่งด้วย --data-dir <path> หรือตัวแปรแวดล้อม NQ_DATA_DIR "
+                 f"(ต้องมี deribit/ และ okx/ อยู่ข้างใน)")
     data = build()
-    if "--check" in sys.argv:
+    if "--check" in _args:
         with open(OUT) as fh:
             old = json.load(fh)
         if old != data:
