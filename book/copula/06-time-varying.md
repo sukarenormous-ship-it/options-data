@@ -143,7 +143,7 @@ f_{t+1} = ω + β·f_t + α·s_t          โดย s_t คือ scaled score �
 
 ผลคือ **ถ้าไม่กรอง common factor ออกก่อน copula ที่ fit ได้จะเป็นภาพของ
 "BTC beta" เป็นหลัก ไม่ใช่ความสัมพันธ์เฉพาะของคู่นั้น** นี่เป็นเหตุผลหลัก
-ที่บทที่ 11 วางลำดับ factor removal ไว้ก่อน copula
+ที่บทถัดไปวางลำดับ factor removal ไว้ก่อน copula
 
 **2. Regime เปลี่ยนเร็วกว่า**
 
@@ -194,4 +194,4 @@ Student-t copula แยก ค่า ν ในแต่ละ regime ต่า�
 
 ---
 
-[← บทที่ 5](05-estimation.md) | [สารบัญ](README.md) | [บทที่ 7: จาก copula เป็นสัญญาณ →](07-conditional-signal.md)
+[← บทที่ 5](05-estimation.md) | [สารบัญ](README.md) | [บทที่ 7: residual มาจากไหน →](07-architecture-residual.md)

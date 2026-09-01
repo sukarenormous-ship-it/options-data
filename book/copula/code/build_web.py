@@ -32,13 +32,13 @@ PARTS = [
         ("06-time-varying", "Dependence ที่เปลี่ยนตามเวลา", "6"),
     ]),
     ("ภาค 3 — เอาไปใช้เทรด", [
-        ("07-conditional-signal", "จาก copula เป็นสัญญาณ", "7"),
-        ("08-dependence-is-not-reversion", "Dependence ≠ Reversion", "8"),
-        ("09-vine-copula", "หลายสินทรัพย์และ Vine", "9"),
+        ("07-architecture-residual", "residual มาจากไหน", "7"),
+        ("08-conditional-signal", "จาก copula เป็นสัญญาณ", "8"),
+        ("09-dependence-is-not-reversion", "Dependence ≠ Reversion", "9"),
         ("10-risk-overlay", "Copula ในบทบาท risk overlay", "10"),
     ]),
-    ("ภาค 4 — สถาปัตยกรรมและการพิสูจน์", [
-        ("11-architecture", "สถาปัตยกรรม StatArb", "11"),
+    ("ภาค 4 — วางที่ให้ถูกและพิสูจน์", [
+        ("11-where-copula-belongs", "copula ควรอยู่ตรงไหนในระบบ", "11"),
         ("12-experiment-design", "ออกแบบการทดลองให้ยุติธรรม", "12"),
         ("13-pitfalls", "หลุมพรางและกฎตัดสินโมเดล", "13"),
     ]),
@@ -46,11 +46,12 @@ PARTS = [
         ("appendix-a-formulas", "สัญลักษณ์และสูตรรวม", "A"),
         ("appendix-b-code", "โค้ดที่รันได้จริง", "B"),
         ("appendix-c-reading", "อ่านต่อ", "C"),
+        ("appendix-d-vine", "Vine copula", "D"),
     ]),
 ]
 
 ORDER = [s for _, items in PARTS for s, _, _ in items]
-KEY_CHAPTER = "08-dependence-is-not-reversion"   # บทแกนของทั้งเล่ม
+KEY_CHAPTER = "09-dependence-is-not-reversion"   # บทแกนของทั้งเล่ม
 
 NAV_LINE = re.compile(r'^\[←.*\]\(.*\)\s*$|^\[← สารบัญ.*$', re.M)
 

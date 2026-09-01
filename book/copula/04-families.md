@@ -217,7 +217,7 @@ C_mix(u,v) = w · C_Clayton(u,v; θ₁) + (1−w) · C_Gumbel(u,v; θ₂)
 | พุ่งพร้อมกันเท่านั้น | Gumbel / Joe | 0 | >0 |
 | tail สองด้านไม่เท่ากัน | mixture / rotated pair | >0 | >0 ต่างกัน |
 | dependence เชิงลบ | Frank หรือ rotated 90°/270° | | |
-| มิติเยอะ (d > 5) | Gaussian / t / vine (บทที่ 9) | | |
+| มิติเยอะ (d > 5) | Gaussian / t / vine (ภาคผนวก D) | | |
 
 ---
 

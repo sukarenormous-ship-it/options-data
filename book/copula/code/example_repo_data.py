@@ -1,6 +1,6 @@
 """ตัวอย่างที่รันได้จริงบนข้อมูลของรีโปนี้
 
-เดินตามสถาปัตยกรรมในบทที่ 11 ทีละขั้น:
+เดินตามสถาปัตยกรรมในบทที่ 7 ทีละขั้น:
 
     ราคา → log return → หัก BTC beta → residual → PIT → copula → วินิจฉัย
 
@@ -124,8 +124,8 @@ def main():
     dvol = {c: np.diff(iv[c]) for c in COINS}
     n = len(ret["BTC"])
 
-    # ── [1] หัก common factor — บทที่ 11 ────────────────────
-    print("\n[1] หัก common factor (BTC เป็น factor)   — บทที่ 11 หัวข้อ 11.3")
+    # ── [1] หัก common factor — บทที่ 7 ────────────────────
+    print("\n[1] หัก common factor (BTC เป็น factor)   — บทที่ 7 หัวข้อ 7.3")
     beta = np.polyfit(ret["BTC"], ret["ETH"], 1)[0]
     resid_eth = ret["ETH"] - beta * ret["BTC"]
     share = 1 - np.var(resid_eth) / np.var(ret["ETH"])
@@ -142,8 +142,8 @@ def main():
     print("    คำถาม: IV ของสองเหรียญพุ่งพร้อมกันไหม — upper tail สำคัญกว่า lower")
     analyse_pair(dvol["BTC"], dvol["ETH"], "ΔIV_BTC", "ΔIV_ETH")
 
-    # ── [4] มี reversion ให้เทรดไหม — บทที่ 8 ───────────────
-    print("\n[4] มี mean reversion จริงไหม   — บทที่ 8 (ทดสอบแยกจาก copula เสมอ)")
+    # ── [4] มี reversion ให้เทรดไหม — บทที่ 9 ───────────────
+    print("\n[4] มี mean reversion จริงไหม   — บทที่ 9 (ทดสอบแยกจาก copula เสมอ)")
     hl_resid = half_life(np.cumsum(resid_eth))
     hl_iv = half_life(iv["BTC"] - iv["ETH"])
     fmt = lambda h: "ไม่พบ mean reversion" if not np.isfinite(h) else f"{h:.1f} วัน"  # noqa: E731

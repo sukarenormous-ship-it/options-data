@@ -380,7 +380,7 @@ def select_family(u, v, families=None):
 
 
 # ─────────────────────────────────────────────────────────────
-# 4. เครื่องมือวินิจฉัย  (บทที่ 3, 8, 10, 12)
+# 4. เครื่องมือวินิจฉัย  (บทที่ 3, 9, 10, 12)
 # ─────────────────────────────────────────────────────────────
 
 def empirical_tail_dep(u, v, q, side="lower"):
@@ -400,7 +400,7 @@ def empirical_tail_dep(u, v, q, side="lower"):
 
 
 def mispricing_index(cop, u, v):
-    """MI_{A|B} = h(u|v) − 0.5   ∈ [−0.5, +0.5]   (บทที่ 7)"""
+    """MI_{A|B} = h(u|v) − 0.5   ∈ [−0.5, +0.5]   (บทที่ 9)"""
     return cop.h(u, v) - 0.5
 
 
@@ -408,7 +408,7 @@ def bucket_forward_return(signal, fwd_return, n_buckets=10):
     """ผลตอบแทนข้างหน้าเฉลี่ยแยกตามถังสัญญาณ
 
     สิ่งที่ต้องมองหาคือ monotonicity — ถ้าไม่มี แปลว่าไม่ใช่ edge
-    ที่มีโครงสร้าง (บทที่ 8 หัวข้อ 8.6, บทที่ 12 หัวข้อ 12.4)
+    ที่มีโครงสร้าง (บทที่ 9 หัวข้อ 9.6, บทที่ 12 หัวข้อ 12.4)
     """
     signal = np.asarray(signal, dtype=float)
     fwd_return = np.asarray(fwd_return, dtype=float)
@@ -449,7 +449,7 @@ def half_life(residual):
       b <= 0  → autocorrelation ติดลบ คือแกว่งข้ามค่ากลางทุกก้าว
 
     และระวังข้อมูลที่ b ประมาณได้ใกล้ 0 (เช่นอนุกรมที่ถูกสลับลำดับ) — ค่าที่ได้
-    จะไร้ความหมาย บางครั้ง inf บางครั้งเกือบศูนย์ แล้วแต่เศษ noise (บทที่ 8)
+    จะไร้ความหมาย บางครั้ง inf บางครั้งเกือบศูนย์ แล้วแต่เศษ noise (บทที่ 9)
     """
     e = np.asarray(residual, dtype=float)
     e = e[np.isfinite(e)]

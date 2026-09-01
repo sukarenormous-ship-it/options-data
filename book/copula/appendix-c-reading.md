@@ -46,7 +46,7 @@ dependence parameters in multivariate families of distributions"*,
 - **Darsow, Nguyen & Olsen (1992)** *"Copulas and Markov processes"*
   *Illinois Journal of Mathematics*, 36(4), 600–642
   งานที่แสดงว่ากระบวนการ Markov อธิบายได้ด้วย copula ของคู่ที่ต่างเวลากัน —
-  เป็นฐานของ "ขอบเขตของข้ออ้าง" ในบทที่ 8 หัวข้อ 8.2 อ่านเมื่อคุณอยากรู้ว่า
+  เป็นฐานของ "ขอบเขตของข้ออ้าง" ในบทที่ 9 หัวข้อ 9.2 อ่านเมื่อคุณอยากรู้ว่า
   ทำไม copula *ในรูปแบบอื่น* ถึงพูดเรื่องเวลาได้ ทั้งที่ตัวที่เราใช้ในเล่มนี้พูดไม่ได้
 
 ### การประยุกต์ทางการเงิน
@@ -62,7 +62,7 @@ dependence parameters in multivariate families of distributions"*,
 - **Aas, Czado, Frigessi & Bakken (2009)**
   *"Pair-copula constructions of multiple dependence"*
   *Insurance: Mathematics and Economics*, 44(2), 182–198
-  งานที่ทำให้ vine ใช้ได้จริง — เป็นรากของบทที่ 9
+  งานที่ทำให้ vine ใช้ได้จริง — เป็นรากของภาคผนวก D
 - **Czado (2019)** *Analyzing Dependent Data with Vine Copulas*, Springer
 
 ### Copula ในการเทรด (อ่านอย่างระแวง)
@@ -71,7 +71,7 @@ dependence parameters in multivariate families of distributions"*,
   *Journal of Derivatives & Hedge Funds*, 19(1), 12–30
 - **Xie, Liew, Wu & Zou (2016)** *"Pairs Trading with Copulas"*
   *The Journal of Trading*, 11(3), 41–52
-  ต้นทางของ mispricing index ในบทที่ 7
+  ต้นทางของ mispricing index ในบทที่ 8
 - **Krauss (2017)** *"Statistical arbitrage pairs trading strategies:
   review and outlook"* *Journal of Economic Surveys*, 31(2), 513–545
   สำรวจภาพรวมทั้งสาขา — ควรอ่านเพื่อเห็นว่าตระกูลวิธีมีอะไรบ้าง
@@ -86,7 +86,7 @@ dependence parameters in multivariate families of distributions"*,
 
 - **Avellaneda & Lee (2010)** *"Statistical arbitrage in the US equities market"*
   *Quantitative Finance*, 10(7), 761–782
-  ต้นแบบของสถาปัตยกรรม PCA → residual → OU ในบทที่ 11 อ่านให้จบ
+  ต้นแบบของสถาปัตยกรรม PCA → residual → OU ในบทที่ 8 อ่านให้จบ
 - **Gatev, Goetzmann & Rouwenhorst (2006)**
   *"Pairs trading: Performance of a relative-value arbitrage rule"*
   *Review of Financial Studies*, 19(3), 797–827
@@ -133,10 +133,10 @@ dependence parameters in multivariate families of distributions"*,
 term structure และ cross-exchange ได้ (ดู [README หลัก](../../README.md))
 
 **ข้อมูลราคา spot/perp** ความถี่สูงกว่านี้ต้องดึงจาก public API ของ
-exchange เอง — ซึ่งจำเป็นถ้าจะทดสอบเรื่องที่บทที่ 8 หัวข้อ 8.5 พูดถึง
+exchange เอง — ซึ่งจำเป็นถ้าจะทดสอบเรื่องที่บทที่ 9 หัวข้อ 9.5 พูดถึง
 (microstructure noise เทียบกับ mispricing จริง) เพราะข้อมูลรายวัน
 แยกสองอย่างนี้ไม่ออก
 
 ---
 
-[← ภาคผนวก B](appendix-b-code.md) | [สารบัญ](README.md)
+[← ภาคผนวก B](appendix-b-code.md) | [สารบัญ](README.md) | [ภาคผนวก D: Vine copula →](appendix-d-vine.md)
