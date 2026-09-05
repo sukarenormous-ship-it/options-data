@@ -1,0 +1,23 @@
+name: CME reachability probe
+
+# Throwaway. Answers "can a GitHub Actions runner reach CME's data endpoints?"
+# before any real CME collector is written. Push-triggered so it can run from a
+# feature branch (workflow_dispatch alone requires the file on the default
+# branch). Delete this workflow together with scripts/probe_cme.py.
+on:
+  push:
+    paths:
+      - 'scripts/probe_cme.py'
+      - '.github/workflows/cme-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe CME endpoints
+        run: python3 scripts/probe_cme.py
