@@ -64,6 +64,13 @@ nearest.sort_values("strike").plot(x="strike", y="mark_iv")
 - กด **Run workflow** ที่แท็บ Actions (workflow: Daily options snapshot) หรือ
 - รันในเครื่อง: `python3 scripts/fetch_chain.py` (ใช้ Python มาตรฐาน ไม่ต้องติดตั้งอะไร)
 
+## หนังสืออ่าน
+
+📘 **[Copula สำหรับ Statistical Arbitrage](book/copula/README.md)** — หนังสือ 13 บท
+ว่าด้วยการใช้ copula ในระบบเทรดจริง ตั้งแต่ Sklar's Theorem ไปจนถึงการออกแบบ
+การทดลองที่พิสูจน์ว่ามันคุ้มหรือไม่ พร้อม[โค้ดที่รันได้](book/copula/code/)
+บนข้อมูลในรีโปนี้
+
 ## หมายเหตุ
 
 - ขนาดข้อมูล ~1 MB/วันก่อนบีบอัด — git เก็บได้หลายปีสบาย ๆ
