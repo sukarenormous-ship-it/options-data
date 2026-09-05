@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ลองเอง: เส้นเสมอตัวของคุณ — คิดแบบ Quant</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style><style>
+.tool{border:2px solid var(--blue);border-radius:12px;padding:20px 24px;margin:22px 0;background:#fbfdff}
+.ctrl{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;margin:14px 0}
+.ctrl label{font-size:.95em;color:var(--g7)}
+.ctrl input[type=range]{width:100%}
+.ctrl .val{font-weight:700;color:var(--g9);font-variant-numeric:tabular-nums;min-width:5.5em;text-align:right}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-family:inherit;font-size:1em;font-weight:700;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.out{font-size:1.06em;line-height:1.9}
+.big{font-size:2em;font-weight:800;color:var(--g9);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.guess{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.guess{grid-template-columns:1fr}.ctrl{grid-template-columns:1fr}.ctrl .val{text-align:left}}
+</style></head><body><div class="cover">
+<h1>ลองเอง: เส้นเสมอตัวของคุณ</h1>
+<div class="sub">ต้องชนะกี่ % ถึงจะไม่ขาดทุน</div>
+<div class="desc">เครื่องมือประกอบ Part 5 — ต้นทุนและอีกฝั่งของดีล</div>
+</div>
+
+<div class="bx bb"><div class="bt">🎯 เครื่องมือนี้ตอบอะไร</div>
+<p>คนส่วนใหญ่ไม่รู้เลขนี้ของตัวเอง แล้วไล่หาสัญญาณที่แม่น 52% ทั้งชีวิต
+โดยไม่รู้ว่าเส้นเสมอตัวอยู่ที่ 60%</p>
+<p>ใส่ต้นทุนจริงของตลาดที่คุณเทรด แล้วดูสองอย่าง — <strong>อัตราชนะขั้นต่ำ</strong>
+และ <strong>ค่าผ่านทางที่คุณจ่ายทั้งปี</strong></p></div>
+
+<div class="tool">
+<div class="ctrl">
+  <label for="fee">ค่าธรรมเนียมต่อข้าง (%)</label><span class="val" id="feev"></span>
+  <input type="range" id="fee" min="0" max="0.5" step="0.01" value="0.1" style="grid-column:1/-1">
+  <label for="spr">ส่วนต่างราคาซื้อ-ขาย (%)</label><span class="val" id="sprv"></span>
+  <input type="range" id="spr" min="0" max="10" step="0.1" value="0.2" style="grid-column:1/-1">
+  <label for="tp">กำไรเป้าต่อไม้ (%)</label><span class="val" id="tpv"></span>
+  <input type="range" id="tp" min="0.2" max="20" step="0.1" value="2" style="grid-column:1/-1">
+  <label for="sl">ขาดทุนที่ยอมรับต่อไม้ (%)</label><span class="val" id="slv"></span>
+  <input type="range" id="sl" min="0.2" max="20" step="0.1" value="2" style="grid-column:1/-1">
+  <label for="freq">จำนวนไม้ต่อปี</label><span class="val" id="freqv"></span>
+  <input type="range" id="freq" min="5" max="500" step="5" value="104" style="grid-column:1/-1">
+</div>
+<div class="out" id="out"></div>
+</div>
+
+<div class="bx ba"><div class="bt">💡 สูตรที่ใช้</div>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ทุกไม้ต้องจ่ายค่าผ่านทางก่อน ไม่ว่าจะถูกหรือผิด
+ดังนั้นกำไรจากไม้ที่ชนะ ต้องมากพอจะกลบทั้งไม้ที่แพ้ <em>และ</em> ค่าผ่านทางของทุกไม้</p>
+<div class="fm">ต้นทุนต่อรอบ = (ค่าธรรมเนียม × 2) + ส่วนต่างราคา<br>
+อัตราชนะขั้นต่ำ = (ขาดทุนที่ยอมรับ + ต้นทุนต่อรอบ) ÷ (กำไรเป้า + ขาดทุนที่ยอมรับ)</div>
+<p>ถ้ากำไรเป้าเท่ากับขาดทุนที่ยอมรับพอดี สูตรจะย่อเหลือ 50% บวกกับ
+ครึ่งหนึ่งของต้นทุนหารด้วยกำไรเป้า</p></div>
+
+<div class="bx br"><div class="bt">⚠️ สิ่งที่มักลืมใส่</div>
+<ul>
+<li><strong>ส่วนต่างราคาซื้อ-ขาย</strong> — ไม่มีในใบเสร็จ แต่มักใหญ่กว่าค่าธรรมเนียมหลายเท่า
+ลองดูของจริง: option ที่เหลืออายุ 0-2 วันมีส่วนต่างค่ากลาง 22.5% (Part 5)</li>
+<li><strong>ค่า funding</strong> ถ้าถือสัญญาข้ามคืน</li>
+<li><strong>ราคาที่ขยับระหว่างกดกับได้ของ</strong> โดยเฉพาะตอนตลาดผันผวน</li>
+</ul></div>
+
+<p style="text-align:center;margin-top:26px"><a href="nq-part5.html">← กลับไป Part 5</a> ·
+<a href="nq-index.html">หน้ารวม</a> · <a href="nq-tools.html">เครื่องมือทั้งหมด</a></p>
+
+<script>
+const ids=['fee','spr','tp','sl','freq'];
+const el=Object.fromEntries(ids.map(i=>[i,document.getElementById(i)]));
+function upd(){
+  const fee=+el.fee.value, spr=+el.spr.value, tp=+el.tp.value, sl=+el.sl.value, freq=+el.freq.value;
+  document.getElementById('feev').textContent=fee.toFixed(2)+'%';
+  document.getElementById('sprv').textContent=spr.toFixed(1)+'%';
+  document.getElementById('tpv').textContent=tp.toFixed(1)+'%';
+  document.getElementById('slv').textContent=sl.toFixed(1)+'%';
+  document.getElementById('freqv').textContent=freq+' ไม้/ปี';
+  const cost=fee*2+spr;
+  const need=(sl+cost)/(tp+sl)*100;
+  const drag=cost*freq;
+  let color = need>=70?'var(--red)': need>=60?'var(--amber)':'var(--green)';
+  let note='';
+  if(need>=100) note='<p style="color:var(--red);font-weight:700">เกิน 100% — โครงสร้างนี้ขาดทุนแน่นอนไม่ว่าจะชนะทุกไม้หรือไม่ ต้นทุนสูงกว่ากำไรเป้า</p>';
+  else if(need>=70) note='<p style="color:var(--red)">ต้องชนะเกิน 7 ใน 10 ไม้จึงจะแค่เสมอตัว — แทบไม่มีใครทำได้ต่อเนื่อง</p>';
+  else if(need>=60) note='<p style="color:var(--amber)">ต้องชนะเกิน 6 ใน 10 ไม้ — เป็นไปได้แต่ยาก และ Part 1 บอกว่าคุณต้องเทรดหลายร้อยไม้กว่าจะรู้ว่าทำได้จริง</p>';
+  else note='<p style="color:var(--green)">อยู่ในระดับที่พอมีทางเป็นไปได้ — แต่ยังต้องพิสูจน์ด้วยจำนวนไม้อยู่ดี</p>';
+  document.getElementById('out').innerHTML=
+    '<p>ต้นทุนไปกลับต่อไม้ = <strong>'+cost.toFixed(2)+'%</strong></p>'+
+    '<p>อัตราชนะขั้นต่ำที่ทำให้เสมอตัว</p>'+
+    '<p class="big" style="color:'+color+'">'+need.toFixed(1)+'%</p>'+ note +
+    '<p style="margin-top:14px">ถ้าเทรด '+freq+' ไม้ต่อปีโดยใส่เงินเต็มทุกไม้ ค่าผ่านทางล้วน ๆ กินทุนไป'+
+    ' <strong>'+drag.toFixed(1)+'% ต่อปี</strong>'+
+    (drag>=30?' — <span style="color:var(--red)">ซึ่งสูงมาก การลดจำนวนไม้ลงครึ่งหนึ่งจะช่วยมากกว่าการหาสัญญาณที่แม่นขึ้น</span>':'')+'</p>';
+}
+ids.forEach(i=>el[i].addEventListener('input',upd)); upd();
+</script>
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

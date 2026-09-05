@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 8: บันทึก ทดสอบ ยอมผิด</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 8 — สถานี ⑧ บันทึก ทดสอบ ยอมผิด: ปิดวงจร</div>
+<div class="desc">การค้นหาสร้างผลงานปลอมได้เท่าไร · หลุมพรางห้าอย่างของการทดสอบตัวเอง · และ edge ที่ถูกที่สุดที่ซื้อได้</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด สถานีนี้ทำได้ด้วยสมุดหนึ่งเล่ม ไม่ต้องเขียนโค้ดเลย · <strong>🔵 มีพื้นแล้ว:</strong> หัวข้อแรกวัดขนาดของ "ค่าปรับจากการค้นหา" เป็นตัวเลขบนข้อมูลจริง</p></div>
+
+<h2>สถานีที่ทำให้อีกเจ็ดสถานีมีความหมาย</h2>
+
+<p>เจ็ดสถานีที่ผ่านมาช่วยให้คุณเข้าตลาดอย่างมีเหตุผลและอยู่รอด แต่ไม่มีสถานีไหนเลยที่ทำให้คุณ <em>เก่งขึ้น</em></p>
+
+<p>การเก่งขึ้นต้องการอย่างเดียว — ข้อมูลป้อนกลับที่เชื่อถือได้ และนั่นยากกว่าที่ทุกคนคิด เพราะสมองคนมีระบบป้องกันตัวเองที่ทำงานเร็วกว่าการรู้ตัว</p>
+
+<p>สถานีสุดท้ายจึงไม่ใช่เรื่องการวิเคราะห์ แต่เป็นเรื่องการ <strong>ทำให้ตัวเองโกงตัวเองไม่ได้</strong></p>
+
+<div class="pq">คุณไม่ได้แข่งกับตลาดอย่างเดียว คุณแข่งกับความสามารถของตัวเองในการเล่าเรื่องให้ตัวเองฟังทีหลัง</div>
+
+<h2>การค้นหาสร้างผลงานปลอมได้เท่าไร</h2>
+
+<p>เริ่มด้วยการทดลองที่วัดขนาดของปัญหาออกมาเป็นตัวเลขได้จริง</p>
+
+<p>Part 3 บอกว่าอย่าจูนพารามิเตอร์ ตรงนี้จะแสดงให้เห็นว่าทำไม โดยการ <em>จูนจริง ๆ</em> แล้วดูว่าเกิดอะไรขึ้น</p>
+
+<p>เราเอา EMA ตัดกันมาลองทุกคู่ที่เป็นไปได้ — เส้นเร็วตั้งแต่ 3 ถึง 25 เส้นช้าตั้งแต่ 4 ถึง 50 รวม <strong>828 ชุด</strong> แล้วรันทุกชุดบนข้อมูลจริง 57 วันของเรา</p>
+
+<div class="bx ba"><div class="bt">🧮 ผลการค้นหาบนข้อมูลจริง</div>
+<ul>
+<li>ชุดที่ดีที่สุดคือ <strong>EMA 25/29</strong> ให้ผล <strong>+20.32%</strong></li>
+<li>ค่ากลางของทั้ง 828 ชุด: <strong>+10.79%</strong></li>
+<li>การถือเฉย ๆ ไม่ทำอะไรเลย: <strong>+23.75%</strong></li>
+<li>จำนวนชุดที่ชนะการถือเฉย ๆ: <strong>0 จาก 828</strong></li>
+</ul></div>
+
+<p>ผลข้อสุดท้ายน่าสนใจ แต่ยังไม่ใช่ประเด็นหลัก ประเด็นหลักอยู่ที่บรรทัดแรก</p>
+
+<p>สมมติผมเดินมาบอกคุณว่า <em>"ผมเจอระบบหนึ่ง ใช้ EMA 25/29 ทำได้ +20.32% ในสองเดือน"</em> — ฟังดูเหมือนการค้นพบ</p>
+
+<p>แต่ผมไม่ได้บอกคุณว่าผมลองมา 828 ชุด</p>
+
+<p>คำถามที่ต้องถามคือ <strong>ถ้าข้อมูลไม่มีอะไรอยู่ในนั้นเลย การลอง 828 ชุดแล้วเลือกอันที่ดีที่สุด จะได้ตัวเลขสวย ๆ มาเท่าไร</strong></p>
+
+<p>ตอบได้ด้วยการทดลอง — สร้างข้อมูลที่ไม่มีโครงสร้างอะไรเลย แล้วค้นหาแบบเดียวกันเป๊ะ ทำ 200 รอบ</p>
+
+<!--CHART:search-->
+<svg class="fig" viewBox="0 0 780 258" role="img" aria-label="กราฟแท่งเทียบสี่กรณี แสดงว่าการค้นหาพารามิเตอร์จำนวนมากแล้วรายงานอันที่ดีที่สุด สร้างผลงานที่ดูดีขึ้นได้แม้บนข้อมูลที่ไม่มีโครงสร้างอะไรเลย">
+<line x1="306.1" y1="36" x2="306.1" y2="222" stroke="#cbd5e1" stroke-width="1.5"/>
+<rect x="250.0" y="46.0" width="56.1" height="24" rx="4" fill="#cbd5e1"/>
+<text x="238" y="58.0" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">หยิบมาชุดเดียว ไม่ค้นหา</text>
+<text x="238" y="73.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">ข้อมูลสุ่ม</text>
+<text x="314.1" y="63.0" text-anchor="start" font-size="12.5" font-weight="700" fill="#cbd5e1" font-family="Sarabun,sans-serif">-3.22%</text>
+<rect x="306.1" y="92.0" width="26.8" height="24" rx="4" fill="#f97316"/>
+<text x="238" y="104.0" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">ค้นหา 828 ชุด เอาที่ดีที่สุด</text>
+<text x="238" y="119.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">ข้อมูลสุ่ม</text>
+<text x="341.0" y="109.0" text-anchor="start" font-size="12.5" font-weight="700" fill="#f97316" font-family="Sarabun,sans-serif">+1.54%</text>
+<rect x="306.1" y="138.0" width="354.1" height="24" rx="4" fill="#2563eb"/>
+<text x="238" y="150.0" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">ค้นหา 828 ชุด เอาที่ดีที่สุด</text>
+<text x="238" y="165.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">ข้อมูลจริง</text>
+<text x="668.2" y="155.0" text-anchor="start" font-size="12.5" font-weight="700" fill="#2563eb" font-family="Sarabun,sans-serif">+20.32%</text>
+<rect x="306.1" y="184.0" width="413.9" height="24" rx="4" fill="#16a34a"/>
+<text x="238" y="196.0" text-anchor="end" font-size="12.5" fill="#374151" font-family="Sarabun,sans-serif">ไม่ทำอะไรเลย ถือเฉย ๆ</text>
+<text x="238" y="211.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">ข้อมูลจริง</text>
+<text x="728.0" y="201.0" text-anchor="start" font-size="12.5" font-weight="700" fill="#16a34a" font-family="Sarabun,sans-serif">+23.75%</text>
+<path d="M416.95142751205043 58 L430.95142751205043 58 L430.95142751205043 104 L416.95142751205043 104" stroke="#f97316" stroke-width="1.5" fill="none"/>
+<text x="438.95142751205043" y="85.0" font-size="12" font-weight="700" fill="#c2410c" font-family="Sarabun,sans-serif">+4.77 จุด</text>
+<text x="438.95142751205043" y="101.0" font-size="11" fill="#9a3412" font-family="Sarabun,sans-serif">เกิดจากการค้นหาล้วน ๆ</text>
+<text x="238" y="26" text-anchor="end" font-size="13" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">ผลตอบแทนตลอดช่วง</text>
+</svg>
+<div class="cap">ลองพารามิเตอร์ 828 ชุด · ฝั่งข้อมูลสุ่มจำลอง 200 รอบแล้วรายงานค่ากลาง · บนข้อมูลจริง ไม่มีชุดไหนเลยจาก 828 ชุดที่ชนะการถือเฉย ๆ</div>
+<!--/CHART:search-->
+
+<div class="bx br"><div class="bt">การค้นหาเพียงอย่างเดียว เสกผลงานขึ้นมาได้ 4.77 จุดเปอร์เซ็นต์</div>
+<p>บนข้อมูลที่ <em>ไม่มีอะไรอยู่ในนั้นเลย</em></p>
+<ul>
+<li>ถ้าหยิบมาชุดเดียวโดยไม่ค้นหา ผลกลางคือ <strong>−3.22%</strong> — ติดลบ ตามที่ควรจะเป็น</li>
+<li>ถ้าค้นหา 828 ชุดแล้วรายงานอันที่ดีที่สุด ผลกลางกลายเป็น <strong>+1.54%</strong></li>
+<li>และหนึ่งในสิบครั้ง การค้นหาบนข้อมูลไร้ความหมายจะให้ตัวเลขถึง <strong>+12.35%</strong></li>
+</ul></div>
+
+<p>ทีนี้กลับมาที่ตัวเลข +20.32% ของข้อมูลจริง มันสูงกว่าที่ความสุ่มมักสร้างได้ — อยู่ที่เปอร์เซ็นไทล์ที่ <strong>99</strong> ของสิ่งที่การค้นหาบนข้อมูลไร้โครงสร้างทำได้</p>
+
+<p>แปลว่ามีอะไรอยู่จริงหรือเปล่า</p>
+
+<div class="bx bb"><div class="bt">คำตอบที่ซื่อสัตย์: อาจจะ แต่มันไม่สำคัญ</div>
+<p>เพราะไม่ว่าจะมีหรือไม่มี ข้อเท็จจริงสองข้อยังยืนอยู่</p>
+<ul>
+<li><strong>ไม่มีชุดไหนเลยจาก 828 ชุด ที่ชนะการไม่ทำอะไรเลย</strong> — ชนะความสุ่มไม่เท่ากับชนะทางเลือกที่ดีที่สุดที่มีอยู่</li>
+<li><strong>ช่วงเวลานี้เป็นขาขึ้นชัดเจน</strong> ระบบที่ถือของไว้มาก ๆ ย่อมได้เปรียบโดยอัตโนมัติ ผลที่ได้จึงบอกเรื่องของช่วงเวลา มากกว่าบอกเรื่องของระบบ</li>
+</ul></div>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ผลการทดสอบเป็นตัวเลขที่วัดคุณภาพของระบบ<br>
+<strong>quant เห็น:</strong> ผลการทดสอบเป็นตัวเลขที่วัด <em>คุณภาพของระบบ บวกกับจำนวนครั้งที่คุณลอง</em> — สองอย่างนี้ปนกันอยู่เสมอ และถ้าไม่บอกจำนวนครั้งที่ลอง ก็ยังไม่ได้รายงานผลจริง</p></div>
+
+<h2>หลุมพรางห้าอย่างของการทดสอบตัวเอง</h2>
+
+<div class="tw"><table>
+<tr><th class="nw">หลุมพราง</th><th>หน้าตาในชีวิตจริง</th><th>วิธีกัน</th></tr>
+<tr><td class="nw"><strong>มองอนาคต</strong></td><td>ใช้ข้อมูลที่ตอนนั้นยังไม่รู้ เช่นดูราคาปิดแล้วบอกว่าจะซื้อตอนเช้า</td><td>ถามทุกครั้งว่า "ตอนนั้นฉันรู้เรื่องนี้แล้วจริงไหม"</td></tr>
+<tr><td class="nw"><strong>เห็นแต่ผู้รอด</strong></td><td>ทดสอบกับเหรียญที่ยังอยู่วันนี้ โดยเหรียญที่ตายไปแล้วไม่อยู่ในข้อมูล</td><td>ถามว่ารายชื่อที่ใช้ทดสอบ มาจากวันไหน</td></tr>
+<tr><td class="nw"><strong>จูนจนสวย</strong></td><td>ปรับค่าไปเรื่อยจนกราฟผลตอบแทนสวย แล้วหยุด</td><td>ตั้งค่าก่อนดูผล และไม่แตะอีก</td></tr>
+<tr><td class="nw"><strong>ลองหลายครั้งแล้วเลือกอันดีสุด</strong></td><td>ลอง 828 ชุดแล้วรายงานชุดเดียว</td><td>รายงานจำนวนที่ลองทุกครั้ง</td></tr>
+<tr><td class="nw"><strong>เปลี่ยนกฎกลางทาง</strong></td><td>ตั้งใจถือ 5 วัน พอวันที่ 3 กำไรก็ขายเลย แล้วบันทึกว่าเป็นไม้ที่ชนะ</td><td>เขียนกฎก่อน แล้วบันทึกทั้งกฎเดิมและสิ่งที่ทำจริง</td></tr>
+</table></div>
+
+<p>สังเกตว่าวิธีกันทั้งห้าข้อ เป็นเรื่องของ <strong>การเขียนอะไรบางอย่างลงไปก่อน</strong> ทั้งหมด ไม่มีข้อไหนต้องใช้คณิตศาสตร์เลย</p>
+
+<h2>จดก่อนเทรด — เครื่องมือที่ทรงพลังที่สุดในเล่ม</h2>
+
+<p>วิธีป้องกันทั้งห้าหลุมพรางพร้อมกัน คือการเขียนสิ่งที่คุณคิดลงไป <em>ก่อน</em> ที่ผลจะออก</p>
+
+<p>ไม่ใช่เพื่อความเป็นระเบียบ แต่เพราะ <strong>ความทรงจำของคุณจะถูกเขียนทับโดยผลลัพธ์เสมอ</strong> ถ้าไม้กำไร คุณจะจำว่าคุณมั่นใจ ถ้าไม้ขาดทุน คุณจะจำว่าคุณลังเลตั้งแต่แรก ทั้งสองอย่างนี้เกิดขึ้นโดยที่คุณไม่ได้ตั้งใจโกหกเลย</p>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — สมุดหนึ่งหน้าต่อไม้</div>
+<p>เขียนหกบรรทัดนี้ <strong>ก่อนกดคำสั่ง</strong> ทุกครั้ง ใช้เวลาไม่ถึงสามนาที</p>
+<ol>
+<li><strong>ข้อความห้าช่อง</strong> จากสถานี ① — อะไร เท่าไร เมื่อไร วัดด้วยอะไร อะไรพิสูจน์ว่าผิด</li>
+<li><strong>ฐาน</strong> — ปกติเรื่องแบบนี้เกิดบ่อยแค่ไหน และฉันรู้ได้ยังไง</li>
+<li><strong>ต้นทุนไปกลับ</strong> เป็นเปอร์เซ็นต์ และอัตราชนะขั้นต่ำที่ต้องได้</li>
+<li><strong>ขนาดไม้</strong> และเพดานความเสียหายที่คำนวณไว้</li>
+<li><strong>ระดับความมั่นใจ</strong> เป็นตัวเลข 1 ถึง 5 — ข้อนี้สำคัญกว่าที่คิด เพราะพอครบ 50 ไม้ คุณจะรู้ว่าความมั่นใจของคุณมีความหมายจริงหรือเปล่า</li>
+<li><strong>อะไรที่จะทำให้ฉันเปลี่ยนใจ</strong> ระหว่างทาง — เขียนไว้ก่อน เพื่อไม่ให้เปลี่ยนใจด้วยเหตุผลที่คิดขึ้นสด ๆ</li>
+</ol>
+<p><strong>ถ้ายังไม่รู้จะเริ่มข้อไหน</strong> ให้ทำแค่ข้อ 1 กับข้อ 5 ก่อน สองข้อนี้ให้ผลตอบแทนต่อเวลาสูงที่สุด</p></div>
+
+<p>แล้วเดือนละครั้ง เปิดสมุดย้อนดู ไม่ใช่เพื่อดูว่ากำไรเท่าไร แต่เพื่อตอบสามคำถาม</p>
+
+<ul>
+<li>ไม้ที่ฉันให้ความมั่นใจ 5 ทำผลงานดีกว่าไม้ที่ให้ 2 จริงไหม</li>
+<li>ฉันทำตามสิ่งที่เขียนไว้กี่เปอร์เซ็นต์ของไม้ทั้งหมด</li>
+<li>ไม้ที่ขาดทุน พลาดที่สถานีไหน — อ่านตลาดผิด หรืออ่านถูกแต่จัดการห่วย</li>
+</ul>
+
+<h2>ยอมผิดให้เร็ว คือ edge ที่ถูกที่สุดที่ซื้อได้</h2>
+
+<p>ตลอดเล่มนี้เราพยายามหาความได้เปรียบจากหลายทาง — วัดให้ถูกตัว นับต้นทุนให้ครบ เลือกรูปให้ตรง คุมขนาดให้อยู่รอด</p>
+
+<p>ทุกทางที่ว่ามาต้องใช้ความพยายาม แต่มีอยู่ทางหนึ่งที่แทบไม่ต้องลงทุนอะไรเลย และคนส่วนใหญ่ไม่ใช้</p>
+
+<div class="bx bg"><div class="bt">💎 การยอมรับเร็วว่าคิดผิด</div>
+<p>คนที่ยอมรับว่าผิดในสัปดาห์แรก เสียเงินก้อนเล็ก แล้วเอาเวลาที่เหลือไปเรียนรู้ต่อ</p>
+<p>คนที่ยืนยันว่าตัวเองถูกเป็นเวลาหกเดือน จ่ายทั้งเงินและเวลา แล้วสุดท้ายก็ยังต้องยอมรับอยู่ดี — แค่แพงกว่ามาก</p>
+<p>ความต่างไม่ได้อยู่ที่ความฉลาด แต่อยู่ที่ว่า <strong>มีข้อความที่ผิดได้เขียนไว้ล่วงหน้าหรือเปล่า</strong> — คนที่มี ไม่ต้องต่อสู้กับอัตตา เพราะเขาตัดสินใจเรื่องนี้ไว้ตั้งแต่ตอนที่ยังไม่มีเงินเป็นเดิมพัน</p></div>
+
+<p>นี่คือเหตุผลที่ธีมของหนังสือเล่มนี้ไม่ใช่ความแม่นยำ แต่เป็นความถ่อมตัว — ไม่ใช่ในความหมายของการดูถูกตัวเอง แต่ในความหมายของ <strong>การรู้ว่าตัวเองมีสิทธิ์พูดอะไรได้แค่ไหนจากข้อมูลที่มี</strong></p>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินเปิดสมุดหลังผ่านไปสามเดือน</div>
+<p>มินมีบันทึก 26 ไม้ นั่งไล่ดูทีละหน้า แล้วเจอสามอย่างที่ไม่เคยเห็นมาก่อน</p>
+<ul>
+<li>ไม้ที่ให้ความมั่นใจระดับ 5 มี 6 ไม้ ผลรวมแย่กว่าไม้ที่ให้ระดับ 3 — <strong>ความมั่นใจของมินยังไม่มีความหมาย</strong> และตอนนี้มินมีหลักฐานแทนความรู้สึก</li>
+<li>มีอยู่ 9 ไม้ที่มินไม่ได้ทำตามสิ่งที่เขียนไว้ และ 7 ใน 9 ไม้นั้นขาดทุน</li>
+<li>ไม้ที่ขาดทุนหนักสุดสามไม้ พลาดที่สถานีเดียวกันทั้งหมด คือสถานี ⑦ — ไม้ใหญ่เกินไป ไม่ใช่อ่านตลาดผิด</li>
+</ul>
+<p>สามเดือนของข้อมูลยังน้อยเกินกว่าจะสรุปเรื่องระบบ ตามที่ Part 1 บอกไว้ แต่มัน <strong>มากพอจะบอกว่าจะซ่อมตรงไหนก่อน</strong> — และนั่นคือสิ่งที่ยอดเงินในพอร์ตตัวเดียวบอกไม่ได้เลย</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สี่คำถามท้ายเดือน</div>
+<ol>
+<li><strong>ฉันลองมากี่ครั้งก่อนจะได้ตัวเลขที่กำลังจะเชื่อนี้</strong> — ถ้าจำไม่ได้ แปลว่าเยอะ</li>
+<li><strong>ความมั่นใจของฉันทำนายอะไรได้จริงไหม</strong> — ตอบได้ก็ต่อเมื่อจดไว้ก่อน</li>
+<li><strong>ไม้ที่พังส่วนใหญ่พังที่สถานีไหน</strong> — ซ่อมสถานีที่พังบ่อยที่สุดก่อน</li>
+<li><strong>เดือนนี้ฉันเปลี่ยนกฎกลางทางกี่ครั้ง</strong> — ทุกครั้งคือข้อมูลหนึ่งชิ้นที่ถูกทำลาย</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<p>มินเทรด <strong>104 ไม้ต่อปี</strong> ถ้าจดครบทุกไม้ ปีหน้ามินจะมีข้อมูล 104 ชิ้นที่ตัดสินได้</p>
+<p>Part 1 บอกว่า 104 ไม้ยังพิสูจน์ไม่ได้ว่าระบบดี (มีโอกาสแค่ 13.3% แม้จะเก่งจริง) — <strong>แต่นั่นเป็นคนละคำถามกับสิ่งที่สมุดตอบได้</strong></p>
+<p>สมุดไม่ได้ตอบว่า "ระบบดีไหม" มันตอบว่า <em>"ฉันทำตามที่ตั้งใจไหม"</em> · <em>"ความมั่นใจฉันมีความหมายไหม"</em> · <em>"ฉันพังที่สถานีไหนบ่อยสุด"</em> — สามคำถามนี้ตอบได้ด้วยไม้ไม่กี่สิบไม้ และซ่อมได้ทันที</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>เขียนบันทึกหกบรรทัดสำหรับไม้ถัดไป เก็บไว้ แล้วเปิดอ่านอีกทีตอนปิดไม้ เทียบกับสิ่งที่คุณจำได้</li>
+<li>นึกถึงตัวเลขผลงานที่คุณเคยเห็นแล้วประทับใจ แล้วถามว่าคนนั้นลองมากี่แบบก่อนจะได้ตัวเลขนั้น — ถ้าไม่มีข้อมูลข้อนี้ คุณยังไม่ได้เห็นผลงานจริง</li>
+<li>ให้คะแนนความมั่นใจ 1 ถึง 5 กับสิบไม้ถัดไป แล้วรอดูว่าคะแนนกับผลลัพธ์เกี่ยวกันไหม</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>การค้นหาสร้างผลงานปลอมได้</strong> — บนข้อมูลไร้ความหมาย การลอง 828 ชุดแล้วเลือกที่ดีที่สุด เสกได้ 4.77 จุด</li>
+<li><strong>ตัวเลขผลงานไม่มีความหมาย ถ้าไม่รู้ว่าลองมากี่ครั้ง</strong></li>
+<li><strong>จดก่อน แล้วอ่านทีหลัง</strong> — ความทรงจำถูกเขียนทับด้วยผลลัพธ์เสมอ โดยที่คุณไม่ได้ตั้งใจโกหก</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 8</div>
+<ul>
+<li>ลอง 828 ชุดพารามิเตอร์บนข้อมูลจริง ได้ที่ดีที่สุด +20.32% แต่ไม่มีชุดไหนเลยชนะการถือเฉย ๆ ที่ +23.75%</li>
+<li>บนข้อมูลไร้โครงสร้าง การค้นหาแบบเดียวกันยกผลจาก −3.22% เป็น +1.54% คือเสกขึ้นมา 4.77 จุด และหนึ่งในสิบครั้งได้ถึง +12.35%</li>
+<li>หลุมพรางห้าอย่าง แก้ได้ด้วยการเขียนอะไรบางอย่างลงไปก่อนเสมอ ไม่ต้องใช้คณิตศาสตร์</li>
+<li>สมุดหกบรรทัดต่อไม้ตอบคำถามที่ยอดเงินในพอร์ตตอบไม่ได้ และตอบได้ด้วยไม้ไม่กี่สิบไม้</li>
+<li>การยอมรับเร็วว่าคิดผิด คือความได้เปรียบที่ถูกที่สุดที่มีให้ซื้อ และซื้อได้ด้วยการเขียนล่วงหน้าเท่านั้น</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">แปดสถานีครบแล้ว · เหลืออย่างเดียวคือเห็นมันทำงานพร้อมกันทั้งสายกับคนคนเดียว บัญชีเดียว เงินก้อนเดียว · Part 9 คือ 30 วันของมิน ตั้งแต่ไม้แรกจนถึงไม้ที่ทำให้เขาเปลี่ยนวิธีคิด</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>การหักค่าปรับจากการค้นหาออกจากผลงานอย่างเป็นทางการ → <code>theory-part5</code> และเครื่องมือ <code>tool-deflated-sharpe</code></li>
+<li>วิธีทดสอบที่เชื่อถือได้ การแบ่งข้อมูล และกับดักของ backtest → <code>theory-part5</code>, <code>statarb-ch21</code></li>
+<li>ถ้าอยากเริ่มเขียนโค้ดเพื่อทดสอบเอง → <code>python-part0</code> เป็นจุดเริ่มที่ไม่ต้องมีพื้นฐานมาก่อน</li>
+<li>แบบฝึกหัดและ notebook ที่รันได้จริง → <code>practice-part7</code> ถึง <code>practice-part9</code></li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ค่าปรับจากการค้นหา</strong> = ส่วนของผลงานที่เกิดจากการลองหลายแบบแล้วเลือกอันดีที่สุด ไม่ใช่จากคุณภาพจริง</li>
+<li><strong>จดก่อนเทรด</strong> = เขียนความเชื่อและกฎลงไปก่อนที่ผลจะออก เพื่อไม่ให้ความทรงจำถูกเขียนทับ</li>
+<li><strong>การตัดสินใจ ≠ ผลลัพธ์</strong> = วัดตัวเองที่กระบวนการ เพราะผลลัพธ์มีดวงปนอยู่เสมอ</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>มองอนาคต</strong> = ใช้ข้อมูลที่ ณ ตอนนั้นยังไม่รู้ · <strong>จูนจนสวย</strong> = ปรับค่าจนผลดูดีแล้วหยุด ซึ่งคือการซื้อความบังเอิญ · <strong>ทดสอบหลายครั้ง</strong> = ยิ่งลองเยอะ ยิ่งเจอของที่ดูดีโดยบังเอิญ</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

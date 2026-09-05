@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 2: ข้อความที่ผิดได้</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 2 — สถานี ① ข้อความที่ผิดได้: เปลี่ยนความรู้สึกให้เป็นสิ่งที่ตรวจสอบได้</div>
+<div class="desc">ห้าช่องที่ต้องกรอก · ข้ออ้างที่กันตัวเองไม่ให้ผิด · ทำไมการยอมให้ตัวเองผิดถึงเป็นเครื่องมือที่ถูกที่สุดที่คุณมี</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด แล้วทำแบบฝึกหัดข้อ 1 ให้ได้จริงก่อนไป Part 3 · <strong>🔵 มีพื้นแล้ว:</strong> Part นี้คือการเขียนสมมติฐานฉบับไม่มีสถิติ ถ้าคุ้นอยู่แล้วให้ข้ามไปที่ตาราง "สิบประโยคที่เราพูดกันจนชิน"</p></div>
+
+<h2>คำถามที่ตอบไม่ได้ กับคำถามที่ตอบไม่ได้ <em>สักที</em></h2>
+
+<p>Part 1 จบด้วยข่าวร้าย: ข้อมูลของเราเองจะไม่พอไปอีกเกือบสิบปี</p>
+
+<p>แต่สังเกตให้ดีว่านั่นเป็นข่าวร้ายเฉพาะกับคำถามแบบหนึ่งเท่านั้น — คำถามว่า "ระบบของฉันดีไหม" ซึ่งเป็นคำถามใหญ่ กว้าง และต้องใช้ข้อมูลมหาศาลกว่าจะตอบได้</p>
+
+<p>ยังมีคำถามอีกแบบที่ตอบได้ <em>ภายในสัปดาห์นี้</em></p>
+
+<div class="tw"><table>
+<tr><th>คำถามที่ต้องรอสิบปี</th><th>คำถามที่ตอบได้สัปดาห์นี้</th></tr>
+<tr><td>ระบบของฉันมี edge ไหม</td><td>ต้นทุนไปกลับของฉันคือเท่าไร</td></tr>
+<tr><td>ฉันเก่งกว่าค่าเฉลี่ยหรือเปล่า</td><td>ไม้ที่แล้ว ฉันเข้าด้วยเหตุผลอะไร และเขียนไว้ก่อนหรือหลัง</td></tr>
+<tr><td>วิธีนี้ใช้ได้จริงในระยะยาวไหม</td><td>ถ้าราคาไปทางตรงข้าม ฉันจะรู้ตอนไหนว่าคิดผิด</td></tr>
+</table></div>
+
+<p>ความต่างไม่ได้อยู่ที่ความยากง่าย แต่อยู่ที่ว่าคำถามฝั่งขวา <strong>มีเงื่อนไขจบในตัวมันเอง</strong> ส่วนคำถามฝั่งซ้ายต้องรอสะสมตัวอย่างไปเรื่อย ๆ</p>
+
+<p>สถานีที่ ① ของสายการผลิต คือการเปลี่ยนสิ่งที่อยู่ในหัวคุณ ให้กลายเป็นคำถามฝั่งขวา</p>
+
+<div class="pq">ความเชื่อที่ไม่มีทางผิด ไม่ใช่ความเชื่อที่แข็งแรง มันคือความเชื่อที่สอนอะไรคุณไม่ได้เลย</div>
+
+<h2>ห้าช่องที่ต้องกรอก</h2>
+
+<p>ข้อความที่ผิดได้ ไม่ใช่คำทำนายที่แม่น มันแค่ต้องบอกล่วงหน้าให้ครบว่า <em>อะไรจะนับว่าคุณผิด</em> ห้าช่องนี้คือทั้งหมดที่ต้องมี</p>
+
+<div class="tw"><table>
+<tr><th class="nw">ช่อง</th><th>คำถาม</th><th>ตัวอย่างที่กรอกแล้ว</th></tr>
+<tr><td class="nw"><strong>1. อะไร</strong></td><td>สิ่งไหนจะเคลื่อนไหว</td><td>ราคา BTC</td></tr>
+<tr><td class="nw"><strong>2. เท่าไร</strong></td><td>ต้องถึงระดับไหนถึงจะนับ</td><td>ปิดสูงกว่า 72,000 ดอลลาร์</td></tr>
+<tr><td class="nw"><strong>3. เมื่อไร</strong></td><td>ภายในกรอบเวลาไหน</td><td>ภายใน 5 วันทำการนับจากวันนี้</td></tr>
+<tr><td class="nw"><strong>4. วัดด้วยอะไร</strong></td><td>ดูราคาจากไหน ณ เวลาใด</td><td>ราคาปิดรายวันจากสแนปช็อตตลาดเดียวกันทุกวัน</td></tr>
+<tr><td class="nw"><strong>5. อะไรพิสูจน์ว่าผิด</strong></td><td>เหตุการณ์แบบไหนที่ทำให้จบเกม</td><td>ครบ 5 วันแล้วไม่ถึง หรือปิดต่ำกว่า 68,000 ก่อน</td></tr>
+</table></div>
+
+<p>เขียนครบห้าช่อง ใช้เวลาไม่ถึงสองนาที และคุณจะได้ของที่ทำสามอย่างพร้อมกัน</p>
+
+<ul>
+<li><strong>ตัดสินได้</strong> — พอถึงเวลา จะไม่มีการเถียงกับตัวเองว่าตกลงถูกหรือผิด</li>
+<li><strong>สอนได้</strong> — ไม่ว่าผลจะออกทางไหน คุณได้ข้อมูลกลับมาหนึ่งชิ้นเสมอ</li>
+<li><strong>กันโกงย้อนหลัง</strong> — สมองคนเก่งมากในการจำว่า "ก็รู้อยู่แล้ว" การเขียนไว้ก่อนคือหลักฐานที่แก้ไม่ได้</li>
+</ul>
+
+<h2>บันไดสี่ขั้น — จากความรู้สึกไปสู่ข้อความ</h2>
+
+<p>ลองดูความเชื่อเดียวกันเขียนสี่แบบ ตั้งต้นในวันที่ <strong>20 สิงหาคม 2026</strong> ตอนที่ BTC อยู่ที่ <strong>70,007</strong> ดอลลาร์ (วันเดียวกับที่สัญญาณ EMA บอกให้ซื้อ — Part 3 จะกลับมาที่วันนี้อีกครั้ง)</p>
+
+<div class="bx br"><div class="bt">ขั้นที่ 1 — "BTC กำลังจะขึ้น"</div>
+<p>ตรวจสอบไม่ได้เลย ขึ้นเมื่อไร ขึ้นเท่าไร ถ้าลงก่อนแล้วค่อยขึ้นถือว่าถูกไหม — ทุกผลลัพธ์เข้าได้หมด</p></div>
+
+<div class="bx br"><div class="bt">ขั้นที่ 2 — "BTC จะขึ้นแรงในระยะสั้น"</div>
+<p>ดูเหมือนชัดขึ้นเพราะมีคำว่า "แรง" กับ "ระยะสั้น" แต่สองคำนี้ไม่มีเส้นแบ่ง ยังตัดสินไม่ได้อยู่ดี — และนี่คือระดับที่บทวิเคราะห์ส่วนใหญ่หยุดอยู่</p></div>
+
+<div class="bx ba"><div class="bt">ขั้นที่ 3 — "BTC จะปิดสูงกว่า 72,000 ภายใน 5 วันทำการ"</div>
+<p>ตรวจสอบได้แล้ว มีระดับ มีเวลา เหลือแค่ยังไม่ได้บอกว่าวัดจากไหนและอะไรจะตัดจบก่อนกำหนด</p></div>
+
+<div class="bx bg"><div class="bt">ขั้นที่ 4 — ครบห้าช่อง</div>
+<p>"ราคาปิด BTC จากสแนปช็อตรายวันของตลาดเดิม จะสูงกว่า 72,000 ดอลลาร์ ภายใน 5 วันทำการนับจาก 20 สิงหาคม — และถือว่าฉันคิดผิดทันทีถ้าราคาปิดต่ำกว่า 68,000 ก่อนครบกำหนด"</p></div>
+
+
+<svg class="fig" viewBox="0 0 780 300" role="img" aria-label="บันไดสี่ขั้นจากความรู้สึกที่ตรวจสอบไม่ได้ ไปสู่ข้อความที่ครบห้าช่องและตรวจสอบได้">
+<defs>
+<linearGradient id="lg1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fef2f2"/><stop offset="1" stop-color="#fee2e2"/></linearGradient>
+<linearGradient id="lg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffbeb"/><stop offset="1" stop-color="#fef3c7"/></linearGradient>
+<linearGradient id="lg3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f0fdf4"/><stop offset="1" stop-color="#dcfce7"/></linearGradient>
+<filter id="ls" x="-10%" y="-20%" width="120%" height="150%"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity=".15"/></filter>
+</defs>
+<g font-family="Sarabun,sans-serif" filter="url(#ls)">
+<rect x="40" y="228" width="330" height="52" rx="9" fill="url(#lg1)" stroke="#fca5a5"/>
+<rect x="110" y="158" width="380" height="52" rx="9" fill="url(#lg1)" stroke="#fca5a5"/>
+<rect x="180" y="88" width="430" height="52" rx="9" fill="url(#lg2)" stroke="#fcd34d"/>
+<rect x="250" y="18" width="490" height="52" rx="9" fill="url(#lg3)" stroke="#86efac"/>
+</g>
+<g font-family="Sarabun,sans-serif">
+<text x="58" y="250" font-size="14" font-weight="700" fill="#991b1b">ขั้น 1 · "BTC กำลังจะขึ้น"</text>
+<text x="58" y="269" font-size="12" fill="#b91c1c">ทุกผลลัพธ์เข้าได้หมด — ไม่มีวันผิด</text>
+<text x="128" y="180" font-size="14" font-weight="700" fill="#991b1b">ขั้น 2 · "จะขึ้นแรงในระยะสั้น"</text>
+<text x="128" y="199" font-size="12" fill="#b91c1c">"แรง" กับ "สั้น" ไม่มีเส้นแบ่ง — ยังตัดสินไม่ได้</text>
+<text x="198" y="110" font-size="14" font-weight="700" fill="#92400e">ขั้น 3 · "ปิดเหนือ 72,000 ใน 5 วันทำการ"</text>
+<text x="198" y="129" font-size="12" fill="#b45309">ตรวจสอบได้แล้ว แต่ยังไม่บอกว่าวัดจากไหน</text>
+<text x="268" y="40" font-size="14" font-weight="700" fill="#166534">ขั้น 4 · ครบห้าช่อง + เงื่อนไขที่บอกว่าผิด</text>
+<text x="268" y="59" font-size="12" fill="#15803d">ตัดสินได้ · สอนได้ · แก้ย้อนหลังไม่ได้</text>
+<text x="18" y="160" font-size="12" fill="#9ca3af" transform="rotate(-90 18 160)" text-anchor="middle">ตรวจสอบได้มากขึ้น</text>
+</g>
+<path d="M22 262 L22 44" stroke="#d1d5db" stroke-width="1.5" marker-end="url(#lam)"/>
+<defs><marker id="lam" markerWidth="9" markerHeight="9" refX="4" refY="7" orient="auto"><path d="M0,8 L4,0 L8,8 z" fill="#d1d5db"/></marker></defs>
+</svg>
+<div class="cap">ยิ่งขึ้นบันได ข้อความยิ่งเสี่ยงต่อการเป็นเท็จ — และนั่นคือสิ่งที่ทำให้มันมีค่า</div>
+
+<p>ทีนี้เปิดข้อมูลดูว่าเกิดอะไรขึ้นจริง</p>
+
+<div class="bx bb"><div class="bt">📊 ผลจริงจากข้อมูล</div>
+<ul>
+<li>วันที่ <strong>21 สิงหาคม</strong> — วันถัดมาวันเดียว — ราคาปิดที่ 75,466 ดอลลาร์ <strong>ผ่านเส้น 72,000 แล้ว</strong></li>
+<li>ราคาไม่เคยลงไปต่ำกว่าจุดตั้งข้อความเลยแม้แต่วันเดียว ย่อลึกสุด <strong>0.0%</strong></li>
+<li>สูงสุดที่ไปถึงในช่วงนั้นคือ <strong>80,387</strong> ดอลลาร์ · ปิดท้ายช่วงที่ 77,716</li>
+</ul>
+<p>ข้อความข้อนี้ <strong>เป็นจริง</strong> — และรู้ผลภายในหนึ่งวัน ไม่ต้องรอสิบปี</p></div>
+
+<p>สังเกตว่าถ้าเปลี่ยนเส้นเป็น 82,000 ข้อความเดียวกันจะ <em>เป็นเท็จ</em> เพราะราคาสูงสุดหยุดที่ 80,387</p>
+
+<p>นี่คือสิ่งที่บันไดขั้นที่ 4 ให้มา — <strong>ความสามารถในการผิด</strong> ขั้นที่ 1 กับ 2 ไม่มีวันเป็นเท็จได้ ไม่ใช่เพราะมันแม่น แต่เพราะมันไม่ได้พูดอะไรเลย</p>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ข้อความคือคำทำนาย และวัดคุณค่าของมันที่ว่าทำนายถูกหรือผิด<br>
+<strong>quant เห็น:</strong> ข้อความคือ <em>เครื่องมือเก็บข้อมูล</em> — ข้อความที่ผิดแล้วรู้ว่าผิด มีค่ามากกว่าข้อความที่ถูกโดยไม่รู้ว่าทำไมถึงถูก</p></div>
+
+<h2>ข้ออ้างที่กันตัวเองไม่ให้ผิด</h2>
+
+<p>มีความเชื่ออีกประเภทที่อันตรายกว่าความเชื่อคลุมเครือ คือความเชื่อที่ <strong>ดูเหมือน</strong> ตรวจสอบได้ แต่มีประตูหนีติดไว้ล่วงหน้า</p>
+
+<div class="tw"><table>
+<tr><th>ประโยคที่ได้ยินบ่อย</th><th>ประตูหนีที่ซ่อนอยู่</th></tr>
+<tr><td>"ระบบนี้ใช้ได้ ถ้าตลาดเป็นเทรนด์"</td><td>พอขาดทุนก็บอกว่าตลาดไม่เป็นเทรนด์ — ตัดสินหลังรู้ผลได้เสมอ</td></tr>
+<tr><td>"ต้องมีวินัยด้วยถึงจะได้ผล"</td><td>ขาดทุนเมื่อไรแปลว่าไม่มีวินัย ระบบไม่มีวันผิด</td></tr>
+<tr><td>"เดี๋ยวมันก็กลับมา ถ้าถือนานพอ"</td><td>ไม่มีเส้นตาย จึงไม่มีวันถึงเวลาตัดสิน</td></tr>
+<tr><td>"ตลาดยังไม่พร้อม"</td><td>เลื่อนวันตัดสินออกไปได้ไม่จำกัด</td></tr>
+</table></div>
+
+<p>ทดสอบง่าย ๆ ว่าประโยคของคุณมีประตูหนีหรือเปล่า — ถามตัวเองว่า <strong>"ผลลัพธ์หน้าตาแบบไหน ที่จะทำให้ฉันยอมพูดว่าฉันคิดผิด"</strong></p>
+
+<p>ถ้านึกไม่ออกภายในสิบวินาที แปลว่าไม่มี และแปลว่าคุณกำลังจะจ่ายค่าเล่าเรียนโดยไม่ได้เรียนอะไรกลับมา</p>
+
+<h2>สิบประโยคที่เราพูดกันจนชิน — เขียนใหม่</h2>
+
+<div class="tw"><table>
+<tr><th>แบบที่พูดกัน</th><th>แบบที่ตรวจสอบได้</th></tr>
+<tr><td>ตัวนี้ดูดี น่าเข้า</td><td>ปิดเหนือ X ภายใน N วัน · ผิดถ้าปิดต่ำกว่า Y ก่อน</td></tr>
+<tr><td>รอย่อแล้วเข้า</td><td>ถ้าย่อถึง X ภายใน N วัน จะเข้า · ถ้าไม่ถึงจะไม่เข้าเลย ไม่ไล่ราคา</td></tr>
+<tr><td>ตลาดกำลังกลับตัว</td><td>ปิดเหนือจุดสูงสุด N วันย้อนหลัง ติดกัน 2 วัน</td></tr>
+<tr><td>ตัวนี้พื้นฐานดี</td><td>ตัวเลข Z จะออกมาสูงกว่า W ในรายงานรอบหน้า</td></tr>
+<tr><td>ของมันแพงไป</td><td>ส่วนต่างจากค่ากลาง N วันจะแคบลงเหลือต่ำกว่า X ภายใน M วัน</td></tr>
+<tr><td>รอบนี้ไม่เหมือนเดิม</td><td>ตัวชี้วัด V จะอยู่นอกช่วง [a, b] ที่เคยเป็นมาตลอด N ปี</td></tr>
+<tr><td>ปล่อยให้กำไรวิ่ง</td><td>จะออกเมื่อราคาปิดต่ำกว่าจุดสูงสุดที่ทำได้ X% ไม่ออกก่อนนั้น</td></tr>
+<tr><td>ตัดขาดทุนให้เร็ว</td><td>จะออกทันทีที่ปิดต่ำกว่าราคาเข้า X% ไม่ต่อรอง</td></tr>
+<tr><td>เข้าไม้เล็กไปก่อน</td><td>ขนาดไม้ = ตัวเลขที่คำนวณจากกฎเดียวทุกครั้ง (สถานี ⑦)</td></tr>
+<tr><td>ดูสัญญาณยืนยันก่อน</td><td>ระบุมาว่า "ยืนยัน" คืออะไร ต้องเห็นอะไรเป็นรูปธรรม</td></tr>
+</table></div>
+
+<p>ฝั่งขวายาวกว่าและฟังดูไม่เท่ นั่นแหละคือราคาที่ต้องจ่าย — ความคลุมเครือฟังดูฉลาดเสมอ เพราะมันไม่เคยถูกจับผิด</p>
+
+<h2>กับดัก: ถูกแล้วยังขาดทุนได้</h2>
+
+<p>ข้อความในบันไดขั้นที่ 4 ของเราเป็นจริง ราคาผ่าน 72,000 ตั้งแต่วันถัดมา และวิ่งต่อไปถึง 80,387</p>
+
+<p>แต่คนที่เชื่อข้อความนี้ ยังขาดทุนได้สบาย ๆ ถ้า</p>
+
+<ul>
+<li>เข้าไม้ใหญ่เกินไป แล้วทนความผันผวนระหว่างทางไม่ไหว ออกก่อน (สถานี ⑦)</li>
+<li>เลือกเครื่องมือที่จ่ายค่าผ่านทางแพงกว่ากำไรที่ได้ (สถานี ⑤)</li>
+<li>ซื้อของที่รูปการจ่ายผลไม่ตรงกับความเชื่อ เช่น เชื่อเรื่องระดับราคา แต่ไปซื้อของที่หมดอายุก่อนถึง (สถานี ⑥)</li>
+</ul>
+
+<div class="bx br"><div class="bt">ประเด็นสำคัญ</div>
+<p>สถานี ① ไม่ได้รับประกันกำไร มันรับประกันแค่ว่า <strong>คุณจะรู้ว่าตัวเองผิดตรงไหน</strong></p>
+<p>ถ้าไม่มีสถานีนี้ เวลาขาดทุนคุณจะไม่มีทางแยกออกเลยว่า "อ่านตลาดผิด" หรือ "อ่านถูกแต่จัดการห่วย" — ซึ่งเป็นสองปัญหาที่ต้องแก้คนละวิธีกันสิ้นเชิง</p></div>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — ถ้ายังไม่รู้จะเริ่มเขียนยังไง</div>
+<ul>
+<li><strong>ใช้เทมเพลตห้าช่องทุกไม้ ไม่มีข้อยกเว้น</strong> — รวมถึงไม้ที่ "มั่นใจมาก" โดยเฉพาะไม้แบบนั้น</li>
+<li><strong>ตั้งกรอบเวลาไว้ที่ 5 วันทำการ</strong> ถ้ายังไม่มีเหตุผลจะตั้งเป็นอย่างอื่น — สั้นพอจะได้ข้อมูลเร็ว ยาวพอไม่ใช่การเดารายชั่วโมง</li>
+<li><strong>เขียนช่องที่ 5 ก่อนช่องอื่นเสมอ</strong> — เริ่มจาก "อะไรจะบอกว่าฉันผิด" แล้วค่อยย้อนกลับมาเขียนช่อง 1–4 วิธีนี้กันประตูหนีได้ดีที่สุด</li>
+<li><strong>ถ้าเขียนช่องที่ 5 ไม่ได้ ให้ถือว่ายังไม่มีไอเดีย</strong> และไม่ต้องเข้าไม้นั้น</li>
+</ul></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินเขียนไม่ออก</div>
+<p>คืนวันพุธ มินเห็นเหรียญตัวหนึ่งวิ่งแรง รู้สึกว่าต้องรีบเข้าก่อนตกรถ เปิดสมุดมาเขียนเทมเพลตห้าช่อง</p>
+<p>ช่อง 1 เขียนได้ ช่อง 2 เขียนได้ พอถึงช่อง 5 — "อะไรจะพิสูจน์ว่าฉันคิดผิด" — มินนั่งนิ่งไปสามนาที</p>
+<p>คำตอบที่โผล่มาในหัวคือ <em>"ถ้ามันลง ก็แปลว่าย่อ เดี๋ยวก็ขึ้นต่อ"</em> ซึ่งมินรู้ทันทีว่านั่นคือประตูหนี ไม่ใช่คำตอบ</p>
+<p>มินปิดสมุด ไม่เข้าไม้นั้น</p>
+<p>คืนนั้นเหรียญตัวนั้นวิ่งต่ออีก 12% และมินไม่ได้อะไรเลย — <strong>ซึ่งเป็นผลลัพธ์ที่ถูกต้อง</strong> เพราะการตัดสินใจที่ดีกับผลลัพธ์ที่ดีเป็นคนละเรื่องกัน และสิ่งเดียวที่มินควบคุมได้คืออย่างแรก</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — เรียงคำถามจากหลังไปหน้า</div>
+<ol>
+<li><strong>อะไรจะทำให้ฉันยอมรับว่าผิด</strong> — ถ้าตอบไม่ได้ หยุดตรงนี้</li>
+<li><strong>ผิดแล้วฉันจะรู้เมื่อไร</strong> — ต้องมีวันที่ ไม่ใช่ "เดี๋ยวก็รู้เอง"</li>
+<li><strong>ถ้าถูก ฉันจะรู้ได้ยังไงว่าถูกเพราะเหตุผลที่คิดไว้ ไม่ใช่บังเอิญ</strong></li>
+<li><strong>เรื่องนี้ตัดสินได้ด้วยข้อมูลที่ฉันมีจริง ๆ ไหม</strong> — ถ้าต้องใช้ข้อมูลที่หาไม่ได้ ให้เปลี่ยนข้อความ</li>
+</ol>
+<p>ข้อ 1 มาก่อนเสมอ เพราะมันเป็นข้อเดียวที่คนไม่อยากตอบ</p></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<p>มินเทรด <strong>104 ไม้ต่อปี</strong> ถ้าทุกไม้มีข้อความห้าช่องเขียนไว้ก่อน สิ้นปีมินจะมีบันทึกผลจริง 104 ชิ้น ที่ตัดสินได้ว่าถูกหรือผิดโดยไม่ต้องเถียงกับตัวเอง</p>
+<p>ถ้าไม่เขียน มินจะมีแค่ยอดเงินในพอร์ตหนึ่งตัวเลข ซึ่งบอกไม่ได้เลยว่าปีที่ผ่านมาเก่งขึ้นหรือแค่ตลาดดี</p>
+<p><strong>ต้นทุนของสถานีนี้คือสองนาทีต่อไม้</strong> = ราว 3.5 ชั่วโมงต่อปี</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>เขียนข้อความห้าช่องสำหรับไม้ถัดไปที่คุณจะเข้าจริง — เขียนก่อนกดซื้อ ไม่ใช่หลัง</li>
+<li>เปิดบทวิเคราะห์ที่คุณอ่านล่าสุด แล้วหาว่ามีประโยคไหนที่กรอกครบห้าช่องได้บ้าง (คำตอบมักจะเป็นศูนย์ และนั่นคือข้อมูลเกี่ยวกับบทวิเคราะห์นั้น)</li>
+<li>นึกถึงไม้ที่ขาดทุนหนักที่สุดของคุณ แล้วตอบว่า ตอนนั้นคุณอ่านตลาดผิด หรืออ่านถูกแต่จัดการห่วย — ถ้าตอบไม่ได้ นั่นคือสิ่งที่สถานีนี้มีไว้แก้</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>เขียนช่อง "อะไรพิสูจน์ว่าฉันผิด" ก่อนช่องอื่นเสมอ</strong> — เป็นช่องเดียวที่กันประตูหนีได้</li>
+<li><strong>ความคลุมเครือฟังดูฉลาดเพราะมันไม่เคยถูกจับผิด</strong> — ไม่ใช่เพราะมันถูก</li>
+<li><strong>ข้อความที่ดีไม่ได้รับประกันกำไร</strong> — มันรับประกันว่าคุณจะรู้ว่าพลาดที่สถานีไหน</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 2</div>
+<ul>
+<li>คำถาม "ระบบฉันดีไหม" ต้องรอหลายปี แต่คำถามที่มีเงื่อนไขจบในตัว ตอบได้ภายในสัปดาห์นี้</li>
+<li>ข้อความที่ผิดได้ต้องกรอกครบห้าช่อง: อะไร · เท่าไร · เมื่อไร · วัดด้วยอะไร · อะไรพิสูจน์ว่าผิด</li>
+<li>ข้อความจริงจากข้อมูล: ตั้งไว้ 20 ส.ค. ที่ 70,007 ว่าจะผ่าน 72,000 ใน 5 วัน — ผ่านตั้งแต่วันถัดมา และรู้ผลใน 1 วัน</li>
+<li>ระวังข้ออ้างที่กันตัวเองไม่ให้ผิด ("ถ้าตลาดเป็นเทรนด์" · "ถ้ามีวินัย" · "เดี๋ยวก็กลับมา")</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">มินเขียนข้อความได้แล้ว แต่ยังใช้ EMA ตัดกันเป็นตัวบอกว่าเมื่อไรควรเข้า · วันที่ 20 สิงหาคมนั้น สัญญาณบอกให้ซื้อที่ 70,007 — คำถามคือมันบอกช้าไปแค่ไหน และเงินหายไปกับความช้านั้นเท่าไร · Part 3 เปิดข้อมูลดูกันตรง ๆ</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>การตั้งสมมติฐานและการทดสอบเชิงสถิติแบบเต็ม → <code>statarb-ch4b</code> (บท ε Design + Null Hypothesis 101)</li>
+<li>ทำไมตลาดถึงทำให้ข้อความที่ถูกกลายเป็นกำไรไม่ได้เสมอไป → <code>theory-part3</code> (EMH และขีดจำกัดของ arbitrage)</li>
+<li>การแปลงความเชื่อเป็นโครงสร้างที่ซื้อขายได้จริง → <code>vp-part1</code>, และ Part 6 ของเล่มนี้</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>เทมเพลตห้าช่อง</strong> = อะไร · เท่าไร · เมื่อไร · วัดด้วยอะไร · อะไรพิสูจน์ว่าผิด</li>
+<li><strong>ประตูหนี</strong> = เงื่อนไขที่แอบใส่ไว้ ทำให้ข้อความไม่มีวันเป็นเท็จ</li>
+<li><strong>เส้นตาย</strong> = วันที่ต้องตัดสินว่าถูกหรือผิด ห้ามเลื่อน</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>เกณฑ์ตัดสิน</strong> = ระดับหรือเหตุการณ์ที่ตกลงไว้ก่อนว่าจะใช้ชี้ขาด · <strong>การตัดสินใจ ≠ ผลลัพธ์</strong> = ตัดสินใจดีแล้วผลออกร้ายได้ และตัดสินใจแย่แล้วฟลุกได้</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

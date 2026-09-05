@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 4: การกระจายและหาง</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 4 — สถานี ④ การกระจายและหาง: ทำไมค่าเฉลี่ยถึงเป็นตัวเลขที่หลอกที่สุด</div>
+<div class="desc">วันที่ควรเกิดครั้งเดียวใน 108 ปี · ช่องว่างระหว่างค่าเฉลี่ยสองแบบ · และเหตุผลที่ลำดับไม่สำคัญ จนกว่าคุณจะมีกฎ</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด สองหัวข้อสุดท้ายคือหัวใจ · <strong>🔵 มีพื้นแล้ว:</strong> ข้ามไปที่ "ลำดับไม่สำคัญ จนกว่าคุณจะมีกฎ" ได้เลย — ผลการทดลองตรงนั้นอาจไม่ตรงกับที่คุณคาด</p></div>
+
+<h2>+23.75% ที่ไม่มีวันไหนหน้าตาแบบนั้นเลย</h2>
+
+<p>สามบทที่ผ่านมา เราพูดถึงผลตอบแทนราวกับมันเป็นตัวเลขตัวเดียว ช่วง 56 วันในข้อมูลของเรา BTC ให้ผล <strong>+23.75%</strong></p>
+
+<p>ตัวเลขนี้จริง แต่มันซ่อนเกือบทุกอย่างที่คุณต้องรู้เพื่อจะอยู่รอดผ่านช่วงนั้นได้</p>
+
+<p>เอาผลตอบแทนของทั้ง 56 วันมากางดูพร้อมกัน</p>
+
+<!--CHART:returns-->
+<svg class="fig" viewBox="0 0 760 300" role="img" aria-label="ฮิสโทแกรมผลตอบแทนรายวันของ BTC จำนวน 56 วัน แสดงว่าวันส่วนใหญ่ขยับเล็กน้อย แต่มีหนึ่งวันที่ขยับ 8.22% ซึ่งหลุดกรอบไปไกล">
+<line x1="48" y1="224" x2="734" y2="224" stroke="#d1d5db" stroke-width="1.5"/>
+<rect x="55.0" y="206.8" width="49.3" height="17.2" rx="2" fill="#93c5fd"/>
+<text x="80.2" y="200.8" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">2</text>
+<text x="80.2" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">-4</text>
+<rect x="107.3" y="198.2" width="49.3" height="25.8" rx="2" fill="#93c5fd"/>
+<text x="132.5" y="192.2" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">3</text>
+<text x="132.5" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">-3</text>
+<rect x="159.6" y="181.0" width="49.3" height="43.0" rx="2" fill="#93c5fd"/>
+<text x="184.8" y="175.0" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">5</text>
+<text x="184.8" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">-2</text>
+<rect x="211.9" y="112.2" width="49.3" height="111.8" rx="2" fill="#93c5fd"/>
+<text x="237.1" y="106.2" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">13</text>
+<text x="237.1" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">-1</text>
+<rect x="264.2" y="52.0" width="49.3" height="172.0" rx="2" fill="#93c5fd"/>
+<text x="289.4" y="46.0" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">20</text>
+<text x="289.4" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+0</text>
+<rect x="316.5" y="163.8" width="49.3" height="60.2" rx="2" fill="#93c5fd"/>
+<text x="341.7" y="157.8" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">7</text>
+<text x="341.7" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+1</text>
+<text x="394.0" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+2</text>
+<rect x="421.2" y="189.6" width="49.3" height="34.4" rx="2" fill="#93c5fd"/>
+<text x="446.3" y="183.6" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">4</text>
+<text x="446.3" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+3</text>
+<text x="498.6" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+4</text>
+<text x="550.9" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+5</text>
+<text x="603.2" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+6</text>
+<rect x="630.4" y="215.4" width="49.3" height="8.6" rx="2" fill="#dc2626"/>
+<text x="655.5" y="209.4" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">1</text>
+<text x="655.5" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+7</text>
+<rect x="682.7" y="215.4" width="49.3" height="8.6" rx="2" fill="#dc2626"/>
+<text x="707.8" y="209.4" text-anchor="middle" font-size="10.5" fill="#6b7280" font-family="Sarabun,sans-serif">1</text>
+<text x="707.8" y="241" text-anchor="middle" font-size="10.5" fill="#9ca3af" font-family="Sarabun,sans-serif">+8</text>
+<line x1="475.6" y1="48" x2="475.6" y2="224" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
+<line x1="50.9" y1="48" x2="50.9" y2="224" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="481.6" y="58" font-size="11.5" fill="#64748b" font-family="Sarabun,sans-serif">กรอบ ±2 เท่าของส่วนเบี่ยงเบน</text>
+<text x="734" y="28" text-anchor="end" font-size="13" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">วันเดียวที่ 8.22% = 4.05 เท่าของส่วนเบี่ยงเบน</text>
+<path d="M694 34 Q 727.2 58 719.4 184.0" stroke="#dc2626" stroke-width="1.5" fill="none" marker-end="url(#nqAr)"/>
+<defs><marker id="nqAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#dc2626"/></marker></defs>
+<text x="394" y="264" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ผลตอบแทนรายวัน (%) · ตัวเลขบนแท่งคือจำนวนวัน</text>
+</svg>
+<div class="cap">ผลตอบแทนรายวันจริง 56 วัน · แต่ละช่องกว้าง 1% ป้ายบอกขอบล่างของช่อง · ส่วนเบี่ยงเบน 2.03% ต่อวัน · มี 2 วันที่ขยับเกิน 2 เท่าของส่วนเบี่ยงเบน</div>
+<!--/CHART:returns-->
+
+<p>วันส่วนใหญ่ขยับนิดเดียว กองรวมกันอยู่กลางกราฟ แล้วมีแท่งสีแดงสองแท่งโดดออกไปไกลทางขวา แยกจากกองใหญ่ด้วยช่องว่างที่ไม่มีวันไหนอยู่เลย</p>
+<p>สองแท่งนั้นคือ <strong>วันเดียวที่ราคาขึ้น 8.22%</strong> กับอีกวันที่ขึ้นเกิน 7% — รวมกันเป็น <strong>2 วันจาก 56 วัน</strong> ที่ขยับเกินสองเท่าของส่วนเบี่ยงเบน</p>
+
+<div class="pq">ค่าเฉลี่ยเล่าเรื่องของวันที่ไม่เคยมีอยู่จริง ส่วนหางเล่าเรื่องของวันที่เปลี่ยนชีวิตคุณ</div>
+
+<h2>วันที่ควรเกิดครั้งเดียวในร้อยแปดปี</h2>
+
+<p>ส่วนเบี่ยงเบนมาตรฐานของผลตอบแทนรายวันในช่วงนี้คือ <strong>2.03%</strong> — พูดง่าย ๆ ว่า "วันปกติ" ขยับราวสองเปอร์เซ็นต์</p>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ส่วนเบี่ยงเบนคือหน่วยวัดว่า "แปลกแค่ไหน" ถ้าวันหนึ่งขยับ 1 เท่าของส่วนเบี่ยงเบน แปลว่าธรรมดามาก ถ้าขยับ 2 เท่าถือว่าเริ่มแปลก ถ้า 3 เท่าคือหายาก</p>
+
+<p>วันที่ราคาขึ้น 8.22% คิดเป็น <strong>4.05 เท่า</strong> ของส่วนเบี่ยงเบน</p>
+
+<p>ถ้าโลกการเงินเป็นไปตามการแจกแจงปกติ — ระฆังคว่ำสวย ๆ ที่อยู่ในตำราสถิติทุกเล่ม — วันที่แรงขนาดนี้ควรเกิดขึ้น</p>
+
+<div class="bx br"><div class="bt">หนึ่งครั้งในทุก 39,364 วัน</div>
+<p>คิดเป็นราว <strong>108 ปี</strong></p>
+<p>เราเห็นมันในข้อมูล <strong>56 วัน</strong></p></div>
+
+<p>และวันที่ขึ้นเกิน 7% อีกวันหนึ่งก็อยู่ในระดับ 3 เท่าขึ้นไปเช่นกัน — ของ "หายากมาก" สองชิ้นในสองเดือน</p>
+
+<p>ข้อสรุปไม่ใช่ว่าเราโชคดีได้เห็นของหายาก ข้อสรุปคือ <strong>แบบจำลองระฆังคว่ำผิด</strong> สำหรับตลาดการเงิน</p>
+
+<p>เหตุการณ์สุดขั้วในตลาดเกิดบ่อยกว่าที่คณิตศาสตร์เบื้องต้นทำนายไว้ <em>มาก</em> — มากจนคนที่วางแผนโดยใช้ระฆังคว่ำจะประหลาดใจซ้ำแล้วซ้ำเล่าตลอดชีวิต และจะเรียกความประหลาดใจนั้นว่า "เหตุการณ์ที่ไม่มีใครคาดคิด" ทุกครั้ง</p>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> เหตุการณ์สุดขั้วคือข้อยกเว้น เป็นเรื่องบังเอิญที่ไม่ควรเอามาวางแผน<br>
+<strong>quant เห็น:</strong> เหตุการณ์สุดขั้วคือ <em>ที่ที่ผลตอบแทนส่วนใหญ่เกิดขึ้นจริง</em> — ในช่วง 56 วันนี้ ถ้าตัดวันเดียวนั้นออก ผลรวมทั้งช่วงจะเปลี่ยนไปทันที การวางแผนสำหรับ "วันปกติ" จึงเป็นการวางแผนสำหรับวันที่ไม่สำคัญ</p></div>
+
+<h2>ค่าเฉลี่ยสองแบบที่ไม่เท่ากัน</h2>
+
+<p>ลองคำนวณ "ผลตอบแทนเฉลี่ยต่อวัน" ของช่วงนี้ด้วยสองวิธี</p>
+
+<div class="tw"><table>
+<tr><th>วิธี</th><th>วิธีคิด</th><th class="nw">ได้เท่าไร</th></tr>
+<tr><td><strong>เฉลี่ยเลขคณิต</strong></td><td>บวกผลตอบแทนทุกวันแล้วหารด้วยจำนวนวัน</td><td class="nw"><strong>0.401%</strong></td></tr>
+<tr><td><strong>เฉลี่ยเชิงเรขาคณิต</strong></td><td>อัตราคงที่ที่ทบแล้วได้ผลจริง 56 วันพอดี</td><td class="nw"><strong>0.381%</strong></td></tr>
+</table></div>
+
+<p>ต่างกัน <strong>0.020 จุดเปอร์เซ็นต์ต่อวัน</strong> ดูเหมือนน้อยจนไม่น่าสนใจ แต่ตัวเลขนี้มีที่มาที่แน่นอนและทำนายได้</p>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> เวลาเงินขึ้นลงสลับกัน การขึ้นกับการลงไม่หักล้างกันพอดี ลง 10% แล้วขึ้น 10% ไม่ได้กลับมาที่เดิม แต่ขาดไปนิดหนึ่งเสมอ ยิ่งแกว่งแรง ยิ่งขาดมาก และส่วนที่ขาดนั้นโตตามความแกว่งยกกำลังสอง</p>
+
+<div class="fm">ช่องว่างต่อวัน ≈ (ส่วนเบี่ยงเบน)² ÷ 2 <br>
+                = (2.03%)² ÷ 2 = 0.021 จุดเปอร์เซ็นต์</div>
+
+<p>ค่าที่วัดได้จริงคือ <strong>0.020</strong> ส่วนสูตรทำนายไว้ <strong>0.021</strong> — ตรงกันเกือบเป๊ะ</p>
+
+<p>นี่คือสิ่งที่เรียกว่า <abbr title="ส่วนที่ความผันผวนกัดกินผลตอบแทนทบต้น ยิ่งแกว่งแรงยิ่งกินมาก">การถูกความผันผวนกิน</abbr> (volatility drag) และมันอธิบายเรื่องที่คนสงสัยกันบ่อยมาก</p>
+
+<div class="bx ba"><div class="bt">🧮 ทำไมพอร์ตที่ "เฉลี่ยแล้วบวก" ถึงยังขาดทุนได้</div>
+<p>สมมติสองวัน วันแรกบวก 20% วันที่สองลบ 20%</p>
+<ul>
+<li><strong>เฉลี่ยเลขคณิต</strong> = (20 − 20) ÷ 2 = <strong>0%</strong> — ดูเหมือนเสมอตัว</li>
+<li><strong>ของจริง</strong> = 100 → 120 → 96 = <strong>ขาดทุน 4%</strong></li>
+</ul>
+<p>ยิ่งแกว่งแรง ช่องว่างยิ่งกว้าง ที่แกว่งวันละ 20% ช่องว่างคือ 4% แต่ที่แกว่งวันละ 2% ช่องว่างเหลือ 0.02% — ตรงกับที่เราวัดได้จากข้อมูลจริง</p></div>
+
+<p>บทเรียนสำหรับสถานีนี้: เวลาเห็นใครโฆษณา "ผลตอบแทนเฉลี่ยต่อเดือน X%" ให้ถามทันทีว่าเฉลี่ยแบบไหน เพราะถ้าเป็นแบบเลขคณิต ตัวเลขนั้นสูงกว่าเงินที่คุณจะได้จริงเสมอ และยิ่งพอร์ตแกว่งแรง ยิ่งสูงกว่ามาก</p>
+
+<h2>ลำดับไม่สำคัญ จนกว่าคุณจะมีกฎ</h2>
+
+<p>คำถามที่ดูเหมือนตอบง่าย: ถ้าเอาผลตอบแทนทั้ง 56 วันนี้มาสลับลำดับใหม่ ผลสุดท้ายจะเปลี่ยนไหม</p>
+
+<p>คนส่วนใหญ่ตอบว่าเปลี่ยน เพราะรู้สึกว่า "ถ้าเจอวันแย่ ๆ ตอนต้นก่อน มันน่าจะต่างกัน"</p>
+
+<p>เราลองสลับดู <strong>20,000 แบบ</strong></p>
+
+<div class="bx bg"><div class="bt">ผลลัพธ์: ได้ค่าเดียว</div>
+<p>ทั้ง 20,000 ลำดับ ให้ผลสุดท้าย <strong>+23.75% เท่ากันหมด</strong> ไม่มีลำดับไหนต่างจากลำดับอื่นแม้แต่ทศนิยมตำแหน่งที่เก้า</p>
+<p>เหตุผลง่ายมาก การทบต้นคือการคูณ และการคูณสลับที่กันได้ — 2 × 3 × 5 เท่ากับ 5 × 2 × 3 เสมอ</p></div>
+
+<p>ถ้าคุณซื้อแล้วนั่งเฉย ๆ ไม่ทำอะไรเลย <strong>ลำดับของเหตุการณ์ไม่มีความหมายต่อผลสุดท้ายเลย</strong></p>
+
+<p>ทีนี้เติมของเข้าไปอย่างเดียว — กฎตัดขาดทุน ถ้าพอร์ตย่อลงจากจุดสูงสุด 8% ให้ออกทันที ซึ่งเป็นกฎที่ฟังดูรอบคอบและมีคนใช้กันจริง ๆ</p>
+
+<p>สลับลำดับชุดเดิม 20,000 แบบอีกครั้ง คราวนี้มีกฎนี้อยู่ด้วย</p>
+
+<div class="tw"><table>
+<tr><th>คำถาม</th><th class="nw">คำตอบ</th></tr>
+<tr><td>กี่ลำดับที่โดนตัดขาดทุนก่อนจบ</td><td class="nw"><strong>33.0%</strong></td></tr>
+<tr><td>ผลลัพธ์แย่ที่สุดที่เป็นไปได้</td><td class="nw"><strong>−10.8%</strong></td></tr>
+<tr><td>ผลลัพธ์ดีที่สุดที่เป็นไปได้</td><td class="nw"><strong>+33.7%</strong></td></tr>
+<tr><td>ลำดับที่เกิดขึ้นจริงในประวัติศาสตร์</td><td class="nw"><strong>+23.8%</strong> (ไม่โดนตัด)</td></tr>
+</table></div>
+
+<p>ผลตอบแทนชุดเดียวกันเป๊ะ ตัวเดิมทุกตัว ไม่เพิ่มไม่ลด — แต่ช่วงผลลัพธ์กว้างจาก <strong>ขาดทุน 10.8%</strong> ถึง <strong>กำไร 33.7%</strong> ขึ้นอยู่กับว่าวันไหนมาก่อนวันไหน</p>
+
+<div class="bx br"><div class="bt">สิ่งที่เพิ่งเกิดขึ้น</div>
+<p>กฎตัดขาดทุนเปลี่ยนธรรมชาติของเกม จากเกมที่ลำดับไม่สำคัญ กลายเป็นเกมที่ <strong>ลำดับสำคัญที่สุด</strong></p>
+<p>และหนึ่งในสามของจักรวาลที่เป็นไปได้ คุณจะถูกเขี่ยออกจากตลาดก่อนที่วันดี ๆ จะมาถึง</p></div>
+
+<p>นี่ไม่ได้แปลว่ากฎตัดขาดทุนไม่ดี — Part 7 จะอธิบายว่าทำไมมันจำเป็น สิ่งที่ต้องเข้าใจตอนนี้คือ</p>
+
+<div class="pq">ทุกกฎที่คุณเพิ่มเข้าไป ทำให้ผลลัพธ์ขึ้นอยู่กับลำดับของเหตุการณ์มากขึ้น — และลำดับคือสิ่งที่คุณควบคุมไม่ได้เลยสักนิดเดียว</div>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — จะคิดเรื่องการกระจายยังไงโดยไม่ต้องคำนวณอะไรเลย</div>
+<ul>
+<li><strong>อย่าถามว่า "คาดว่าจะได้เท่าไร" ถามว่า "แย่สุดได้แค่ไหน"</strong> — คำถามแรกตอบด้วยค่าเฉลี่ยซึ่งหลอก คำถามที่สองตอบด้วยหาง ซึ่งเป็นสิ่งที่ทำให้คุณออกจากเกม</li>
+<li><strong>สมมติว่าวันแย่ที่สุดที่คุณเคยเห็น ยังไม่ใช่วันที่แย่ที่สุดที่จะเกิด</strong> — ข้อมูล 56 วันของเราเจอวัน 4 เท่าของส่วนเบี่ยงเบนไปแล้ว ไม่มีเหตุผลอะไรที่ 5 เท่าจะเกิดไม่ได้</li>
+<li><strong>ถ้าต้องเลือกตัวเลขเดียวมาใช้ ให้ใช้เฉลี่ยเชิงเรขาคณิตเสมอ</strong> — เพราะมันคือเงินที่เข้ากระเป๋าจริง ส่วนเลขคณิตคือเงินในโฆษณา</li>
+<li><strong>ถ้ายังไม่รู้จะเริ่มยังไง</strong> ให้เปิดพอร์ตตัวเองแล้วหาว่า "วันที่แย่ที่สุดในรอบปี" ขาดทุนไปกี่เปอร์เซ็นต์ แล้วถามว่าถ้าวันแบบนั้นมาสามวันติดกัน คุณยังอยู่ในเกมไหม</li>
+</ul></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินคำนวณวันที่ยังไม่เกิด</div>
+<p>มินมีทุน 50,000 บาท กำลังจะใส่เต็มจำนวนลงเหรียญเดียว</p>
+<p>ก่อนกด มินเปิดตัวเลขจาก Part นี้ขึ้นมาดู ส่วนเบี่ยงเบนรายวันคือ 2.03% แปลว่าวันธรรมดามินจะเห็นพอร์ตขยับราว <strong>1,000 บาท</strong> ขึ้นหรือลง</p>
+<p>แต่วันที่ 4 เท่าของส่วนเบี่ยงเบนก็เกิดขึ้นแล้วในข้อมูลแค่ 56 วัน ถ้ามันมาในทางลบ พอร์ตจะขยับราว <strong>4,000 บาท</strong> ในวันเดียว</p>
+<p>มินถามตัวเองสองคำถาม — เห็นเลขแดง 4,000 บาทตอนตื่นนอน จะยังทำตามแผนได้ไหม และถ้ามันมาสามวันติด รวมเป็น 12,000 บาท จะยังทำตามแผนได้ไหม</p>
+<p>คำตอบข้อแรกคือได้ ข้อสองคือไม่แน่ใจ — มินจึงใส่เงินไปครึ่งเดียว ไม่ใช่เพราะมองตลาดต่างไปจากเดิม แต่เพราะรู้จักตัวเองมากขึ้นหนึ่งขั้น</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สี่คำถามต่อทุกตัวเลขผลตอบแทน</div>
+<ol>
+<li><strong>นี่คือค่าเฉลี่ยแบบไหน</strong> — เลขคณิตหรือเรขาคณิต ถ้าคนตอบไม่ได้ ตัวเลขนั้นเชื่อไม่ได้</li>
+<li><strong>ระหว่างทางย่อลึกสุดเท่าไร</strong> — ผลตอบแทนปลายทางไม่บอกว่าคุณจะทนไหวไหม</li>
+<li><strong>ถ้าตัดวันที่ดีที่สุดออกไปสองสามวัน เหลือเท่าไร</strong> — ถ้าเหลือน้อยมาก แปลว่ากำไรทั้งหมดมาจากหาง ไม่ใช่จากฝีมือ</li>
+<li><strong>มีกฎอะไรอยู่ในระบบบ้าง</strong> — ทุกกฎแปลว่าลำดับเริ่มมีความหมาย และผลลัพธ์เริ่มขึ้นกับดวงมากขึ้น</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>หาผลตอบแทนรายวันของสิ่งที่คุณถืออยู่ย้อนหลังสองเดือน แล้วหาว่าวันที่แรงที่สุดคิดเป็นกี่เท่าของวันปกติ</li>
+<li>คำนวณว่าถ้าพอร์ตคุณขยับ 4 เท่าของวันปกติในทางลบ เป็นเงินกี่บาท แล้วถามตัวเองตรง ๆ ว่าเห็นตัวเลขนั้นแล้วจะยังทำตามแผนได้ไหม</li>
+<li>นับว่าตอนนี้ระบบของคุณมีกฎอัตโนมัติกี่ข้อ (ตัดขาดทุน ทยอยเข้า ทยอยออก เติมเงิน ถอนเงิน) — ทุกข้อคือจุดที่ลำดับของเหตุการณ์เข้ามามีอำนาจเหนือผลลัพธ์ของคุณ</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>หางหนากว่าที่ตำราบอก</strong> — วันที่ "ควรเกิดครั้งเดียวใน 108 ปี" โผล่มาในข้อมูล 56 วัน</li>
+<li><strong>ค่าเฉลี่ยเลขคณิตสูงกว่าเงินจริงเสมอ</strong> — ช่องว่างประมาณครึ่งหนึ่งของความแปรปรวน และโตตามความแกว่งยกกำลังสอง</li>
+<li><strong>ลำดับไม่สำคัญถ้าคุณไม่ทำอะไรเลย</strong> — แต่ทุกกฎที่เพิ่มเข้าไป ทำให้ดวงมีอำนาจเหนือผลลัพธ์มากขึ้น</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 4</div>
+<ul>
+<li>+23.75% ของช่วงนี้ ประกอบด้วยวันที่ขยับ 8.22% หนึ่งวัน และวันธรรมดาที่ขยับราว 2.03% อีกเป็นสิบ ๆ วัน</li>
+<li>วันแรงสุดคิดเป็น 4.05 เท่าของส่วนเบี่ยงเบน ซึ่งถ้าโลกเป็นระฆังคว่ำ ควรเกิดครั้งเดียวในราว 108 ปี</li>
+<li>เฉลี่ยเลขคณิต 0.401% ต่อวัน แต่เฉลี่ยเชิงเรขาคณิต 0.381% — ช่องว่าง 0.020 จุด ตรงกับสูตร (ส่วนเบี่ยงเบน)² ÷ 2 = 0.021</li>
+<li>สลับลำดับ 20,000 แบบ ถ้าถือเฉย ๆ ได้ค่าเดียวเสมอ แต่พอใส่กฎตัดขาดทุน 8% เข้าไป มี 33.0% ที่โดนเขี่ยออก และผลลัพธ์กระจายจาก −10.8% ถึง +33.7%</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">เรารู้แล้วว่าผลตอบแทนหน้าตายังไง แต่ยังไม่ได้ถามว่ามันไปถึงกระเป๋าเราจริงเท่าไร · Part 5 นับค่าผ่านทางทุกบาท และถามคำถามที่คนไม่ค่อยถาม — ใครอยู่อีกฝั่งของไม้นี้ และเขายอมเสียเปรียบเพราะอะไร</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>การแจกแจง หางอ้วน และการวัดความเสี่ยงเชิงปริมาณ → <code>math-part3</code>, <code>pillars-part4</code> (VaR / CVaR)</li>
+<li>ความผันผวนในฐานะสิ่งที่ซื้อขายได้ ไม่ใช่แค่ตัวเลขความเสี่ยง → <code>vol-part1</code> ถึง <code>vol-part8</code></li>
+<li>เครื่องมือลองเอง: ความผันผวนกินกำไรเท่าไร → <code>tool-vol-drag</code> · กระจายพอร์ตแล้วเสี่ยงลดจริงไหม → <code>tool-diversification</code></li>
+<li>เคสจริงเวลาหางมาเยือน → <code>case-2540-narrative</code> (ต้มยำกุ้ง 2540)</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ส่วนเบี่ยงเบนมาตรฐาน</strong> = หน่วยวัดว่าวันหนึ่ง ๆ ขยับ "แปลก" แค่ไหน</li>
+<li><strong>หางอ้วน</strong> = เหตุการณ์สุดขั้วเกิดบ่อยกว่าที่การแจกแจงปกติทำนายไว้มาก</li>
+<li><strong>ถูกความผันผวนกิน</strong> = ช่องว่างระหว่างค่าเฉลี่ยเลขคณิตกับเงินที่ได้จริง ≈ ครึ่งหนึ่งของความแปรปรวน</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>เฉลี่ยเชิงเรขาคณิต</strong> = อัตราคงที่ที่ทบแล้วได้ผลจริงพอดี · <strong>การแจกแจงปกติ</strong> = ระฆังคว่ำในตำราสถิติ ซึ่งประเมินเหตุการณ์สุดขั้วต่ำเกินไปสำหรับตลาด · <strong>ขึ้นกับลำดับ</strong> = ผลลัพธ์เปลี่ยนตามว่าเหตุการณ์ไหนมาก่อนมาหลัง</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

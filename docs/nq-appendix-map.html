@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — ภาคผนวก A: แผนที่เข้าคลัง</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">ภาคผนวก A — แผนที่เข้าคลัง</div>
+<div class="desc">ติดที่สถานีไหน ให้อ่านเล่มไหนต่อ · เส้นทางสี่แบบสำหรับคนสี่ประเภท</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 วิธีใช้หน้านี้</div>
+<p>หนังสือเล่มนี้เป็นประตูหน้า ไม่ใช่บ้านทั้งหลัง — ทุกสถานีมีเล่มที่ลงลึกกว่ารออยู่แล้ว
+หน้านี้บอกว่าประตูไหนพาไปห้องไหน</p></div>
+
+<h2>ติดที่สถานีไหน อ่านอะไรต่อ</h2>
+
+<div class="tw"><table>
+<tr><th class="nw">สถานี</th><th>ถ้าคุณติดตรงนี้</th><th>ไปต่อที่</th></tr>
+<tr><td class="nw"><strong>① ข้อความ</strong></td><td>เขียนสมมติฐานให้ตรวจสอบได้ไม่เป็น · ไม่รู้จะตั้งเกณฑ์ยังไง</td><td><code>statarb-ch4b</code> (ออกแบบ ε + สมมติฐานว่าง) · <code>theory-part3</code> (ตลาดมีประสิทธิภาพแค่ไหน)</td></tr>
+<tr><td class="nw"><strong>② ฐาน</strong></td><td>ไม่รู้จะหาฐานจากไหน · อยากได้พื้นสถิติจริงจัง</td><td><code>math-part2</code>, <code>math-part3</code> (สถิติและความน่าจะเป็น)</td></tr>
+<tr><td class="nw"><strong>③ การวัด</strong></td><td>อยากวัดสภาพตลาดอย่างมีหลักการ ไม่ใช่ด้วยเส้นตัดกัน</td><td><code>statarb-ch6</code> (Hurst / regime) · <code>playground-part7</code> (เลือกเกมตามระบอบตลาด) · <code>vol-part1</code></td></tr>
+<tr><td class="nw"><strong>④ การกระจาย</strong></td><td>อยากเข้าใจหางอ้วนและความผันผวนให้ลึกกว่านี้</td><td><code>vol-part1</code>–<code>vol-part8</code> (ความผันผวนเป็นของที่ซื้อขายได้) · <code>pillars-part4</code> (VaR / CVaR)</td></tr>
+<tr><td class="nw"><strong>⑤ ต้นทุน</strong></td><td>อยากเห็นความจริงระดับกระดานราคาและการวางคำสั่ง</td><td><code>ob-part0</code>–<code>ob-part14</code> (อ่านกระดาน) · <code>arb-part7</code> (การดำเนินการ) · <code>pillars-part3</code> (ทฤษฎีตลาดจุลภาค)</td></tr>
+<tr><td class="nw"><strong>⑥ โครงสร้าง</strong></td><td>อยากประกอบโครงสร้างเองให้เป็น ไม่ใช่แค่อ่านรูป</td><td><code>pm-part1</code>–<code>pm-part8</code> (Payoff Mastery) · <code>vp-part1</code>–<code>vp-part7</code> (ความเชื่อ → โครงสร้าง) · <code>eye-part1</code>–<code>eye-part5</code> (ฝึกสายตา)</td></tr>
+<tr><td class="nw"><strong>⑦ ขนาด</strong></td><td>อยากได้กรอบจัดการความเสี่ยงที่เป็นระบบกว่านี้</td><td><code>pm-part5a</code> (Kelly) · <code>statarb-ch12</code> (การกำหนดขนาด) · <code>playground-part5</code> (Calculated Risk)</td></tr>
+<tr><td class="nw"><strong>⑦ ขนาด</strong> <span class="cc">(ต่อ)</span></td><td>อยากรู้ว่าคู่ที่ถือดู "ไม่สัมพันธ์กัน" จะพังพร้อมกันตอนตลาดแย่ไหม</td><td><a href="statarb-copula-practice.html"><strong>Copula ในทางปฏิบัติ</strong></a> — ใช้ร่วมกับ cointegration ยังไง (บทเสริมสาย stat arb)</td></tr>
+<tr><td class="nw"><strong>⑧ บันทึก</strong></td><td>อยากทดสอบเองอย่างเชื่อถือได้ · อยากเริ่มเขียนโค้ด</td><td><code>theory-part5</code> (กับดัก backtest) · <code>python-part0</code> (เริ่มเขียนโค้ด) · <code>practice-part7</code>–<code>practice-part9</code> (notebook รันได้จริง)</td></tr>
+</table></div>
+
+<h2>เส้นทางสี่แบบ</h2>
+
+<div class="bx bg"><div class="bt">🟢 สายอ่านกราฟ — ไม่อยากแตะโค้ด</div>
+<p>Payoff Mastery (<code>pm-part1</code>) → ตาของ Arbitrageur (<code>eye-part1</code>) → View → Payoff (<code>vp-part1</code>) → The Playground (<code>playground-part0</code>)</p>
+<p>เส้นทางนี้ทำให้คุณอ่านและประกอบโครงสร้างได้โดยไม่ต้องเขียนโปรแกรมเลย</p></div>
+
+<div class="bx bb"><div class="bt">🔵 สายเขียนโค้ด — อยากทดสอบเอง</div>
+<p>Python for Quant Traders (<code>python-part0</code>) → คณิตศาสตร์สำหรับ Options (<code>math-part1</code>) → Statistical Arbitrage (<code>statarb-ch0</code>) → Practical Quant (<code>practice-part0</code> + notebook)</p>
+<p>เส้นทางนี้ยาวที่สุดแต่ให้ของที่ตรวจสอบได้เองทุกอย่าง</p></div>
+
+<div class="bx bp"><div class="bt">🟣 สายทฤษฎี — อยากรู้ว่าทำไม</div>
+<p>ทฤษฎีตำนานของ Quant (<code>theory-part1</code>–<code>theory-part6</code>) → เสาที่เหลือของ Quant (<code>pillars-part1</code>–<code>pillars-part5</code>) → คณิตศาสตร์สำหรับ Options (<code>math-part1</code>)</p>
+<p>มีฉบับเล่าเรื่อง (<code>theory-part1-narrative</code>) สำหรับอ่านรอบแรก</p></div>
+
+<div class="bx ba"><div class="bt">🟠 สายลงมือ — อยากใช้พรุ่งนี้เช้า</div>
+<p>ชุดเครื่องมือ (<code>tools-index</code>) → The Playground (<code>playground-part0</code>) → Grid Trading Mastery (<code>grid-part0</code>) → Arbitrage (<code>arb-part1</code>)</p>
+<p>เริ่มจากเครื่องมือที่กดเล่นได้ก่อน แล้วค่อยย้อนกลับไปหาทฤษฎีเมื่อสงสัย</p></div>
+
+<h2>เครื่องมือที่กดเล่นได้เลย</h2>
+<p>สี่อันแรกเป็นของเล่มนี้ ที่เหลือมาจากคลังหนังสือ — ดูรวมที่ <a href="nq-tools.html">หน้าชุดเครื่องมือ</a></p>
+
+<div class="tw"><table>
+<tr><th>เครื่องมือ</th><th>ตอบคำถามอะไร</th><th class="nw">เชื่อมกับ</th></tr>
+<tr><td><a href="nq-tool-randomness.html"><strong>จริงหรือสุ่ม</strong></a></td><td>กราฟไหนคือตลาดจริง กราฟไหนคือการโยนเหรียญ</td><td class="nw">Part 1</td></tr>
+<tr><td><a href="nq-tool-samplesize.html"><strong>ต้องเทรดกี่ไม้ถึงจะรู้</strong></a></td><td>ผลงานคุณพิสูจน์อะไรได้แล้ว และต้องอีกกี่ไม้</td><td class="nw">Part 1</td></tr>
+<tr><td><a href="nq-tool-breakeven.html"><strong>เส้นเสมอตัวของคุณ</strong></a></td><td>ต้องชนะกี่ % ถึงไม่ขาดทุน · ค่าผ่านทางกินทุนปีละเท่าไร</td><td class="nw">Part 5</td></tr>
+<tr><td><a href="nq-tool-ruin.html"><strong>ขนาดไม้กับการอยู่รอด</strong></a></td><td>ใส่เท่าไรถึงจะยังอยู่ในเกม</td><td class="nw">Part 7</td></tr>
+<tr><td><code>tool-vol-drag</code></td><td>ความผันผวนกินกำไรไปเท่าไร</td><td class="nw">Part 4</td></tr>
+<tr><td><code>tool-diversification</code></td><td>เพิ่มสินทรัพย์แล้วเสี่ยงลดจริงไหม</td><td class="nw">Part 4, 7</td></tr>
+<tr><td><code>tool-deflated-sharpe</code></td><td>backtest ของคุณกำลังโกหกอยู่ไหม</td><td class="nw">Part 8</td></tr>
+<tr><td><code>tool-carry-blowup</code></td><td>กลยุทธ์เก็บกินระเบิดเมื่อไร</td><td class="nw">Part 4, 5</td></tr>
+<tr><td><code>tool-duration</code></td><td>บอนด์ "ปลอดภัย" เจ็บแค่ไหนเมื่อดอกเบี้ยขึ้น</td><td class="nw">Part 4</td></tr>
+<tr><td><code>payoff-builder</code></td><td>ประกอบรูปการจ่ายผลเอง</td><td class="nw">Part 6</td></tr>
+</table></div>
+
+<div class="bx br"><div class="bt">⚠️ คำเตือนเดียวของหน้านี้</div>
+<p>อย่าอ่านทุกเล่ม — คลังมี 14 เล่ม และไม่มีใครควรอ่านครบ</p>
+<p>วิธีใช้ที่ถูกต้องคือ <strong>เทรดไปเรื่อย ๆ จนติดที่สถานีใดสถานีหนึ่งจริง ๆ แล้วค่อยเปิดเล่มที่ตรงกับสถานีนั้น</strong> — ความรู้ที่มาก่อนปัญหาจะลืมหมด ส่วนความรู้ที่มาหลังปัญหาจะอยู่ตลอดไป</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

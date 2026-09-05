@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 7: ขนาดและการอยู่รอด</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 7 — สถานี ⑦ ขนาดและการอยู่รอด: ไม้ละเท่าไร โดยไม่ต้องมี backtest</div>
+<div class="desc">การจำลองสองชุดที่ให้คำตอบตรงข้ามกัน · เลขคณิตที่ไม่ให้อภัย · และค่าเริ่มต้นสำหรับคนที่ยังไม่มีสถิติของตัวเอง</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด นี่คือบทที่ป้องกันไม่ให้คุณออกจากเกมก่อนได้เรียนรู้อะไร · <strong>🔵 มีพื้นแล้ว:</strong> หัวข้อ "การจำลองสองชุดที่ให้คำตอบตรงข้าม" น่าจะเป็นของใหม่ · กล่อง [รอบสอง] ท้ายบทพูดถึง Kelly</p></div>
+
+<h2>คำถามที่คนตอบผิดบ่อยที่สุด</h2>
+
+<p>Part 6 จบด้วยปัญหาของมิน — เลือกรูปได้ถูกแล้ว แต่รูปที่ถูกที่สุดยังใหญ่เกินพอร์ตทั้งใบ</p>
+
+<p>นี่คือสถานีที่คนใช้เวลากับมันน้อยที่สุด ทั้งที่มันตัดสินผลลัพธ์มากที่สุด</p>
+
+<p>ลองสังเกตตัวเองเวลากรอกช่อง "จำนวน" — คุณกรอกด้วยอะไร</p>
+
+<div class="tw"><table>
+<tr><th>วิธีที่คนใช้จริง</th><th>ปัญหา</th></tr>
+<tr><td>"ไม้นี้มั่นใจ ใส่เยอะหน่อย"</td><td>ความมั่นใจไม่มีความสัมพันธ์กับความถูกต้อง — Part 1 แสดงแล้วว่าคนที่ชนะสามไม้ติดจะมั่นใจขึ้นทั้งที่ยังไม่มีข้อมูลอะไรเพิ่ม</td></tr>
+<tr><td>"ใส่เท่าที่รู้สึกว่ารับได้"</td><td>ความรู้สึกตอนตลาดเงียบ กับตอนพอร์ตแดง เป็นคนละความรู้สึกกันคนละคน</td></tr>
+<tr><td>"ใส่ให้พอดีกับที่จะได้กำไรเป้าหมาย"</td><td>คิดจากสิ่งที่อยากได้ ไม่ใช่สิ่งที่ทนได้</td></tr>
+<tr><td>"คำนวณจากสูตร Kelly"</td><td>สูตรต้องการอัตราชนะจริง ซึ่ง Part 1 บอกว่าต้องใช้พันไม้กว่าจะรู้ — ไก่กับไข่</td></tr>
+</table></div>
+
+<p>สถานีนี้เสนอฐานคิดคนละแบบ ที่ตอบได้ตั้งแต่ไม้แรก</p>
+
+<div class="pq">อย่าถามว่ามั่นใจแค่ไหน ถามว่าทนได้แค่ไหน — เพราะข้อแรกคุณตอบไม่ได้จริง แต่ข้อสองคุณตอบได้วันนี้</div>
+
+<h2>เลขคณิตที่ไม่ให้อภัย</h2>
+
+<p>ก่อนไปเรื่องขนาดไม้ ต้องเข้าใจก่อนว่าทำไมการขาดทุนถึงแพงกว่าที่รู้สึก</p>
+
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> เวลาขาดทุน เงินที่เหลือน้อยลง ดังนั้นการจะกลับมาที่เดิม เงินก้อนที่เล็กลงต้องโตในอัตราที่สูงกว่าที่เสียไป และยิ่งเสียหนัก ยิ่งต้องโตแรงขึ้นแบบไม่เป็นเส้นตรง</p>
+
+<div class="tw"><table>
+<tr><th class="nw">ขาดทุนไป</th><th class="nw">ต้องได้เท่าไรถึงกลับที่เดิม</th></tr>
+<tr><td class="nw">−10%</td><td class="nw">+11%</td></tr>
+<tr><td class="nw">−20%</td><td class="nw">+25%</td></tr>
+<tr><td class="nw">−30%</td><td class="nw">+43%</td></tr>
+<tr><td class="nw">−50%</td><td class="nw"><strong>+100%</strong></td></tr>
+<tr><td class="nw">−70%</td><td class="nw"><strong>+233%</strong></td></tr>
+<tr><td class="nw">−90%</td><td class="nw"><strong>+900%</strong></td></tr>
+</table></div>
+
+<p>สังเกตว่าช่วง −10% ถึง −30% ยังพอไหว แต่หลังจากนั้นตัวเลขเริ่มโหดขึ้นเร็วมาก</p>
+
+<p>นี่คือเหตุผลที่เป้าหมายของสถานีนี้ <strong>ไม่ใช่การทำกำไรสูงสุด</strong> แต่คือการทำให้แน่ใจว่าคุณไม่เดินเข้าไปในเขตที่กลับตัวไม่ได้</p>
+
+<h2>การจำลองสองชุดที่ให้คำตอบตรงข้ามกัน</h2>
+
+<p>ทีนี้มาถึงส่วนที่สำคัญที่สุดของบท และเป็นเรื่องที่ผมเกือบเขียนผิดเองระหว่างทำหนังสือเล่มนี้</p>
+
+<p>คำถาม: ถ้ามินใส่เงินเต็มพอร์ตในสินทรัพย์ที่ผันผวนแบบ BTC เป็นเวลาหนึ่งปี ความเสี่ยงเป็นยังไง</p>
+
+<p>วิธีตอบที่ตรงไปตรงมาที่สุดคือ เอาผลตอบแทนรายวันจริงที่เรามี 56 วัน มาสุ่มหยิบซ้ำ ๆ ให้ครบ 252 วันทำการ ทำแบบนี้ 20,000 เส้นทาง แล้วดูว่าเกิดอะไรขึ้นบ้าง</p>
+
+<div class="bx bg"><div class="bt">ผลที่ได้ — ดูดีมาก</div>
+<ul>
+<li>ใส่เต็มทุน: ผลกลาง <strong>+159.0%</strong> ต่อปี</li>
+<li>โอกาสที่จะเคยติดลบลึกถึง 30%: <strong>0.2%</strong></li>
+<li>โอกาสจบปีต่ำกว่าทุน: <strong>0.1%</strong></li>
+</ul>
+<p>ถ้าเชื่อตัวเลขชุดนี้ คำแนะนำที่สมเหตุสมผลคือ "ใส่เต็มเลย แล้วถ้ากล้าก็ใส่มากกว่านั้น"</p></div>
+
+<p>ตัวเลขข้างบน <strong>คำนวณถูกต้องทุกตัว</strong> และ <strong>เป็นคำแนะนำที่อันตรายที่สุดในหนังสือทั้งเล่ม</strong></p>
+
+<p>ปัญหาอยู่ที่วัตถุดิบ — ผลตอบแทน 56 วันที่เราหยิบมาสุ่ม มาจากช่วงที่ราคาขึ้นจาก 62,800 ไป 77,716 มันมีแนวโน้มขาขึ้น <strong>0.401% ต่อวัน</strong> อบอยู่ในทุกตัวเลข</p>
+
+<p>การสุ่มหยิบมันซ้ำ 252 ครั้ง จึงเท่ากับการสมมติว่า <em>ตลาดจะขึ้นแบบนี้ต่อไปทั้งปี</em> — ซึ่งเป็นข้อสมมติมหาศาลที่ไม่มีใครพูดออกมา</p>
+
+<div class="bx br"><div class="bt">นี่คือวิธีที่คนหลอกตัวเองให้ใส่ไม้ใหญ่</div>
+<p>ไม่ใช่ด้วยการคำนวณผิด แต่ด้วยการ <strong>เอาช่วงเวลาที่ดีมาเป็นวัตถุดิบของการจำลองอนาคต</strong> แล้วรายงานผลอย่างซื่อสัตย์</p>
+<p>ทุกตัวเลขถูกหมด ข้อสรุปผิดหมด</p></div>
+
+<p>วิธีแก้ตรงไปตรงมา — เอาแนวโน้มขาขึ้นออก เหลือเฉพาะ <em>รูปร่าง</em> ของความผันผวนและหางอ้วนไว้ แล้วถามคำถามที่ควรถามตั้งแต่แรก</p>
+
+<div class="bx bp"><div class="bt">"ถ้าฉันไม่มี edge เลย ขนาดไม้แต่ละแบบจะพาฉันไปไหน"</div></div>
+
+<!--CHART:survival-->
+<svg class="fig" viewBox="0 0 760 344" role="img" aria-label="กราฟแท่งเทียบโอกาสที่พอร์ตจะติดลบลึก 30% ภายในหนึ่งปี ระหว่างการจำลองที่ใช้ผลตอบแทน ช่วงตลาดขาขึ้น กับการจำลองที่ตัดแนวโน้มออก ซึ่งให้คำตอบต่างกันมาก">
+<line x1="60" y1="232.0" x2="736" y2="232.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="52" y="236.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0%</text>
+<line x1="60" y1="189.5" x2="736" y2="189.5" stroke="#f3f4f6" stroke-width="1"/>
+<text x="52" y="193.5" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">25%</text>
+<line x1="60" y1="147.0" x2="736" y2="147.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="52" y="151.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">50%</text>
+<line x1="60" y1="104.5" x2="736" y2="104.5" stroke="#f3f4f6" stroke-width="1"/>
+<text x="52" y="108.5" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">75%</text>
+<line x1="60" y1="62.0" x2="736" y2="62.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="52" y="66.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">100%</text>
+<rect x="106.5" y="232.0" width="34.0" height="1.5" rx="3" fill="#94a3b8"/>
+<text x="123.5" y="225.0" text-anchor="middle" font-size="11.5" font-weight="700" fill="#94a3b8" font-family="Sarabun,sans-serif">0.0%</text>
+<rect x="148.5" y="225.4" width="34.0" height="6.6" rx="3" fill="#dc2626"/>
+<text x="165.5" y="218.4" text-anchor="middle" font-size="11.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">3.9%</text>
+<text x="144.5" y="250" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">ครึ่งทุน</text>
+<rect x="275.5" y="231.7" width="34.0" height="1.5" rx="3" fill="#94a3b8"/>
+<text x="292.5" y="224.7" text-anchor="middle" font-size="11.5" font-weight="700" fill="#94a3b8" font-family="Sarabun,sans-serif">0.2%</text>
+<rect x="317.5" y="147.3" width="34.0" height="84.7" rx="3" fill="#dc2626"/>
+<text x="334.5" y="140.3" text-anchor="middle" font-size="11.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">49.8%</text>
+<text x="313.5" y="250" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">1 เท่า</text>
+<rect x="444.5" y="201.6" width="34.0" height="30.4" rx="3" fill="#94a3b8"/>
+<text x="461.5" y="194.6" text-anchor="middle" font-size="11.5" font-weight="700" fill="#94a3b8" font-family="Sarabun,sans-serif">17.9%</text>
+<rect x="486.5" y="68.5" width="34.0" height="163.5" rx="3" fill="#dc2626"/>
+<text x="503.5" y="61.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">96.2%</text>
+<text x="482.5" y="250" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">2 เท่า</text>
+<rect x="613.5" y="124.7" width="34.0" height="107.3" rx="3" fill="#94a3b8"/>
+<text x="630.5" y="117.7" text-anchor="middle" font-size="11.5" font-weight="700" fill="#94a3b8" font-family="Sarabun,sans-serif">63.1%</text>
+<rect x="655.5" y="62.2" width="34.0" height="169.8" rx="3" fill="#dc2626"/>
+<text x="672.5" y="55.2" text-anchor="middle" font-size="11.5" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">99.9%</text>
+<text x="651.5" y="250" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">3 เท่า</text>
+<line x1="60" y1="232" x2="736" y2="232" stroke="#d1d5db" stroke-width="1.5"/>
+<text x="398" y="272" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ขนาดไม้ (สัดส่วนต่อทุน)</text>
+<text x="60" y="28" font-size="13.5" font-weight="700" fill="#374151" font-family="Sarabun,sans-serif">โอกาสที่พอร์ตจะเคยติดลบลึกถึง 30% ภายในหนึ่งปี</text>
+<text x="60" y="46" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">ข้อมูลชุดเดียวกัน ต่างกันแค่ว่าอบตลาดขาขึ้นไว้ในสมมติฐานหรือไม่</text>
+<rect x="60" y="284" width="11" height="11" rx="2" fill="#94a3b8"/>
+<text x="76" y="294" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">ใช้ผลตอบแทนจริง (ช่วงขาขึ้น)</text>
+<rect x="390" y="284" width="11" height="11" rx="2" fill="#dc2626"/>
+<text x="406" y="294" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">ตัดแนวโน้มออก (สมมติไม่มี edge)</text>
+</svg>
+<div class="cap">สุ่มผลตอบแทนจริงคืนกลับ 252 วันทำการ × 20,000 เส้นทาง · ชุดสีเทาอบแนวโน้มขาขึ้น 0.401% ต่อวัน ไว้ในสมมติฐาน ส่วนชุดสีแดงตัดออก เหลือเฉพาะรูปร่างความผันผวนและหางอ้วน</div>
+<!--/CHART:survival-->
+
+<div class="tw"><table>
+<tr><th class="nw">ขนาดไม้</th><th class="nw">ผลกลางต่อปี</th><th class="nw">เคยลึก 30%</th><th class="nw">เคยลึก 50%</th><th class="nw">จบต่ำกว่าทุน</th></tr>
+<tr><td class="nw">ครึ่งทุน</td><td class="nw">−1.8%</td><td class="nw">3.9%</td><td class="nw">0.0%</td><td class="nw">54.6%</td></tr>
+<tr><td class="nw">เต็มทุน</td><td class="nw">−5.6%</td><td class="nw"><strong>49.8%</strong></td><td class="nw">5.4%</td><td class="nw">57.3%</td></tr>
+<tr><td class="nw">2 เท่า</td><td class="nw">−18.9%</td><td class="nw"><strong>96.2%</strong></td><td class="nw"><strong>57.3%</strong></td><td class="nw">63.0%</td></tr>
+<tr><td class="nw">3 เท่า</td><td class="nw"><strong>−36.0%</strong></td><td class="nw"><strong>99.9%</strong></td><td class="nw"><strong>88.3%</strong></td><td class="nw">68.3%</td></tr>
+</table></div>
+
+<p>อ่านตารางนี้ช้า ๆ เพราะมันเปลี่ยนวิธีคิดเรื่องขนาดไม้ไปเลย</p>
+
+<ul>
+<li><strong>ใส่เต็มทุนโดยไม่มี edge</strong> — โอกาสเกือบครึ่งที่จะเคยเห็นพอร์ตติดลบ 30% ภายในปีเดียว</li>
+<li><strong>ใส่ 2 เท่า</strong> — เกือบแน่นอนว่าจะเจอ และมากกว่าครึ่งจะเคยเห็น −50%</li>
+<li><strong>ใส่ 3 เท่า</strong> — ผลกลางติดลบ 36% ทั้งที่สินทรัพย์อ้างอิงมีค่าเฉลี่ยเป็นศูนย์พอดี</li>
+</ul>
+
+<div class="bx ba"><div class="bt">🧮 ทำไมเลเวอเรจถึงทำให้ผลกลางติดลบ ทั้งที่ค่าเฉลี่ยเป็นศูนย์</div>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> Part 4 บอกว่าความผันผวนกินผลตอบแทนเท่ากับครึ่งหนึ่งของความแปรปรวน และความแปรปรวนคือความผันผวนยกกำลังสอง — พอคุณเพิ่มขนาดไม้เป็นสองเท่า ความผันผวนเป็นสองเท่า แต่สิ่งที่ถูกกินกลายเป็น <strong>สี่เท่า</strong></p>
+<div class="fm">ขนาดไม้ 1 เท่า → ถูกกิน 1 หน่วย<br>
+ขนาดไม้ 2 เท่า → ถูกกิน 4 หน่วย<br>
+ขนาดไม้ 3 เท่า → ถูกกิน 9 หน่วย</div>
+<p>นี่คือเหตุผลที่ผลกลางของ 3 เท่าติดลบหนักกว่า 2 เท่ามาก ทั้งที่วัตถุดิบเหมือนกันเป๊ะ</p></div>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ขนาดไม้คือคันเร่ง — อยากได้ผลตอบแทนมากขึ้นก็เหยียบเพิ่ม<br>
+<strong>quant เห็น:</strong> ขนาดไม้คือ <em>ตัวคูณของทั้งกำไรและความผันผวน แต่ความผันผวนถูกคูณสองรอบ</em> — รอบแรกในผลลัพธ์ รอบสองในสิ่งที่มันกินไป จึงมีขนาดที่เกินไปแล้วผลตอบแทนคาดหวัง <em>ลดลง</em> ทั้งที่ยังถูกทางอยู่</p></div>
+
+<h2>ค่าเริ่มต้นสำหรับคนที่ยังไม่มีสถิติของตัวเอง</h2>
+
+<p>ปัญหาไก่กับไข่ที่ทำให้คนติดตายคือ สูตรคำนวณขนาดไม้ทุกสูตรต้องการอัตราชนะและขนาดกำไรเฉลี่ย ซึ่งได้มาจากประวัติการเทรด ซึ่งคุณยังไม่มี</p>
+
+<p>ทางออกไม่ใช่การเดาตัวเลขที่ยังไม่รู้ แต่คือ <strong>เปลี่ยนไปใช้ตัวแปรที่รู้แน่วันนี้</strong></p>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — บันไดสามขั้นสำหรับคนที่ยังไม่มีข้อมูล</div>
+<p><strong>ขั้นที่ 1 — กำหนดเพดานความเสียหายต่อไม้ก่อน</strong></p>
+<ul>
+<li>ตอบคำถามเดียว: "ถ้าไม้นี้ผิดทั้งหมด ฉันยอมเสียกี่บาทโดยไม่เปลี่ยนพฤติกรรม" — คำว่า <em>ไม่เปลี่ยนพฤติกรรม</em> สำคัญที่สุด</li>
+<li>ถ้ายังไม่รู้ ให้เริ่มที่ <strong>1% ของทุนต่อไม้</strong> ซึ่งแปลว่าผิดติดกัน 20 ไม้ยังเสียไม่ถึงหนึ่งในห้า</li>
+</ul>
+<p><strong>ขั้นที่ 2 — แปลงเพดานเป็นจำนวน</strong></p>
+<ul>
+<li>ขนาดไม้ = เพดานความเสียหาย ÷ ระยะจากราคาเข้าถึงจุดที่ยอมรับว่าผิด</li>
+<li>จุดที่ยอมรับว่าผิด คือช่องที่ 5 ของเทมเพลตใน Part 2 ซึ่งคุณเขียนไว้แล้ว</li>
+</ul>
+<p><strong>ขั้นที่ 3 — ตั้งเพดานรวมทั้งพอร์ต</strong></p>
+<ul>
+<li>ถ้าพอร์ตติดลบจากจุดสูงสุดถึงระดับหนึ่ง ให้หยุดเทรดชั่วคราวและทบทวน ไม่ใช่ลดขนาดไม้แล้วเทรดต่อ</li>
+<li>ถ้ายังไม่รู้จะตั้งที่เท่าไร ให้ใช้ <strong>−20%</strong> เพราะจากตารางข้างบน −20% ยังกลับมาได้ด้วย +25% ซึ่งเป็นไปได้จริง ส่วน −50% ต้องการ +100% ซึ่งแทบไม่มีใครทำได้ในเวลาที่สมเหตุสมผล</li>
+</ul>
+<p><strong>ถ้ายังไม่รู้จะเริ่มข้อไหน</strong> ให้ทำขั้นที่ 1 อย่างเดียวก่อน แค่มีเพดานต่อไม้ก็ตัดความเสี่ยงที่จะออกจากเกมไปได้เกือบหมดแล้ว</p></div>
+
+<div class="bx bb"><div class="bt">🔵 [รอบสอง] แล้วสูตร Kelly ล่ะ</div>
+<p>Kelly คือสูตรที่บอกขนาดไม้ที่ทำให้เงินโตเร็วที่สุดในระยะยาว โดยต้องรู้อัตราชนะและอัตราส่วนกำไรต่อขาดทุนที่แท้จริง</p>
+<p>มันถูกต้องทางคณิตศาสตร์ และมีปัญหาสองข้อสำหรับคนที่เพิ่งเริ่ม</p>
+<ul>
+<li><strong>ต้องรู้ตัวเลขที่คุณยังไม่รู้</strong> — Part 1 คำนวณไว้ว่าต้องราวพันไม้กว่าจะประมาณอัตราชนะได้แม่นพอ ถ้าใส่ตัวเลขที่มองโลกในแง่ดีเกินจริงเข้าไป สูตรจะบอกให้ใส่ไม้ใหญ่เกินจริงตามไปด้วย</li>
+<li><strong>มันเพิ่มความเร็วในการโต พร้อมกับความลึกของการย่อ</strong> — ขนาดไม้ตามสูตรเต็ม ๆ มักทำให้เจอการย่อระดับที่คนทั่วไปทนไม่ไหว แล้วเลิกกลางทาง ซึ่งแย่กว่าการใช้ขนาดเล็กกว่าตั้งแต่แรก</li>
+</ul>
+<p>ในทางปฏิบัติ คนที่ใช้จริงจึงมักใช้เศษส่วนของสูตร เช่นครึ่งหนึ่งหรือหนึ่งในสี่ — ซึ่งเมื่อคำนวณออกมามักได้ตัวเลขใกล้เคียงกับบันไดสามขั้นข้างบนอยู่ดี รายละเอียดเต็มอยู่ใน <code>pm-part5a</code></p></div>
+
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินกรอกช่องจำนวน</div>
+<p>มินกลับมาที่โครงสร้างจาก Part 6 ราคา 1,437 ดอลลาร์ ซึ่งมากกว่าทุนทั้งพอร์ตที่มีราว 1,400 ดอลลาร์</p>
+<p>เมื่อก่อนมินจะคิดว่า "งั้นก็รอเก็บเงินเพิ่มอีกหน่อยแล้วค่อยซื้อ"</p>
+<p>ตอนนี้มินคิดต่างออกไป — เพดานความเสียหายต่อไม้ของมินคือ 1% ของทุน = <strong>500 บาท</strong> ส่วนโครงสร้างนี้ถ้าผิดจะเสียเต็มจำนวน คือราว 50,000 บาท</p>
+<p>นั่นแปลว่าโครงสร้างนี้ใหญ่กว่าเพดานของมิน <strong>ราวร้อยเท่า</strong> ไม่ใช่ "ใหญ่ไปนิดหน่อย"</p>
+<p>มินไม่ได้รอเก็บเงิน แต่เปลี่ยนคำถามเป็น <em>"มีวิธีแสดงความเชื่อเดียวกันนี้ในขนาดที่พอดีกับเพดานไหม"</em> — ซึ่งเป็นคำถามที่พาไปหาคำตอบได้จริง ส่วนคำถามเดิมพาไปสู่การรอเฉย ๆ หรือใส่เกินตัว</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สี่คำถามก่อนกรอกช่องจำนวน</div>
+<ol>
+<li><strong>ถ้าไม้นี้ผิดทั้งหมด ฉันเสียกี่บาท</strong> — ตอบเป็นตัวเลข ก่อนกรอกจำนวน ไม่ใช่หลัง</li>
+<li><strong>ตัวเลขนั้นเกินเพดานต่อไม้ของฉันไหม</strong> — ถ้าเกิน ลดขนาด ไม่ใช่ลดเพดาน</li>
+<li><strong>ถ้าผิดติดกันห้าไม้ ฉันยังทำตามแผนเดิมได้ไหม</strong> — ถ้าไม่ได้ แปลว่าขนาดยังใหญ่ไป</li>
+<li><strong>ตัวเลขที่ฉันใช้คำนวณ มาจากช่วงเวลาที่ดีเป็นพิเศษหรือเปล่า</strong> — คำถามที่ช่วยชีวิตได้มากที่สุดในบทนี้</li>
+</ol></div>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<ul>
+<li>ทุน <strong>50,000 บาท</strong> · เพดานต่อไม้ 1% = <strong>500 บาท</strong></li>
+<li>ถ้ามินยอมให้ราคาผิดทางได้ 5% ก่อนยอมรับว่าคิดผิด → ขนาดไม้ = 500 ÷ 5% = <strong>10,000 บาท</strong> หรือ 20% ของทุน</li>
+<li>ถ้ายอมให้ผิดทางได้ 10% → ขนาดไม้ = 500 ÷ 10% = <strong>5,000 บาท</strong> หรือ 10% ของทุน</li>
+</ul>
+<p>สังเกตว่า <strong>ยิ่งให้ที่ว่างกับความผิดพลาดมาก ขนาดไม้ยิ่งต้องเล็กลง</strong> — สองอย่างนี้ผูกกันเสมอ และคนที่ตั้งจุดตัดขาดทุนไกล ๆ แล้วยังใส่ไม้ใหญ่เท่าเดิม กำลังทำสองอย่างที่ขัดกันเอง</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>คำนวณเพดานความเสียหายต่อไม้ของคุณเป็นตัวเลขบาท แล้วเทียบกับไม้ล่าสุดที่เพิ่งเทรด — เกินไปกี่เท่า</li>
+<li>เปิดผลตอบแทนย้อนหลังที่คุณใช้ตัดสินใจ แล้วถามว่าช่วงนั้นตลาดขึ้นหรือลง ถ้าขึ้น แปลว่าตัวเลขของคุณมองโลกในแง่ดีเกินจริงอยู่เท่าไร</li>
+<li>ดูตาราง "ขาดทุนไปเท่าไร ต้องได้เท่าไรถึงกลับ" แล้วขีดเส้นว่าคุณจะไม่ยอมให้พอร์ตลงลึกกว่าตรงไหน เขียนตัวเลขนั้นแปะไว้ข้างจอ</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>ขนาดไม้มาจากสิ่งที่ทนได้ ไม่ใช่สิ่งที่มั่นใจ</strong> — เพราะข้อแรกตอบได้วันนี้ ข้อสองต้องรอพันไม้</li>
+<li><strong>ระวังการจำลองที่ใช้ช่วงเวลาดี ๆ เป็นวัตถุดิบ</strong> — ตัวเลขถูกทุกตัว ข้อสรุปผิดทั้งหมด</li>
+<li><strong>ความผันผวนถูกคูณสองรอบเมื่อเพิ่มขนาดไม้</strong> — จึงมีขนาดที่เกินไปแล้วผลตอบแทนคาดหวังลดลง</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 7</div>
+<ul>
+<li>ขาดทุน 50% ต้องได้ 100% ถึงกลับที่เดิม ส่วน 20% ต้องการแค่ 25% — เส้นแบ่งระหว่างสองโลกนี้อยู่ตรงกลาง</li>
+<li>จำลองด้วยผลตอบแทนช่วงขาขึ้น: ใส่เต็มทุนได้ผลกลาง +159% และแทบไม่มีความเสี่ยง</li>
+<li>จำลองด้วยชุดเดียวกันแต่ตัดแนวโน้มออก: ใส่เต็มทุนมีโอกาส 49.8% ที่จะเคยติดลบ 30% และจบต่ำกว่าทุน 57.3%</li>
+<li>ที่ 3 เท่า ผลกลางติดลบ 36.0% ทั้งที่สินทรัพย์มีค่าเฉลี่ยเป็นศูนย์ เพราะความผันผวนถูกคูณสองรอบ</li>
+<li>ค่าเริ่มต้นที่ใช้ได้ตั้งแต่ไม้แรก: เพดาน 1% ต่อไม้ → แปลงเป็นจำนวนด้วยระยะถึงจุดที่ยอมรับว่าผิด → เพดานรวมทั้งพอร์ต −20%</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">เจ็ดสถานีแรกทำให้คุณเข้าตลาดอย่างมีเหตุผลและอยู่รอด · แต่ทั้งหมดจะไม่สอนอะไรคุณเลย ถ้าไม่มีสถานีสุดท้าย · Part 8 ว่าด้วยการจดก่อนเทรด และเหตุผลที่การยอมผิดให้เร็วคือ edge ที่ถูกที่สุดที่ซื้อได้</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>Kelly เต็มรูปแบบและเศษส่วนของ Kelly → <code>pm-part5a</code></li>
+<li>การกำหนดขนาดไม้ในพอร์ตหลายตัว และเพดานความเสี่ยงรวม → <code>statarb-ch12</code>, <code>playground-part5</code></li>
+<li>ทฤษฎีการวัดความเสี่ยง VaR / CVaR และมาตรวัดที่สอดคล้อง → <code>pillars-part4</code></li>
+<li>ทฤษฎีพอร์ตและการกระจายความเสี่ยง → <code>theory-part2</code>, เครื่องมือ <code>tool-diversification</code></li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>เพดานความเสียหายต่อไม้</strong> = จำนวนเงินสูงสุดที่ยอมเสียในไม้เดียวโดยไม่เปลี่ยนพฤติกรรม</li>
+<li><strong>การย่อจากจุดสูงสุด</strong> = พอร์ตติดลบจากจุดที่เคยสูงที่สุดกี่เปอร์เซ็นต์ — ตัวเลขที่ตัดสินว่าคุณจะอยู่ต่อไหม</li>
+<li><strong>สุ่มคืนกลับ</strong> = การหยิบข้อมูลในอดีตขึ้นมาสุ่มซ้ำ ๆ เพื่อจำลองอนาคต ซึ่งจะอบทุกอคติของอดีตติดมาด้วย</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>เลเวอเรจ</strong> = การใช้เงินมากกว่าทุนที่มี ทำให้ทั้งกำไรและความผันผวนถูกคูณ · <strong>ผลกลาง</strong> = ค่าที่อยู่ตรงกลางเมื่อเรียงผลลัพธ์ทั้งหมด ต่างจากค่าเฉลี่ยซึ่งถูกดึงด้วยค่าสุดโต่ง</p></div>
+
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>

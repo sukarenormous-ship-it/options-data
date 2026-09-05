@@ -1,0 +1,334 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>คิดแบบ Quant — Part 1: ภาษาของความไม่แน่นอน</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--green:#16a34a;--green-bg:#f0fdf4;--red:#dc2626;--red-bg:#fef2f2;--blue:#2563eb;--blue-bg:#eff6ff;--amber:#d97706;--amber-bg:#fffbeb;--purple:#7c3aed;--purple-bg:#f5f3ff;--g7:#374151;--g8:#1f2937;--g9:#111827;--g1:#f3f4f6;--g2:#e5e7eb;--g0:#f9fafb}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Sarabun",sans-serif;font-size:16px;line-height:1.8;color:var(--g8);background:#fff;max-width:900px;margin:0 auto;padding:40px 30px;word-break:normal;word-break:auto-phrase;overflow-wrap:break-word;line-break:loose;text-wrap:pretty;hanging-punctuation:allow-end}h1{font-size:2.2em;font-weight:800;color:var(--g9)}h2{font-size:1.7em;font-weight:700;color:var(--g9);margin-top:2em;margin-bottom:.8em;padding-bottom:.3em;border-bottom:3px solid var(--blue)}h3{font-size:1.3em;font-weight:700;color:var(--g8);margin-top:1.5em;margin-bottom:.6em}p{margin-bottom:.8em}ul,ol{margin-bottom:1em;padding-left:1.8em}li{margin-bottom:.4em}strong{color:var(--g9)}a{color:var(--blue)}.cover{text-align:center;padding:50px 20px;border-bottom:3px solid var(--blue);margin-bottom:30px}.cover h1{font-size:2em;line-height:1.3}.cover .sub{font-size:1.2em;color:var(--blue);font-weight:600;margin:8px 0}.cover .desc{color:#64748b;max-width:640px;margin:12px auto}
+.bx{padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0}.bg{background:var(--green-bg);border-left:4px solid var(--green)}.br{background:var(--red-bg);border-left:4px solid var(--red)}.bb{background:var(--blue-bg);border-left:4px solid var(--blue)}.ba{background:var(--amber-bg);border-left:4px solid var(--amber)}.bp{background:var(--purple-bg);border-left:4px solid var(--purple)}.bt{font-weight:700;margin-bottom:5px}.fm{font-family:'Courier New',monospace;background:var(--g1);padding:12px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;font-size:.93em}
+.tw{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left}td{padding:7px 10px;border-bottom:1px solid var(--g2);vertical-align:top}tr:nth-child(even){background:var(--g0)}.nw{white-space:nowrap}
+.card{border:1px solid var(--g2);border-radius:10px;padding:6px 22px 18px;margin:24px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}.yr{display:inline-block;background:var(--g9);color:#fff;font-size:.6em;font-weight:700;padding:3px 9px;border-radius:20px;vertical-align:middle;margin-left:8px}.must{color:var(--red);font-weight:700}.lvl{font-size:.85em;letter-spacing:1px;white-space:nowrap}.cc{font-size:.7em;color:#64748b}
+.pq{font-size:1.3em;font-weight:700;color:var(--g9);font-style:italic;border-left:5px solid var(--purple);background:var(--purple-bg);padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:16px 0;border-radius:8px;overflow:hidden;border:1px solid var(--g2)}.ad>div{padding:12px 16px}.ad .pro{background:var(--green-bg)}.ad .con{background:#fff7ed;border-left:1px solid var(--g2)}.ad .bt{margin-bottom:6px}.ad ul{margin:0;padding-left:1.3em;font-size:.93em}
+.qv{background:#f3effe;border:1px solid #ddd6fe;border-left:5px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}.qv .bt{color:var(--purple)}
+.why{background:#fff7ed;border:1px dashed var(--amber);border-radius:8px;padding:12px 18px;margin:14px 0}.why .bt{color:var(--amber)}
+.dft{background:#ecfeff;border:2px solid #06b6d4;border-radius:10px;padding:14px 20px;margin:18px 0}.dft .bt{color:#0e7490}
+.scene{background:var(--g0);border:1px solid var(--g2);border-radius:10px;padding:16px 20px;margin:18px 0}.scene .bt{color:var(--g9)}
+.fig{display:block;margin:22px auto;width:100%;height:auto}.cap{text-align:center;font-size:.87em;color:#64748b;margin:-12px 0 20px}
+abbr[title]{border-bottom:1px dotted var(--g7);cursor:help;text-decoration:none}
+@media(max-width:640px){.ad{grid-template-columns:1fr}.ad .con{border-left:none;border-top:1px solid var(--g2)}.fm{font-size:.82em}}
+@media print{body{padding:15px;font-size:14px}h2{page-break-before:always}.cover{page-break-after:always}.bx,table,.card,.ad,.qv,.dft,.scene{page-break-inside:avoid}abbr[title]{border:none}}</style></head><body>
+
+<!-- ═══════════════ COVER ═══════════════ -->
+<div class="cover">
+<h1>คิดแบบ Quant</h1>
+<div class="sub">Part 1 — ภาษาของความไม่แน่นอน: เท่าไรถึงจะพอ</div>
+<div class="desc">เหรียญที่รู้จักโมเมนตัม · ดาวเด่นที่ไม่มีฝีมือ · คนที่คุณไม่เคยเห็น — ศัพท์ที่ทุกสถานีในสายการผลิตต้องใช้</div>
+</div>
+
+<div class="bx bb" style="font-size:.92em"><div class="bt">🧭 เส้นทางอ่าน</div>
+<p><strong>🟢 มือใหม่:</strong> อ่านทั้งหมด Part นี้ไม่มีสมการเลยแม้แต่ตัวเดียว · <strong>🔵 มีพื้นแล้ว:</strong> ตัวเลขทั้งหมดในบทนี้สร้างซ้ำได้ด้วย <code>tools/nq_figures.py</code> ถ้าอยากตรวจว่าผมโกงไหม เปิดสคริปต์ได้เลย</p></div>
+
+<!-- ═══════════════ HOOK ═══════════════ -->
+<h2>เหรียญที่รู้จักโมเมนตัม</h2>
+
+<p>Part 0 จบด้วยคำถามค้างสองข้อ — ข้อแรก ถ้า 11 ตัวอย่างน้อยเกินไป แล้วเท่าไรถึงจะพอ ข้อสอง ทำไมสมองเราถึงเห็นแพตเทิร์นในสิ่งที่สุ่มล้วน ๆ</p>
+
+<p>เริ่มจากข้อสอง เพราะคำตอบของมันแรงกว่า</p>
+
+<p>ผมเอาเหรียญมาหนึ่งเหรียญ ถ่วงให้ออกหัว <strong>58.9%</strong> เท่ากับสัดส่วนวันที่ BTC ขึ้นจริงในข้อมูล 56 วันของเรา เหรียญนี้ไม่รู้จักตลาด ไม่รู้จักโมเมนตัม ไม่มีความทรงจำ การโยนแต่ละครั้งไม่เกี่ยวกับครั้งก่อนเลยแม้แต่นิดเดียว</p>
+
+<p>แล้วโยนมัน 56 ครั้ง นับว่าได้ "หัวสามครั้งติด" กี่หน จากนั้นทำซ้ำทั้งกระบวนการ <strong>100,000 รอบ</strong></p>
+
+<p>ผลคือ เหรียญที่ไม่มีความทรงจำนี้สร้าง "ขึ้น 3 วันติด" ได้เฉลี่ย <strong>11.0 ครั้ง</strong></p>
+
+<p>ข้อมูล BTC จริงของเรามี <strong>11 ครั้ง</strong></p>
+
+<!--CHART:randomness-->
+<svg class="fig" viewBox="0 0 760 322" role="img" aria-label="การกระจายของจำนวนครั้งที่เกิด ขึ้น 3 วันติด จากการจำลองเหรียญสุ่ม 100,000 รอบ โดยค่าจริงของตลาดคือ 11 ครั้ง ซึ่งอยู่กลางเนิน">
+<line x1="46" y1="250" x2="744" y2="250" stroke="#d1d5db" stroke-width="1.5"/>
+<rect x="52.0" y="243.7" width="25.4" height="6.3" rx="2" fill="#e5e7eb"/>
+<rect x="79.4" y="231.8" width="25.4" height="18.2" rx="2" fill="#e5e7eb"/>
+<text x="92.0" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">2</text>
+<rect x="106.7" y="212.5" width="25.4" height="37.5" rx="2" fill="#e5e7eb"/>
+<rect x="134.1" y="185.4" width="25.4" height="64.6" rx="2" fill="#93c5fd"/>
+<text x="146.8" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">4</text>
+<rect x="161.4" y="156.4" width="25.4" height="93.6" rx="2" fill="#93c5fd"/>
+<rect x="188.8" y="122.3" width="25.4" height="127.7" rx="2" fill="#93c5fd"/>
+<text x="201.5" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">6</text>
+<rect x="216.2" y="93.6" width="25.4" height="156.4" rx="2" fill="#93c5fd"/>
+<rect x="243.5" y="69.3" width="25.4" height="180.7" rx="2" fill="#93c5fd"/>
+<text x="256.2" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">8</text>
+<rect x="270.9" y="53.4" width="25.4" height="196.6" rx="2" fill="#93c5fd"/>
+<rect x="298.2" y="48.0" width="25.4" height="202.0" rx="2" fill="#93c5fd"/>
+<text x="310.9" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">10</text>
+<rect x="325.6" y="58.8" width="25.4" height="191.2" rx="2" fill="#7c3aed"/>
+<rect x="353.0" y="68.9" width="25.4" height="181.1" rx="2" fill="#93c5fd"/>
+<text x="365.6" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">12</text>
+<rect x="380.3" y="85.9" width="25.4" height="164.1" rx="2" fill="#93c5fd"/>
+<rect x="407.7" y="107.5" width="25.4" height="142.5" rx="2" fill="#93c5fd"/>
+<text x="420.4" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">14</text>
+<rect x="435.0" y="129.7" width="25.4" height="120.3" rx="2" fill="#93c5fd"/>
+<rect x="462.4" y="152.8" width="25.4" height="97.2" rx="2" fill="#93c5fd"/>
+<text x="475.1" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">16</text>
+<rect x="489.8" y="174.8" width="25.4" height="75.2" rx="2" fill="#93c5fd"/>
+<rect x="517.1" y="196.8" width="25.4" height="53.2" rx="2" fill="#93c5fd"/>
+<text x="529.8" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">18</text>
+<rect x="544.5" y="207.6" width="25.4" height="42.4" rx="2" fill="#93c5fd"/>
+<rect x="571.8" y="219.3" width="25.4" height="30.7" rx="2" fill="#e5e7eb"/>
+<text x="584.5" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">20</text>
+<rect x="599.2" y="228.7" width="25.4" height="21.3" rx="2" fill="#e5e7eb"/>
+<rect x="626.6" y="235.4" width="25.4" height="14.6" rx="2" fill="#e5e7eb"/>
+<text x="639.2" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">22</text>
+<rect x="653.9" y="240.3" width="25.4" height="9.7" rx="2" fill="#e5e7eb"/>
+<rect x="681.3" y="243.9" width="25.4" height="6.1" rx="2" fill="#e5e7eb"/>
+<text x="694.0" y="266" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">24</text>
+<rect x="708.6" y="246.0" width="25.4" height="4.0" rx="2" fill="#e5e7eb"/>
+<line x1="338.3" y1="50.8" x2="338.3" y2="32" stroke="#7c3aed" stroke-width="2"/>
+<text x="338.3" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed" font-family="Sarabun,sans-serif">ตลาดจริง = 11 ครั้ง</text>
+<text x="44" y="54" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">บ่อย</text>
+<text x="44" y="248" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">น้อย</text>
+<text x="394" y="288" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">จำนวนครั้งที่เกิด "ขึ้น 3 วันติด" ใน 56 วัน</text>
+<rect x="528" y="42" width="216" height="46" rx="6" fill="#f9fafb" stroke="#e5e7eb"/>
+<rect x="538" y="52" width="11" height="11" rx="2" fill="#93c5fd"/>
+<text x="555" y="62" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">ช่วงที่ความสุ่มสร้างได้ 90%</text>
+<rect x="538" y="69" width="11" height="11" rx="2" fill="#7c3aed"/>
+<text x="555" y="79" font-size="11.5" fill="#4b5563" font-family="Sarabun,sans-serif">ค่าที่วัดได้จากตลาดจริง</text>
+</svg>
+<div class="cap">จำลองเหรียญที่ออกหัวเท่าสัดส่วนวันขึ้นจริง 100,000 รอบ · ความสุ่มล้วน ๆ ให้ค่าเฉลี่ย 11.0 ครั้ง และอยู่ในช่วง 4–19 ครั้งถึง 90% ของเวลา</div>
+<!--/CHART:randomness-->
+
+<p>ดูกราฟให้ดี ค่าจริงไม่ได้อยู่ตรงหาง ไม่ได้อยู่ตรงจุดที่น่าตื่นเต้น มันอยู่ <em>ตรงกลางเนิน</em> พอดี — ที่เปอร์เซ็นไทล์ที่ <strong>57</strong> ซึ่งแปลว่าถ้าเราโยนเหรียญโง่ ๆ ใบนี้ 100 ครั้ง จะมีสัก 43 ครั้งที่มัน "มีโมเมนตัม" มากกว่าตลาดจริงเสียอีก</p>
+
+<div class="pq">แพตเทิร์นที่คุณเห็นบนกราฟ ไม่ได้พิสูจน์ว่าตลาดมีความทรงจำ มันพิสูจน์แค่ว่าตลาดขยับ</div>
+
+<p>นี่ไม่ใช่การบอกว่าโมเมนตัมไม่มีจริงในโลกนี้ — มีนักวิจัยศึกษาเรื่องนี้กันมาหลายสิบปีและเป็นหัวข้อที่ถกเถียงกันจริงจัง ประเด็นแคบกว่านั้นมาก และสำคัญกว่าสำหรับคุณ</p>
+
+<div class="bx br"><div class="bt">ประเด็นคือ</div>
+<p>ข้อมูลที่ <em>คุณ</em> มีอยู่ในมือ — 2 เดือนบนหน้าจอ — ไม่มีทางแยกได้เลยว่าสิ่งที่เห็นคือโมเมนตัมจริง หรือเป็นเหรียญที่ถูกถ่วงแล้วโยนไปเรื่อย ๆ</p>
+<p>และถ้าแยกไม่ได้ การเดิมพันเงินจริงลงไปบนความต่างนั้น ก็คือการเดิมพันบนสิ่งที่ตัวเองมองไม่เห็น</p></div>
+
+<!-- ═══════════════ เท่าไรถึงจะพอ ═══════════════ -->
+<h2>แล้วเท่าไรถึงจะพอ</h2>
+
+<p>มาที่คำถามข้อแรก คราวนี้กลับด้านการทดลอง</p>
+
+<p>สมมติว่าคุณ <strong>มี <abbr title="ความได้เปรียบที่ทำให้ผลตอบแทนคาดหวังเป็นบวกหลังหักต้นทุนแล้ว">edge</abbr> จริง</strong> — คำว่า edge (ความได้เปรียบ) หมายถึงเหตุผลที่ทำให้ในระยะยาวคุณได้เงินมากกว่าเสีย หลังหักค่าผ่านทางแล้ว ไม่ใช่แค่ความรู้สึกว่าตัวเองเก่ง — สมมติว่าคุณไม่ได้หลอกตัวเอง ระบบของคุณชนะ 55% จริง ๆ ในระยะยาว (ซึ่งพอดีเป๊ะกับเส้นเสมอตัวของมินจาก Part 0 — เอาไว้พูดถึงตอนท้าย)</p>
+
+<p>คำถาม: คุณต้องเทรดกี่ไม้ ถึงจะ <em>แสดงหลักฐานได้</em> ว่าผลงานของคุณไม่ใช่ดวง</p>
+
+<!--CHART:sample-size-->
+<svg class="fig" viewBox="0 0 760 312" role="img" aria-label="กราฟแสดงว่าคนที่มี edge จริง 55% ต้องเทรดกี่ไม้ถึงจะพิสูจน์ตัวเองได้ ที่ 100 ไม้ได้แค่ 13.3% ที่ 1000 ไม้ได้ 88.1%">
+<defs><linearGradient id="nqArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2563eb" stop-opacity=".22"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>
+<line x1="56" y1="236.0" x2="728" y2="236.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="240.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">0%</text>
+<line x1="56" y1="188.5" x2="728" y2="188.5" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="192.5" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">25%</text>
+<line x1="56" y1="141.0" x2="728" y2="141.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="145.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">50%</text>
+<line x1="56" y1="93.5" x2="728" y2="93.5" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="97.5" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">75%</text>
+<line x1="56" y1="46.0" x2="728" y2="46.0" stroke="#f3f4f6" stroke-width="1"/>
+<text x="48" y="50.0" text-anchor="end" font-size="11" fill="#9ca3af" font-family="Sarabun,sans-serif">100%</text>
+<path d="M56.0,225.7 L286.0,210.7 L442.9,162.1 L615.0,68.6 L714.0,47.3 L714.0,236 L56.0,236 Z" fill="url(#nqArea)"/>
+<path d="M56.0,225.7 L286.0,210.7 L442.9,162.1 L615.0,68.6 L714.0,47.3" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="56" y1="231.8" x2="728" y2="231.8" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="724" y="222.8" text-anchor="end" font-size="12" font-weight="700" fill="#dc2626" font-family="Sarabun,sans-serif">คนที่ไม่มี edge เลย ≈ 2.2%</text>
+<circle cx="56.0" cy="225.7" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="56.0" y="211.7" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af" font-family="Sarabun,sans-serif">5.4%</text>
+<text x="56.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">20</text>
+<circle cx="286.0" cy="210.7" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="286.0" y="196.7" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af" font-family="Sarabun,sans-serif">13.3%</text>
+<text x="286.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">100</text>
+<circle cx="442.9" cy="162.1" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="442.9" y="148.1" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af" font-family="Sarabun,sans-serif">38.9%</text>
+<text x="442.9" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">300</text>
+<circle cx="615.0" cy="68.6" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="615.0" y="54.6" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af" font-family="Sarabun,sans-serif">88.1%</text>
+<text x="615.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">1,000</text>
+<circle cx="714.0" cy="47.3" r="4.5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="714.0" y="33.3" text-anchor="end" font-size="12.5" font-weight="700" fill="#1e40af" font-family="Sarabun,sans-serif">99.3%</text>
+<text x="714.0" y="254" text-anchor="middle" font-size="11.5" fill="#6b7280" font-family="Sarabun,sans-serif">2,000</text>
+<text x="392" y="276" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Sarabun,sans-serif">จำนวนไม้ที่เทรด (มาตราส่วนลอการิทึม)</text>
+</svg>
+<div class="cap">จำลอง 20,000 รอบต่อจุด · เส้นน้ำเงินคือคนที่เก่งจริง เส้นแดงคือคนที่ไม่มีฝีมือเลย — กว่าสองเส้นจะแยกออกจากกันชัดเจน ต้องใช้ถึงหลักพันไม้</div>
+<!--/CHART:sample-size-->
+
+<div class="tw"><table>
+<tr><th class="nw">จำนวนไม้</th><th>โอกาสที่คนมี edge จริง 55% จะพิสูจน์ตัวเองได้</th><th>ความหมาย</th></tr>
+<tr><td class="nw">20 ไม้</td><td><strong>5.4%</strong></td><td>แทบเป็นไปไม่ได้</td></tr>
+<tr><td class="nw">100 ไม้</td><td><strong>13.3%</strong></td><td>ต่อให้เก่งจริง 87% ของกรณีก็ยังดูเหมือนคนธรรมดา</td></tr>
+<tr><td class="nw">300 ไม้</td><td><strong>38.9%</strong></td><td>ยังแพ้การโยนหัวก้อย</td></tr>
+<tr><td class="nw">1,000 ไม้</td><td><strong>88.1%</strong></td><td>ตรงนี้ถึงจะเริ่มเห็น</td></tr>
+<tr><td class="nw">2,000 ไม้</td><td><strong>99.3%</strong></td><td>ชัดเจน</td></tr>
+</table></div>
+
+<p>คำตอบของคำถาม "เท่าไรถึงจะพอ" คือ <strong>ประมาณหนึ่งพันไม้</strong> สำหรับ edge ขนาด 5 จุดเปอร์เซ็นต์ และถ้า edge เล็กกว่านั้น ตัวเลขจะพุ่งขึ้นอีกมาก</p>
+
+<p>ทีนี้อีกด้านของเหรียญ ซึ่งเจ็บกว่า — คนที่ <strong>ไม่มี edge เลย</strong> ชนะ 50% เป๊ะ จะดูเหมือน "พิสูจน์ได้แล้ว" บ่อยแค่ไหน คำตอบคือราว <strong>2%</strong> ไม่ว่าจะเทรดกี่ไม้ก็ตาม</p>
+
+<p>ฟัง 2% แล้วดูน้อย จนกระทั่งคุณนับหัวคน</p>
+
+<div class="bx ba"><div class="bt">🧮 เลขคณิตที่ทำให้กลุ่มเทรดทุกกลุ่มมี "เซียน"</div>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> ถ้ามีคนพันคนที่ไม่มีฝีมืออะไรเลยสักคนเดียว มาลองเทรดพร้อมกัน จะมีสักยี่สิบกว่าคนที่ผลงานออกมาดูดีพอจะเรียกว่าพิสูจน์แล้ว โดยไม่ต้องมีใครเก่งจริงเลยแม้แต่คนเดียว</p>
+<div class="fm">1,000 คน × 2.2% ≈ 22 คน "ที่ดูเหมือนมีของ"</div>
+<p>คนยี่สิบสองคนนั้นจะเชื่อสนิทใจว่าตัวเองเก่ง เพราะเขามีหลักฐานอยู่ในมือจริง ๆ — และคนที่เหลืออีก 978 คนจะเงียบหายไป ไม่มีใครโพสต์ผลงาน</p></div>
+
+<!-- ═══════════════ ดาวเด่น ═══════════════ -->
+<h2>ดาวเด่นที่ไม่มีฝีมือ</h2>
+
+<p>ลองทำการทดลองที่โหดกว่านั้น</p>
+
+<p>สร้างเทรดเดอร์ขึ้นมา <strong>2,000 คน</strong> ทุกคนฝีมือเท่ากันเป๊ะ — โอกาสชนะ 50% เท่ากันหมด ไม่มีใครเก่งกว่าใครแม้แต่นิดเดียว ให้ทุกคนเทรด 20 ไม้ นี่คือ "รอบแรก"</p>
+
+<p>จบรอบแรก คัด <strong>100 คนที่ทำผลงานดีที่สุด</strong> ออกมาเป็นดาวเด่น พวกเขาชนะเฉลี่ย <strong>14.6 จาก 20 ไม้</strong> ขณะที่ค่าเฉลี่ยของทุกคนอยู่ที่ 10.0</p>
+
+<p>ผลงานดีกว่าค่าเฉลี่ยเกือบห้าไม้ ถ้านี่เป็นเรื่องจริง คนกลุ่มนี้จะได้ขึ้นปก ได้เปิดคอร์ส ได้คนตาม</p>
+
+<p>แล้วให้ดาวเด่นร้อยคนนี้เทรดต่ออีก 20 ไม้ในรอบที่สอง</p>
+
+<div class="bx br"><div class="bt">รอบสอง: ชนะเฉลี่ย 10.0 จาก 20 ไม้</div>
+<p>ตรงกับค่าเฉลี่ยของประชากรทั้งหมดเป๊ะ ๆ ราวกับไม่เคยมีอะไรพิเศษเกิดขึ้น — เพราะไม่เคยมีจริง ๆ</p></div>
+
+<p>ปรากฏการณ์นี้มีชื่อว่า <abbr title="แนวโน้มที่ค่าสุดโต่งจะตามมาด้วยค่าที่ธรรมดากว่า เมื่อความสุดโต่งนั้นมีองค์ประกอบของดวงปนอยู่">ถอยสู่ค่าเฉลี่ย</abbr> (regression to the mean) และมันเกิดขึ้นเสมอเมื่อผลลัพธ์มีดวงปนอยู่ ไม่ว่าจะมีฝีมือปนอยู่ด้วยหรือไม่</p>
+
+<div class="qv"><div class="bt">🧠 มุมที่ quant มองต่าง</div>
+<p><strong>คนทั่วไปเห็น:</strong> ดาวเด่นทำผลงานแย่ลงในรอบสอง แล้วหาคำอธิบาย — เขาเหลิง เขาเปลี่ยนวิธี ตลาดเปลี่ยน<br>
+<strong>quant เห็น:</strong> ไม่มีอะไรต้องอธิบาย ตัวเลขรอบสองคือฝีมือจริงของเขาที่มองเห็นได้ชัดขึ้น ส่วนตัวเลขรอบแรกต่างหากที่เป็นของปลอม</p></div>
+
+<p>ความเข้าใจนี้กลับด้านนิสัยหนึ่งที่เราทำกันจนเคยชิน คือการไปเรียนกับคนที่ผลงานดีที่สุดในรอบล่าสุด — <strong>ยิ่งผลงานรอบล่าสุดโดดเด่นเท่าไร โอกาสที่มันจะเป็นดวงก็ยิ่งมากขึ้นเท่านั้น</strong> ไม่ใช่น้อยลง</p>
+
+<!-- ═══════════════ ผู้รอดชีวิต ═══════════════ -->
+<h2>คนที่คุณไม่เคยเห็น</h2>
+
+<p>ในการทดลองข้างบน มีรายละเอียดหนึ่งที่ผมข้ามไป คือ 1,900 คนที่ไม่ได้ถูกคัดมาเป็นดาวเด่น</p>
+
+<p>ในโลกจริง คนกลุ่มนั้นไม่ได้แค่ไม่ถูกคัด — เขา <em>หายไปจากข้อมูล</em> เลย เลิกโพสต์ ปิดพอร์ต ไม่มีใครสัมภาษณ์ กลุ่มที่คุณเห็นในฟีดจึงเป็นกลุ่มที่ถูกกรองมาแล้วสองชั้น: ชั้นแรกด้วยผลงาน ชั้นที่สองด้วยความเต็มใจที่จะพูดถึงมัน</p>
+
+<p>เรื่องนี้ฟังดูเป็นนามธรรม จนกระทั่งเราเปิดดูข้อมูลของเราเอง</p>
+
+<div class="bx bb"><div class="bt">📊 หลักฐานจากคลังข้อมูลของเราเอง</div>
+<ul>
+<li>วันที่ 4 กรกฎาคม 2026 ตลาด Deribit มีสัญญา option ของ BTC อยู่ <strong>914 ตัว</strong></li>
+<li>วันที่ 29 สิงหาคม 2026 มีอยู่ <strong>1,030 ตัว</strong> — ดูเหมือนตลาดโตขึ้น</li>
+<li>แต่ในจำนวนนั้น มีเพียง <strong>404 ตัว</strong> ที่เป็นสัญญาเดิมจากวันแรก</li>
+</ul>
+<p>แปลว่าสัญญาที่มีอยู่ในวันแรก <strong>รอดมาถึงวันสุดท้ายแค่ 44%</strong> ที่เหลืออีก 56% หมดอายุและหายไป</p></div>
+
+<p>ทีนี้ลองนึกว่ามีคนศึกษาผลตอบแทนของ option โดยดูจากรายการที่มีอยู่ <em>วันนี้</em> เท่านั้น เขาจะกำลังศึกษากลุ่มที่รอดมา 44% โดยที่ตัวเลขบนหน้าจอไม่มีอะไรบอกใบ้เลยว่าอีก 56% หายไปไหนและหายไปเพราะอะไร</p>
+
+<p>นี่คือ <abbr title="ความลำเอียงที่เกิดจากการดูเฉพาะสิ่งที่เหลือรอด โดยมองไม่เห็นสิ่งที่หายไปแล้ว">อคติผู้รอดชีวิต</abbr> (survivorship bias) และมันไม่ได้อยู่แค่ในข้อมูล — มันอยู่ในทุกที่ที่คุณหาคำแนะนำ</p>
+
+<!-- ═══════════════ เงื่อนไข ═══════════════ -->
+<h2>"แม่น 99%" ไม่ได้แปลว่าเชื่อได้ 99%</h2>
+
+<p>ศัพท์สุดท้ายของ Part นี้ ขอยกตัวอย่างนอกตลาดเพราะมันเห็นชัดกว่ามาก</p>
+
+<p>สมมติมีโรคหนึ่งที่พบใน <strong>1%</strong> ของประชากร มีชุดตรวจที่ดีมาก ถ้าคุณเป็นโรคจริง มันตรวจเจอ <strong>99%</strong> ของกรณี และถ้าคุณไม่ได้เป็น มันแจ้งผิดว่าเป็นแค่ <strong>5%</strong></p>
+
+<p>คุณไปตรวจ ผลออกมาเป็นบวก — โอกาสที่คุณเป็นโรคจริงคือเท่าไร</p>
+
+<p>คนส่วนใหญ่ตอบราว 95% คำตอบจริงคือ <strong>16.7%</strong></p>
+
+<div class="bx ba"><div class="bt">🧮 ทำไมถึงเป็นแบบนั้น — นับหัวคนดู</div>
+<p><strong>🚶 อ่านเป็นภาษาคนก่อน:</strong> คนที่ไม่ได้เป็นโรคมีเยอะกว่าคนที่เป็นโรคมหาศาล ดังนั้นถึงชุดตรวจจะแจ้งผิดแค่ 5% ของกลุ่มใหญ่นั้น จำนวนคนที่ถูกแจ้งผิดก็ยังมากกว่าคนที่เป็นโรคจริงทั้งหมดอยู่ดี</p>
+<p>ลองตั้งต้นด้วยคน 10,000 คน</p>
+<ul>
+<li>เป็นโรคจริง 100 คน · ตรวจเจอ <strong>99 คน</strong></li>
+<li>ไม่ได้เป็น 9,900 คน · ถูกแจ้งผิดว่าเป็น <strong>495 คน</strong></li>
+<li>รวมคนที่ได้ผลบวก = 99 + 495 = 594 คน · ในจำนวนนี้เป็นโรคจริง 99 คน</li>
+</ul>
+<div class="fm">99 ÷ 594 = 16.7%</div></div>
+
+<p>ทีนี้เปลี่ยนคำ แล้วอ่านใหม่</p>
+
+<div class="bx br"><div class="bt">แปลกลับเป็นภาษาเทรด</div>
+<p>"สัญญาณนี้จับการกลับตัวใหญ่ได้ 99%" อาจเป็นความจริงทุกตัวอักษร <strong>และ</strong> สัญญาณส่วนใหญ่ที่มันปล่อยออกมาก็ยังผิดอยู่ดี</p>
+<p>เพราะการกลับตัวใหญ่นั้นหายาก ส่วนวันธรรมดานั้นมีเยอะมหาศาล — เหมือนคน 9,900 คนที่ไม่ได้เป็นโรค</p>
+<p>สองประโยคนี้ไม่ได้ขัดกันเลย และนี่คือเหตุผลที่ต้องถาม <strong>ฐาน</strong> ก่อนเสมอ</p></div>
+
+<!-- ═══════════════ ตัวเลขของมิน ═══════════════ -->
+<h2>กลับมาที่มิน</h2>
+
+<div class="bx ba"><div class="bt">🧮 ตัวเลขของมิน</div>
+<ul>
+<li>มินเทรดราว <strong>2 ไม้ต่อสัปดาห์</strong> = <strong>104 ไม้ต่อปี</strong></li>
+<li>ถ้าอยากสะสมให้ครบ 1,000 ไม้ ซึ่งเป็นจุดที่เริ่มพิสูจน์ edge ได้ ต้องใช้เวลา <strong>9.6 ปี</strong></li>
+</ul>
+<p>เกือบสิบปี — เพื่อจะได้คำตอบว่าวิธีที่ใช้อยู่ตอนนี้ดีจริงหรือเปล่า</p></div>
+
+<p>อ่านแล้วอาจรู้สึกว่าหมดหวัง แต่ข้อสรุปที่ถูกต้องไม่ใช่ "งั้นก็เลิกเทรด" และไม่ใช่ "งั้นก็เทรดถี่ ๆ ให้ครบพันไม้เร็ว ๆ" ซึ่งจะทำให้จ่ายค่าธรรมเนียมจนหมดตัวก่อนถึง</p>
+
+<div class="dft"><div class="bt">⚠️ ค่าเริ่มต้น — ทำยังไงเมื่อข้อมูลของตัวเองจะไม่มีวันพอ</div>
+<p>ยอมรับก่อนว่า <strong>ผลงานของคุณเองจะไม่มีวันเป็นหลักฐานที่หนักแน่นได้ทันเวลา</strong> แล้วเปลี่ยนไปหาหลักฐานจากที่อื่นแทน เรียงตามความคุ้มค่า</p>
+<ul>
+<li><strong>1. หาเหตุผลว่าทำไมเงินถึงควรอยู่ฝั่งคุณ</strong> — ใครอยู่อีกฝั่ง และเขายอมเสียเปรียบเพราะอะไร ถ้าตอบไม่ได้ ตัวเลขสวยแค่ไหนก็ไม่ช่วย (สถานี ⑤ ใน Part 5)</li>
+<li><strong>2. ลดสิ่งที่ต้องพิสูจน์</strong> — เดิมพันบนสิ่งที่ตรวจสอบง่ายกว่า เช่น ต้นทุนและขนาดไม้ ซึ่งวัดได้ทันทีโดยไม่ต้องรอพันไม้</li>
+<li><strong>3. เก็บข้อมูลให้เป็นตั้งแต่ไม้แรก</strong> — ถ้ายังไงก็ต้องใช้เวลาหลายปี อย่างน้อยอย่าให้ปีที่ผ่านมาสูญเปล่าเพราะไม่ได้จด (สถานี ⑧ ใน Part 8)</li>
+<li><strong>ถ้าไม่รู้จะเริ่มข้อไหน</strong> ให้เริ่มข้อ 3 วันนี้ เพราะมันเป็นข้อเดียวที่ยิ่งเริ่มช้ายิ่งแพง</li>
+</ul></div>
+
+<!-- ═══════════════ ฉากหน้าจอ + นิสัยคิด ═══════════════ -->
+<div class="scene"><div class="bt">🎬 ฉากหน้าจอ — มินเจอโพสต์ในกลุ่ม</div>
+<p>เช้าวันเสาร์ มีคนโพสต์ในกลุ่มเทรด: <em>"ระบบผมชนะ 17 จาก 22 ไม้เดือนนี้ครับ ใครสนใจทักมา"</em> พร้อมภาพพอร์ตสีเขียว</p>
+<p>เมื่อก่อนมินจะทัก ตอนนี้มินคิดสามชั้นภายในสิบวินาที</p>
+<ol>
+<li><strong>22 ไม้</strong> — อยู่ในโซนที่ต่อให้เก่งจริงก็พิสูจน์ไม่ได้ และต่อให้ไม่เก่งเลยก็ได้ผลแบบนี้ไม่ยาก</li>
+<li><strong>คนที่ไม่ได้โพสต์</strong> — ในกลุ่มสองพันคน เดือนนี้มีกี่คนที่ผลออกมาแบบนี้แล้วเงียบ เพราะรู้ตัวว่าฟลุก</li>
+<li><strong>เดือนหน้า</strong> — ถ้าเป็นดวง ผลงานจะถอยกลับหาค่าเฉลี่ยเอง โดยที่เจ้าตัวจะหาคำอธิบายอื่นให้เสมอ</li>
+</ol>
+<p>มินไม่ได้ตัดสินว่าคนโพสต์โกหก เขาอาจเชื่อในสิ่งที่พูดจริง ๆ ก็ได้ มินแค่รู้ว่า <strong>ตัวเลขชุดนี้แยกสองกรณีนั้นไม่ออก</strong> — และนั่นเพียงพอที่จะไม่เอาเงินไปเสี่ยง</p></div>
+
+<div class="bx bp"><div class="bt">🧭 นิสัยคิด — สามคำถามต่อทุกตัวเลขที่มีคนยื่นมาให้</div>
+<ol>
+<li><strong>มาจากกี่ครั้ง</strong> — ตัวเลขที่ไม่มี n มาด้วย ยังไม่ใช่หลักฐาน เป็นแค่เรื่องเล่า</li>
+<li><strong>ใครหายไป</strong> — คนหรือข้อมูลที่ไม่ผ่านเข้ามาถึงสายตาเรา ถูกกรองออกด้วยเกณฑ์อะไร</li>
+<li><strong>ถ้าเป็นดวงล้วน หน้าตาจะต่างจากนี้ยังไง</strong> — ถ้าตอบว่า "ไม่ต่าง" แปลว่าตัวเลขนี้ยังไม่ได้บอกอะไรเลย</li>
+</ol>
+<p>คำถามข้อสามคือข้อที่ทรงพลังที่สุด และเป็นข้อที่แทบไม่มีใครถาม</p></div>
+
+<div class="bx bg"><div class="bt">✍️ ลองทำเอง</div>
+<ol>
+<li>นับจำนวนไม้ที่คุณเทรดไปทั้งหมดตั้งแต่เริ่ม แล้วเทียบกับตารางในบทนี้ — ตอนนี้คุณอยู่แถวไหนของเส้นทางสู่พันไม้</li>
+<li>นึกถึงเทรดเดอร์คนหนึ่งที่คุณเคยประทับใจจากผลงานช่วงหนึ่ง แล้วลองหาว่าเขาทำผลงานยังไงในปีถัดมา — ถ้าหาไม่เจอ ให้ถามว่าทำไมถึงหาไม่เจอ</li>
+<li>เปิดกฎการเข้าไม้ของคุณข้อหนึ่ง แล้วตอบคำถามที่สามของกล่อง 🧭 ให้ได้: ถ้ากฎข้อนี้ไม่มีค่าอะไรเลย ผลลัพธ์ที่ผ่านมาจะหน้าตาต่างจากนี้ยังไง</li>
+</ol></div>
+
+<div class="bx bg"><div class="bt">🎯 3 อย่างที่ต้องจำจาก Part นี้</div>
+<ul>
+<li><strong>ความสุ่มสร้างแพตเทิร์นได้เอง</strong> — เหรียญที่ไม่มีความทรงจำสร้าง "ขึ้น 3 วันติด" ได้ 11 ครั้ง เท่ากับตลาดจริงเป๊ะ</li>
+<li><strong>ราวหนึ่งพันไม้คือเส้นที่หลักฐานเริ่มมีน้ำหนัก</strong> — ที่ 100 ไม้ ต่อให้เก่งจริงก็มีโอกาสแค่ 13.3% ที่จะพิสูจน์ได้</li>
+<li><strong>ตัวเลขที่สุดโต่งมักถอยกลับหาค่าเฉลี่ย</strong> — และคนที่คุณเห็น คือคนที่รอดมาแล้ว ไม่ใช่คนทั้งหมดที่ลอง</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">สรุป Part 1</div>
+<ul>
+<li>สมองเห็นแพตเทิร์นในความสุ่มเพราะ <strong>ความสุ่มสร้างแพตเทิร์นจริง ๆ</strong> ไม่ใช่เพราะสมองเสีย</li>
+<li>คำถาม "เท่าไรถึงจะพอ" มีคำตอบเป็นตัวเลข และตัวเลขนั้นใหญ่กว่าที่ทุกคนคิดมาก</li>
+<li>คนไม่มี edge จะดูเหมือนพิสูจน์ได้ราว 2% ของกรณี — พอที่จะสร้าง "เซียน" ให้ทุกกลุ่มโดยไม่ต้องมีใครเก่งจริง</li>
+<li>ผลงานสุดโต่งถอยสู่ค่าเฉลี่ย · ข้อมูลที่เห็นคือส่วนที่รอดมา 44% · และ "แม่น 99%" ให้ความมั่นใจแค่ 16.7% เมื่อสิ่งที่หาเจอนั้นหายาก</li>
+</ul></div>
+
+<div class="pq" style="border-left-color:var(--blue);background:var(--blue-bg)">ถ้าข้อมูลของเราเองจะไม่พอไปอีกสิบปี แล้วเราจะตัดสินใจอะไรได้บ้างวันนี้ · คำตอบเริ่มที่การเขียนความเชื่อออกมาให้มัน <em>ผิดได้</em> — สถานีที่ ① ใน Part 2</div>
+
+<div class="bx ba"><div class="bt">🔗 อยากลึกกว่านี้</div>
+<ul>
+<li>ความน่าจะเป็นและการแจกแจงแบบเต็ม → <code>math-part2</code>, <code>math-part3</code></li>
+<li>ทำไม backtest ถึงหลอกได้ และวิธีหักลบความบังเอิญออกจากผลงาน → <code>theory-part5</code>, เครื่องมือ <code>tool-deflated-sharpe</code></li>
+<li>ตลาดมีประสิทธิภาพแค่ไหน และทำไม edge ถึงหายไปเมื่อคนรู้เยอะขึ้น → <code>theory-part3</code></li>
+<li>อยากรันการจำลองในบทนี้เอง → <code>tools/nq_figures.py</code> ในคลังนี้ ตัวเลขทุกตัวสร้างซ้ำได้</li>
+</ul></div>
+
+<div class="bx bb"><div class="bt">📖 ศัพท์ใหม่ในตอนนี้</div>
+<p><strong>3 คำที่ต้องจำก่อน</strong></p>
+<ul>
+<li><strong>ความสุ่ม</strong> = สิ่งที่สร้างแพตเทิร์นได้เองโดยไม่ต้องมีสาเหตุอยู่เบื้องหลัง</li>
+<li><strong>ถอยสู่ค่าเฉลี่ย</strong> = แนวโน้มที่ผลลัพธ์สุดโต่งจะตามมาด้วยผลลัพธ์ธรรมดากว่า เมื่อมีดวงปนอยู่</li>
+<li><strong>อคติผู้รอดชีวิต</strong> = ความลำเอียงจากการเห็นแต่สิ่งที่เหลือรอด โดยมองไม่เห็นสิ่งที่หายไป</li>
+</ul>
+<p><strong>ที่เหลือ</strong> · <strong>edge (ความได้เปรียบ)</strong> = เหตุผลที่ทำให้ผลตอบแทนคาดหวังเป็นบวกหลังหักต้นทุน · <strong>ความน่าจะเป็นแบบมีเงื่อนไข</strong> = โอกาสของอย่างหนึ่ง เมื่อรู้แล้วว่าอีกอย่างเกิดขึ้น · <strong>ผลบวกลวง</strong> = การแจ้งว่าเจอ ทั้งที่ไม่มีอยู่จริง · <strong>เปอร์เซ็นไทล์</strong> = ตำแหน่งของค่าหนึ่งเมื่อเทียบกับค่าอื่นทั้งหมด</p></div>
+
+<!-- ═══════════════ Thai line-break script — ต้องอยู่ก่อน </body> ทุกไฟล์ (ห้ามแก้) ═══════════════ -->
+<script>
+(function(){if(typeof Intl=='undefined'||typeof Intl.Segmenter!='function')return;if(document.body.getAttribute('data-thwbr')=='1')return;var T=/[฀-๿]/,E=/[฀-๿]$/,S=/^[฀-๿]/,SK={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,NOSCRIPT:1},seg;try{seg=new Intl.Segmenter('th',{granularity:'word'})}catch(e){return}
+function skip(n){for(var el=n.parentNode;el&&el.nodeType==1;el=el.parentNode){if(SK[el.tagName])return 1;if(el.classList&&el.classList.contains('fm'))return 1}return 0}
+function proc(tn){var s=tn.nodeValue;if(!s||s.length<2||!T.test(s))return;var parts=[],prev=null,buf='';for(var it of seg.segment(s)){var w=it.segment;if(prev!==null&&E.test(prev)&&S.test(w)){parts.push(buf);buf=''}buf+=w;prev=w}parts.push(buf);if(parts.length<2)return;var f=document.createDocumentFragment();for(var i=0;i<parts.length;i++){if(i>0)f.appendChild(document.createElement('wbr'));f.appendChild(document.createTextNode(parts[i]))}tn.parentNode.replaceChild(f,tn)}
+function run(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return !T.test(n.nodeValue)||skip(n)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}}),t=[],n;while(n=w.nextNode())t.push(n);for(var i=0;i<t.length;i++)proc(t[i]);document.body.setAttribute('data-thwbr','1')}
+if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run()})();
+</script>
+</body></html>
