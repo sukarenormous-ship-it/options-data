@@ -10,11 +10,11 @@
 
 | # | งาน | ทำไมต้องทำ | สถานะตอนนี้ |
 |---|---|---|---|
-| **A** | **ย้ายหนังสือไป `claude-code-project`** | ตอนนี้อยู่ใน repo ข้อมูล ผิดที่ · แยกจากอีก 14 เล่ม | 🟡 **เปิด PR แล้ว** — [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) (draft) รอรีวิว/merge ก่อนจะลบไฟล์ต้นทางจาก repo นี้ |
-| **B** | **บท: การรวมสัญญาณโดยไม่ overfit** | คลังนับได้ **0** · เป็นภาคต่อโดยตรงของบท copula | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-signal-blending.html`) |
-| **C** | **บท: live กับ backtest ไม่ตรงกัน** | คลังนับได้ **0** · สาเหตุอันดับหนึ่งที่ระบบ deploy จริงแล้วพัง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-live-vs-backtest.html`) |
-| **D** | **บท: edge เสื่อม — รู้ได้เมื่อไร** | `alpha decay` = 12 ครั้ง · เป็นการตัดสินใจที่ยากที่สุดในชีวิตจริง | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-alpha-decay.html`) |
-| **E** | **บท: ข้อมูลที่ใช้ทดสอบเชื่อได้แค่ไหน** | `data quality` = 2 · `short availability` = 3 · `corporate action` = 5 | ✅ **push แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-data-quality.html`) |
+| **A** | **ย้ายหนังสือไป `claude-code-project`** | ตอนนี้อยู่ใน repo ข้อมูล ผิดที่ · แยกจากอีก 14 เล่ม | ✅ **เสร็จ** — [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) merge แล้ว · ลบไฟล์ต้นทางจาก repo นี้แล้ว |
+| **B** | **บท: การรวมสัญญาณโดยไม่ overfit** | คลังนับได้ **0** · เป็นภาคต่อโดยตรงของบท copula | ✅ **merge แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-signal-blending.html`) |
+| **C** | **บท: live กับ backtest ไม่ตรงกัน** | คลังนับได้ **0** · สาเหตุอันดับหนึ่งที่ระบบ deploy จริงแล้วพัง | ✅ **merge แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-live-vs-backtest.html`) |
+| **D** | **บท: edge เสื่อม — รู้ได้เมื่อไร** | `alpha decay` = 12 ครั้ง · เป็นการตัดสินใจที่ยากที่สุดในชีวิตจริง | ✅ **merge แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-alpha-decay.html`) |
+| **E** | **บท: ข้อมูลที่ใช้ทดสอบเชื่อได้แค่ไหน** | `data quality` = 2 · `short availability` = 3 · `corporate action` = 5 | ✅ **merge แล้ว** — เข้า [PR #31](https://github.com/sukarenormous-ship-it/Claude-code-project/pull/31) โดยตรง (`statarb-data-quality.html`) |
 
 **ลำดับที่เสนอ:** A → B → C → D → E
 เหตุผล: A เป็นงานโครงสร้างที่ยิ่งทำช้ายิ่งแพง (ทุกบทใหม่ที่เขียนก่อนย้ายคือของที่ต้องย้ายเพิ่ม)
@@ -65,7 +65,8 @@
 - ✅ คัดไฟล์ 23 ไฟล์ + สคริปต์ 8 ไฟล์ไป `claude-code-project` แล้ว
 - ✅ `nq_qa.py` + `nq_check_figures.py` ผ่านในตำแหน่งใหม่ · เรนเดอร์ผ่านทั้ง 21 ไฟล์ (1000px/420px)
 - ✅ เชื่อมเข้า `docs/index.html` (การ์ดเล่มใหม่) และ `docs/tools-index.html` (เครื่องมือ 4 ตัว เลข 06-09)
-- 🟡 **ยังไม่ลบไฟล์ต้นทางจาก `options-data`** — รอ PR #31 merge ก่อน เพื่อไม่ให้ของหายถ้าต้องแก้ตาม review
+- ✅ **PR #31 merge แล้ว** (merge commit `20b58ab` บน `claude/payoff-chart-lesson-KchZQ`) — ตรวจแล้วว่าไฟล์ครบทุกตัวอยู่บน branch ปลายทางจริง
+- ✅ **ลบไฟล์ต้นทางจาก `options-data` แล้ว** — 23 ไฟล์ใน `docs/` + 8 สคริปต์ใน `tools/` เหลือไว้แค่เอกสารแผนสองไฟล์ พร้อมเพิ่ม `docs/README.md` ชี้ทางไปคลังปลายทางและอธิบายวิธีรันสคริปต์ข้ามคลังด้วย `--data-dir`
 - ⚠️ พบข้อจำกัดระหว่างทาง: repo `claude-code-project` กระจายเป็น 19 branch เนื้อหาไม่ตรงกัน branch ที่ใช้เป็นฐาน (`payoff-chart-lesson-KchZQ`) ไม่มีซีรีส์ `statarb-*`/`practice-*`/`playground-*` ทำให้บท copula เชื่อมโยงไปยังซีรีส์ stat arb ได้แค่เป็นข้อความอ้างอิง ไม่ใช่ลิงก์จริง — ไม่ใช่สิ่งที่แก้ได้ในงาน A นี้
 
 ---
@@ -99,7 +100,7 @@
 - ✅ ใช้เครื่องจักรเดียวกับ Part 8 จริง — ค้นหา 114 วิธีรวม (AND/OR ทุกเซตย่อย + vote-k + weight กริด) เทียบกับการค้นหาเดียวกันบนป้ายกำกับสุ่ม 300 รอบ
 - ✅ ผลที่ได้ต่างจากที่คาดไว้ในแผนเดิมเล็กน้อย แต่ **น่าสนใจกว่า**: ชุดรวมที่ดีที่สุดจาก 114 วิธี = ตัวกรองเดี่ยวที่ดีที่สุด (cost) พอดี — การรวมไม่ได้เพิ่มมูลค่าเลย และค่ายกที่ได้ (+8.3 จุด) อยู่แค่เปอร์เซ็นไทล์ 62 ของสุ่มล้วน ๆ (แยกไม่ออกจากบังเอิญ)
 - ✅ เชื่อมเข้า `nq-appendix-map.html` (แถวใหม่) และ `statarb-copula-practice.html` (ลิงก์ "อ่านต่อ")
-- ✅ ตรวจ HTML balance, ลิงก์, เรนเดอร์ 1000px/420px ผ่านหมด — push เข้า PR #31 แล้ว (ยังไม่ merge)
+- ✅ ตรวจ HTML balance, ลิงก์, เรนเดอร์ 1000px/420px ผ่านหมด — push เข้า PR #31 แล้ว — merge เรียบร้อย
 - 🟡 `nq_qa.py`/`nq_check_figures.py` ไม่ครอบคลุมไฟล์ `statarb-*` (สแกนเฉพาะ `nq-*.html`) — ตรวจด้วยสคริปต์ชั่วคราวแทน (link + tag balance) เหมือนที่ทำกับบท copula ไว้ก่อนหน้านี้
 
 ---
@@ -132,7 +133,7 @@
 - ✅ ใช้ข้อมูลจริงวันเดียว (2026-08-29) ทั้งสองตลาด: ตัวอย่างกระทบยอดหนึ่งไม้จริง (ขาดทุน 4.4% แค่จากข้าม spread สองรอบ), สภาพคล่องทั้งกระดาน (46%/43% ไม่มีปริมาณซื้อขาย, ~10% ไม่มีราคาเสนอซื้อ, mark นอกช่วง bid-ask 13/237 สัญญา), งบ tracking error จาก percentile จริง
 - ✅ ใช้ `nq-figures.json::ต้นทุนตามอายุ` ต่อยอด (Write Once) แทนคำนวณ spread ซ้ำ — ตัวเลข 22.5%/2.3% ที่แผนเดิมอ้างอิงมาจากตรงนี้จริง
 - 🟡 ตัดหัวข้อ "เคสจริงจากรายงานรีวิว grid" ที่แผนเดิมเสนอไว้ออก — ตรวจแล้วว่าไม่มีรายงานลักษณะนั้นอยู่จริงใน repo ที่เข้าถึงได้ตอนนี้ ใช้ตัวอย่างกระทบยอดจากข้อมูลจริงแทนเพื่อไม่ให้อ้างอิงสิ่งที่ยืนยันไม่ได้
-- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-signal-blending.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว (ยังไม่ merge)
+- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-signal-blending.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว — merge เรียบร้อย
 
 ---
 
@@ -163,7 +164,7 @@
 - ✅ เขียน `statarb-alpha-decay.html` + `tools/alpha_decay_figures.py` ตรงเข้า `claude-code-project`
 - ✅ ขยายสูตร power calculation ของ `nq-tool-samplesize` จากกรณีพิเศษ p0=0.5 ไปเป็นกรณีทั่วไป p0→p1 — ตรวจแล้วว่าลดรูปกลับไปตรงกับสูตรเดิมเป๊ะที่ p0=0.5 (1,077 ไม้)
 - ✅ ผลหลัก: edge 55%→50% ต้องใช้ 1,067 ไม้ (10.3 ปีที่จังหวะ 2 ไม้/สัปดาห์ของมิน) ถึงตรวจจับได้ — ตรงกับที่แผนเดิมคาดไว้ว่า "เวลาที่ใช้ตรวจจับ ยาวกว่าเวลาที่คนส่วนใหญ่ทนได้"
-- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-live-vs-backtest.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว (ยังไม่ merge)
+- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-live-vs-backtest.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว — merge เรียบร้อย
 
 ---
 
@@ -196,7 +197,7 @@ backtest ของคุณตั้งอยู่บนข้อมูล — 
 - ✅ ผลตรวจคลังนี้เอง: ทั้งสองตลาดข้อมูลครบ 57/57 วัน (ข่าวดี) แต่ผู้รอดชีวิตต่างกันมาก (Deribit 44.2% vs OKX 31.8%) และราคาข้ามตลาดต่างกันกลาง 0.448%
 - ✅ ตัวเลขตรงกับ nq-figures.json (44%) และ live-backtest-figures.json (45.9%/9.8%/13, 43.1%/10.4%/237) ทุกจุด — ตรวจข้าม
 - 🟡 ตัวเลขคลังนับ `data quality`/`short availability`/`corporate action` ที่แผนเดิมอ้างไว้ (2/3/5) เป็นตัวเลขจาก scan ข้ามหลาย branch ในเซสชันก่อนหน้า — บทนี้ตรวจนับใหม่เฉพาะ branch ที่ใช้จริง (`payoff-chart-lesson-KchZQ`) ได้ผลต่างกัน (survivorship 5 ไฟล์, corporate action 1 ไฟล์, short-borrow 4 ไฟล์) และเขียนตามตัวเลขที่ตรวจสอบได้จริงแทน
-- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-alpha-decay.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว (ยังไม่ merge)
+- ✅ เชื่อมเข้า `nq-appendix-map.html` และ `statarb-alpha-decay.html` (ลิงก์ "อ่านต่อ") — push เข้า PR #31 แล้ว — merge เรียบร้อย
 
 **งาน B/C/D/E เสร็จครบทั้งหมดแล้ว** — สายเสริม stat arb มี 5 บทต่อเนื่องกัน: copula → รวมสัญญาณ → live-vs-backtest → alpha-decay → data-quality
 
