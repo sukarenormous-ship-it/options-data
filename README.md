@@ -1,15 +1,16 @@
 # options-data
 
-คลังข้อมูล option chain ของคริปโต เก็บสแนปช็อตอัตโนมัติ**วันละครั้ง**ด้วย GitHub Actions
-(เวลา ~00:15 UTC / ~07:15 น. เวลาไทย) จาก public API — ไม่มีค่าใช้จ่าย ไม่ต้องมี API key
+คลังข้อมูล option chain ของคริปโต เก็บสแนปช็อตวันละครั้งจาก public API
+(ไม่มีค่าใช้จ่าย ไม่ต้องมี API key) โดย**รันบนเครื่องของเจ้าของ repo** ผ่าน cron
+แล้ว push ขึ้นมา ดูวิธีตั้งที่หัวข้อ "เก็บข้อมูลรายวัน" ด้านล่าง
 
 | แหล่งข้อมูล | เหรียญ | ข้อมูลที่ได้ |
 |---|---|---|
 | **Deribit** | BTC, ETH, SOL, XRP | mark price, bid/ask, IV, open interest, volume |
 | **OKX** | BTC, ETH, SOL | mark price, bid/ask, IV, **Greeks (delta/gamma/vega/theta)**, OI, volume |
 
-> ทำไมไม่ใช่ Bybit/Binance: ทั้งสองเจ้าบล็อก IP ของเครื่อง GitHub Actions (ทดสอบแล้ว
-> ได้ HTTP 403/451) ส่วน Deribit คือตลาด options ที่ใหญ่ที่สุดอยู่แล้ว จึงเป็นแหล่งที่เหมาะกว่า
+> ทำไมไม่ใช่ Bybit/Binance: ทั้งสองเจ้าบล็อก IP ของศูนย์ข้อมูล (ได้ HTTP 403/451)
+> ส่วน Deribit คือตลาด options ที่ใหญ่ที่สุดอยู่แล้ว จึงเป็นแหล่งที่เหมาะกว่า
 
 ## โครงไฟล์
 
@@ -59,10 +60,22 @@ nearest = btc[btc.expiry == btc.expiry.min()]
 nearest.sort_values("strike").plot(x="strike", y="mark_iv")
 ```
 
-## รันเองนอกตาราง
+## เก็บข้อมูลรายวัน
 
-- กด **Run workflow** ที่แท็บ Actions (workflow: Daily options snapshot) หรือ
-- รันในเครื่อง: `python3 scripts/fetch_chain.py` (ใช้ Python มาตรฐาน ไม่ต้องติดตั้งอะไร)
+รันบนเครื่องของคุณเอง ไม่ใช่บน GitHub Actions เพราะข้อกำหนดของ Actions ครอบคลุม
+เฉพาะงานสร้าง ทดสอบ และเผยแพร่ซอฟต์แวร์ของ repo นั้น การตั้ง cron ดูดข้อมูลตลาด
+มาสะสมอยู่นอกขอบเขต และเคยทำให้บัญชีถูกระงับมาแล้ว
+
+```bash
+crontab -e
+# 07:15 น. เวลาไทยทุกวัน
+15 7 * * *  /path/to/options-data/scripts/run_local.sh >> /path/to/options-data/snapshot.log 2>&1
+```
+
+สคริปต์จะ pull ก่อน ดึงข้อมูล commit และ push ให้เอง · ถ้าไฟล์ของวันนั้นมีอยู่แล้ว
+จะข้าม (`SKIP_IF_EXISTS=1`) · ดู log ที่ `snapshot.log` เมื่ออยากรู้ว่ารอบไหนพลาด
+
+รันครั้งเดียวแบบไม่ push: `python3 scripts/fetch_chain.py` (ใช้ Python มาตรฐาน ไม่ต้องติดตั้งอะไร)
 
 ## หมายเหตุ
 

@@ -1,0 +1,22 @@
+# ตรวจสคริปต์เท่านั้น — การเก็บข้อมูลรายวันย้ายไปรันบนเครื่องของเจ้าของ repo แล้ว
+# (ดู scripts/run_local.sh) เพราะการใช้ GitHub Actions เป็น cron ดูดข้อมูลตลาด
+# ไม่ใช่งานที่เกี่ยวกับการสร้าง/ทดสอบ/เผยแพร่ซอฟต์แวร์ของ repo นี้
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/**', '.github/workflows/**']
+  pull_request:
+    paths: ['scripts/**', '.github/workflows/**']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile check
+        run: python3 -m py_compile scripts/fetch_chain.py

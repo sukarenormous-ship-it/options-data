@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Snapshot crypto option chains from Deribit and OKX into daily CSV files.
 
-Runs inside GitHub Actions (see .github/workflows/snapshot.yml) but can be
-run anywhere: `python3 scripts/fetch_chain.py`. Standard library only.
+Run from cron on your own machine (see scripts/run_local.sh) or by hand:
+`python3 scripts/fetch_chain.py`. Standard library only.
 
 Output: data/<exchange>/<YYYY>/<MM>/<YYYY-MM-DD>.csv, one row per option
 contract. Prices from both exchanges are quoted in the base coin (e.g. a
@@ -211,9 +211,9 @@ def main() -> None:
     now = datetime.now(timezone.utc)
     snapshot_ts = now.strftime("%Y-%m-%d %H:%M:%S")
 
-    # With SKIP_IF_EXISTS=1 (set on scheduled runs) an exchange whose file for
-    # today already exists is left untouched, so the midday catch-up run only
-    # fills in what the morning run missed.
+    # With SKIP_IF_EXISTS=1 (set by scripts/run_local.sh) an exchange whose file
+    # for today already exists is left untouched, so a re-run only fills in what
+    # the first run of the day missed.
     skip_existing = os.environ.get("SKIP_IF_EXISTS") == "1"
     fetchers = {"deribit": fetch_deribit, "okx": fetch_okx}
 
@@ -235,8 +235,8 @@ def main() -> None:
         print(f"{exchange}: wrote {len(rows)} rows -> {path.relative_to(repo_root)}")
         handled_any = True
 
-    # Exit codes drive the workflow: written data is committed either way,
-    # but any error must surface as a failed run so the alert issue opens.
+    # Exit codes: whatever was written is committed either way, but any error
+    # surfaces in the caller's exit status (scripts/run_local.sh passes it on).
     #   0 = complete, 1 = total failure, 2 = partial (some data + some errors)
     if errors:
         print("Errors:\n  " + "\n  ".join(errors), file=sys.stderr)
